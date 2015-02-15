@@ -1,54 +1,51 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage{fancyhdr} % Required for custom headers
-\usepackage{lastpage} % Required to determine the last page for the footer
-\usepackage{extramarks} % Required for headers and footers
-\usepackage{graphicx} % Required to insert images
-\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
-\usepackage{mathtools} % for math (thx Cpt Obvious...)
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage{mathtools}
 
 % Margins
-\topmargin=-0.45in
-\evensidemargin=0in
-\oddsidemargin=0in
-\textwidth=6.5in
-\textheight=9.0in
-\headsep=0.25in 
+%\topmargin=0.5cm
+%\evensidemargin=1.0cm
+%\oddsidemargin=1.0cm
+%\textwidth=6.5in
+%\textheight=9.0in
+%\headsep=0.25in 
 
-\linespread{1.1} % Line spacing
+\linespread{1.1}
 
 % Set up the header and footer
 \pagestyle{fancy}
-\lhead{} % Top left header
-\chead{Exposé} % Top center header
-\rhead{} % Top right header
-\lfoot{Peter Nirschl (1025647)} % Bottom left footer
-\cfoot{} % Bottom center footer
-\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
-\renewcommand\headrulewidth{0.4pt} % Size of the header rule
-\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+\lhead{}
+\chead{Exposé}
+\rhead{}
+\lfoot{Peter Nirschl (1025647)}
+\cfoot{}
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
 
 \setlength\parindent{0pt} % Removes all indentation from paragraphs
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
-
 \title{Exposé}
 \author{Peter Nirschl (1025647)}
 \date{\today} % Insert date here if you want it to appear below your name
-
 %----------------------------------------------------------------------------------------
 
 \begin{document}
 
 \maketitle
-
-%----------------------------------------------------------------------------------------
-%	TABLE OF CONTENTS
-%----------------------------------------------------------------------------------------
-
+\begin{abstract}
+This exposé is the basic orientation guideline for my Bachelor thesis.
+It defines the goals, related literature as well as the planned timeline.
+\end{abstract}
 \setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
 \tableofcontents
 \newpage
@@ -56,5 +53,20 @@
 \section{Research Question}
 
 
+\section{Related Work}
+
+
+\section{Title}
+% the title of the BSc thesis
+
+\section{Task Description}
+% precise description of the problem
+% Target - optional; if there is no clear target defined by the research question, then the target has to be specified explicitly
+
+\section{Methodology}
+
+
+\section{Timing}
+% set milestones (including deliverables) and set delivery dates
 
 \end{document}
