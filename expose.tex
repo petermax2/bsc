@@ -44,7 +44,7 @@
 \maketitle
 \begin{abstract}
 This exposé is the basic orientation guideline for my Bachelor thesis.
-It defines the goals, related literature as well as the planned timeline.
+It defines the goals, lists related literature as well as the planned timeline.
 \end{abstract}
 \setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
 \tableofcontents
@@ -54,7 +54,13 @@ It defines the goals, related literature as well as the planned timeline.
 
 
 \section{Related Work}
-
+\begingroup
+\renewcommand{\section}[2]{}%
+\renewcommand{\refname}{}
+\nocite{*}
+\bibliography{literature}
+\bibliographystyle{alpha}
+\endgroup
 
 \section{Title}
 % the title of the BSc thesis
