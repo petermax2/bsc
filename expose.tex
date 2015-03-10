@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{lipsum}
 \usepackage{mathtools}
+\usepackage{url}
 
 % Margins
 %\topmargin=0.5cm
@@ -29,7 +30,15 @@
 \renewcommand\headrulewidth{0.4pt}
 \renewcommand\footrulewidth{0.4pt}
 
+% Setup paragraph style
 \setlength\parindent{0pt} % Removes all indentation from paragraphs
+\setlength{\parskip}{0.2cm}
+
+%----------------------------------------------------------------------------------------
+%	USER DEFINED COMMANDS
+%----------------------------------------------------------------------------------------
+\newcommand{\libelektra}{\texttt{libelektra}~}
+
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -43,36 +52,94 @@
 
 \maketitle
 \begin{abstract}
-This exposé is the basic orientation guideline for my Bachelor thesis.
-It defines the goals, lists related literature as well as the planned timeline.
+This document is the basic orientation guideline for my Bachelor thesis.
+It defines the research goals and lists the related literature as well as the planned timeline.
 \end{abstract}
-\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
+\setcounter{tocdepth}{1} % defines whether or not subsections should not be listed in the TOC
 \tableofcontents
 \newpage
 
+%----------------------------------------------------------------------------------------
+%	TITLE
+%----------------------------------------------------------------------------------------
+\section{Title}
+
+TBD
+
+
+%----------------------------------------------------------------------------------------
+%	RESEARCH QUESTION
+%----------------------------------------------------------------------------------------
 \section{Research Question}
 
+The research question in this thesis examines the practical applications of cryptography in a cross-platform library environment and the possible increase in data security.
+It consists of the following two parts.
 
+\begin{enumerate}
+\item Does a real-world Advanced Encryption Standard (AES) implementation offer confidentiality (i.e. protection against unauthorized access) for small data units?
+Small data refers to values, that possibly fit into a single encryption block (e.g. passwords).
+      
+\item Can a real-world implementation of an RSA-based digital signature algorithm offer integrity (i.e. protection against unauthorized modification) for configuration files, that are persisted on a storage device (e.g. a hard drive)?
+
+\end{enumerate}
+
+The following sections provide further details about how these questions will be examined.
+
+
+%----------------------------------------------------------------------------------------
+%	TASK DESCRIPTION
+%----------------------------------------------------------------------------------------
+\section{Task Description}
+% precise description of the problem
+% Target - optional; if there is no clear target defined by the research question, then the target has to be specified explicitly
+Security is a crucial aspect of application development.
+Especially when it comes to libraries, which support different applications on various operating systems.
+\libelektra\footnote{\url{https://github.com/ElektraInitiative/libelektra/}} is essentially a hierachical key-value database that features extensibility by providing a plugin system.
+There are two main reasons why such a project should provide security measures.
+The first reason is that the library represents a single point of failure to all using applications, as the code is being shared.
+If the library is vulnerable, all the applications, which use its features, are vulnerable too.
+The second reason is that \libelektra is dealing with application configurations, which often contain sensitive data like login credentials or private keys.
+
+The idea of this thesis is to enhance \libelektra to provide \textbf{confidentiality} for stored username- and password values.
+Those values will be protected against unauthorized usage by means of symmetric encryption.
+An existing implementation of the Advanced Encryption Standard (AES) will be used for encryption.
+
+Another security enhancement to \libelektra is to provide \textbf{integrity} for configuration files.
+Therefor an RSA-based signature algorithm will be used to detect unauthorized changes between the time the file has been persisted and reloaded again.
+
+The following section describes how these tasks can be implemented and how the research questions can be answered.
+
+
+%----------------------------------------------------------------------------------------
+%	METHODOLOGY
+%----------------------------------------------------------------------------------------
+\section{Methodology}
+
+So far the research question as well as the task description have been discussed in a general way.
+This section provides detailed information about how the research questions can be answered step by step.
+
+\textbf{TBD}
+
+
+%----------------------------------------------------------------------------------------
+%	TIMING
+%----------------------------------------------------------------------------------------
+\section{Timing}
+% set milestones (including deliverables) and set delivery dates
+TBD
+  
+
+%----------------------------------------------------------------------------------------
+%	RELATED WORK
+%----------------------------------------------------------------------------------------
 \section{Related Work}
 \begingroup
-\renewcommand{\section}[2]{}%
+\renewcommand{\section}[2]{}
 \renewcommand{\refname}{}
 \nocite{*}
 \bibliography{literature}
 \bibliographystyle{alpha}
 \endgroup
 
-\section{Title}
-% the title of the BSc thesis
-
-\section{Task Description}
-% precise description of the problem
-% Target - optional; if there is no clear target defined by the research question, then the target has to be specified explicitly
-
-\section{Methodology}
-
-
-\section{Timing}
-% set milestones (including deliverables) and set delivery dates
 
 \end{document}
