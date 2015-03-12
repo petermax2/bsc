@@ -15,7 +15,7 @@ TBD
 Please note that a LaTeX distribution is required for generating the content as PDF or PostScript file.
 Also the [UseLATEX](https://github.com/kmorel/UseLATEX) CMake module should be installed on your system.
 
-* Verify the installation of the CMake module `UseLATEX.cmake` (which is typically installed under `/usr/share/cmake/Modules`)
+* Verify the installation of the CMake module `UseLATEX.cmake` (you can simply copy the file into the root directory of the repository)
 
 * Create a directory called `build`.
 
