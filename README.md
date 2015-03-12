@@ -2,6 +2,10 @@
 
 This repository contains my Bachelor thesis.
 
+## Copyright Notice ##
+
+This work is distributed under the terms of the [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/)
+
 ## Abstract ##
 
 TBD
