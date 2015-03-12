@@ -8,6 +8,8 @@ TBD
 
 ## Generating the content ##
 
+Please note that a LaTeX distribution is required for generating the content as PDF or PostScript file.
+
 * Create a directory called `build`.
 
 ```
