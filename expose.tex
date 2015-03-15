@@ -44,6 +44,7 @@
 %	USER DEFINED COMMANDS
 %----------------------------------------------------------------------------------------
 \newcommand{\libelektra}{\texttt{libelektra}~}
+\newcommand{\libgcrypt}{\texttt{libgcrypt}~}
 
 
 %----------------------------------------------------------------------------------------
@@ -61,9 +62,11 @@
 This document is the basic orientation guideline for my Bachelor thesis.
 It defines the research goals and lists the related literature as well as the planned timeline.
 \end{abstract}
-\setcounter{tocdepth}{1} % defines whether or not subsections should not be listed in the TOC
-\tableofcontents
-\newpage
+%\setcounter{tocdepth}{1} % defines whether or not subsections should not be listed in the TOC
+%\tableofcontents
+%\newpage
+
+\vfill
 
 \section*{Copyright Notice}
 
@@ -81,7 +84,7 @@ For further information, please refer to:
 %----------------------------------------------------------------------------------------
 \section{Title}
 
-Increasing confidentiality and integritiy in a hierarchical key-value database
+Increasing confidentiality and integrity in a hierarchical key-value database
 
 
 %----------------------------------------------------------------------------------------
@@ -110,7 +113,7 @@ The following sections provide further details about how these questions will be
 
 Security has become a crucial aspect of modern day applications.
 Especially when it comes to libraries, which support different applications on various operating systems.
-\libelektra\footnote{\url{https://github.com/ElektraInitiative/libelektra/}} is essentially a hierachical key-value database that features extensibility by providing a plugin system.
+\libelektra\footnote{\url{https://github.com/ElektraInitiative/libelektra/}} is essentially a hierarchical key-value database that features extensibility by providing a plugin system.
 There are two main reasons why such a project should provide security measures.
 The first reason is that the library represents a single point of failure to all using applications, as the code is being shared.
 If the library is vulnerable, all the applications, which use its features, are vulnerable too.
@@ -134,8 +137,16 @@ The following section describes how these tasks can be implemented and how the r
 So far the research question as well as the task description have been discussed in a general way.
 This section provides detailed information about how the research questions can be answered step by step.
 
-To examine the research question the \libelektra project is being used, as mentioned in the task description.
-The source code of the project is available at GitHub (\url{https://github.com/ElektraInitiative/libelektra/}).
+To examine the research question the \libelektra project is being used as a test environment, as mentioned in the task description.
+The source code of the \libelektra project is available at GitHub:
+
+\url{https://github.com/ElektraInitiative/libelektra/}
+
+The cryptographic operations will be provided by \libgcrypt, an open source cryptographic API, which is FIPS compliant and can thus be considered as ``sufficiently secure''.
+This project will act as the real-world implementation and will be tested against the security threats in order to examine the research question.
+The \libgcrypt project is hosted by the Free Software Foundation (FSF) and can be accessed at:
+
+\url{http://www.gnu.org/software/libgcrypt/}
 
 
 
