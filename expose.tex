@@ -4,9 +4,10 @@
 % For further information, please refer to: http://creativecommons.org/licenses/by-sa/4.0/
 %
 
-\documentclass[a4paper]{article}
+\documentclass[a4paper,12pt]{article}
 
 \usepackage[utf8]{inputenc}
+\usepackage[top=3cm, bottom=3cm, left=3cm, right=2cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{extramarks}
@@ -15,14 +16,6 @@
 \usepackage{mathtools}
 \usepackage{url}
 
-% Margins
-%\topmargin=0.5cm
-%\evensidemargin=1.0cm
-%\oddsidemargin=1.0cm
-%\textwidth=6.5in
-%\textheight=9.0in
-%\headsep=0.25in 
-
 \linespread{1.1}
 
 % Set up the header and footer
@@ -30,11 +23,11 @@
 \lhead{}
 \chead{Exposé}
 \rhead{}
-\lfoot{Peter Nirschl (1025647)}
-\cfoot{}
-\rfoot{Page\ \thepage\ of\ \pageref{LastPage}}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
 \renewcommand\headrulewidth{0.4pt}
-\renewcommand\footrulewidth{0.4pt}
+%\renewcommand\footrulewidth{0.4pt}
 
 % Setup paragraph style
 \setlength\parindent{0pt} % Removes all indentation from paragraphs
@@ -88,45 +81,44 @@ Increasing confidentiality and integrity in a hierarchical key-value database
 
 
 %----------------------------------------------------------------------------------------
-%	RESEARCH QUESTION
-%----------------------------------------------------------------------------------------
-\section{Research Question}
-
-The research question in this thesis examines the practical applications of cryptography in a cross-platform library environment and the possible increase in data security.
-It consists of the following two parts.
-
-\begin{enumerate}
-\item Does a real-world Advanced Encryption Standard (AES) implementation offer confidentiality (i.e. protection against unauthorized access) for small data units?
-Small data refers to values, that possibly fit into a single encryption block (e.g. passwords).
-      
-\item Can a real-world implementation of an RSA-based digital signature algorithm offer integrity (i.e. protection against unauthorized modification) for configuration files, that are persisted on a storage device (e.g. a hard drive)?
-
-\end{enumerate}
-
-The following sections provide further details about how these questions will be examined.
-
-
-%----------------------------------------------------------------------------------------
 %	TASK DESCRIPTION
 %----------------------------------------------------------------------------------------
 \section{Task Description}
 
-Security has become a crucial aspect of modern day applications.
-Especially when it comes to libraries, which support different applications on various operating systems.
-\libelektra\footnote{\url{https://github.com/ElektraInitiative/libelektra/}} is essentially a hierarchical key-value database that features extensibility by providing a plugin system.
-There are two main reasons why such a project should provide security measures.
-The first reason is that the library represents a single point of failure to all using applications, as the code is being shared.
-If the library is vulnerable, all the applications, which use its features, are vulnerable too.
-The second reason is that \libelektra is dealing with application configurations, which often contain sensitive data like login credentials or private keys.
+Security has become a crucial aspect of modern day applications, especially when it comes to libraries.
+\libelektra is essentially a hierarchical key-value database that features extensibility by providing a plugin system.
+There are two main reasons why such a project should provide security measures:
 
-The idea of this thesis is to enhance \libelektra to provide \textbf{confidentiality} for stored username- and password values.
+\begin{enumerate}
+\item the library represents a single point of failure to all using applications, as the code is being shared
+\item \libelektra is dealing with application configurations, which often contain sensitive data like login credentials or private keys
+\end{enumerate}
+
+The goal is to enhance \libelektra to provide \textbf{confidentiality} for stored username- and password values.
 Those values will be protected against unauthorized usage by means of symmetric encryption.
 An existing implementation of the Advanced Encryption Standard (AES) will be used for encryption.
 
 Another security enhancement to \libelektra is to provide \textbf{integrity} for configuration files.
-Therefor an RSA-based signature algorithm will be used to detect unauthorized changes between the time the file has been persisted and reloaded again.
+Therefore an RSA-based signature algorithm will be used to detect unauthorized changes between the time the file has been persisted and reloaded again.
 
-The following section describes how these tasks can be implemented and how the research questions can be answered.
+The following section describes the research questions, which arise from the task description.
+
+
+%----------------------------------------------------------------------------------------
+%	RESEARCH QUESTION
+%----------------------------------------------------------------------------------------
+\section{Research Question}
+
+The research question examines the practical applications of cryptography in a cross-platform library environment and the possible increase in data security.
+It consists of the following two parts:
+
+\begin{enumerate}
+\item Does a real-world Advanced Encryption Standard (AES) implementation offer confidentiality (i.e. protection against unauthorized access) for small data units?
+Small data refers to values, that possibly fit into a single encryption block (e.g. passwords).
+\item Can a real-world implementation of an RSA-based digital signature algorithm offer integrity (i.e. protection against unauthorized modification) for configuration files, that are persisted on a storage device (e.g. a hard drive)?
+\end{enumerate}
+
+The next section provides details about how these questions will be examined.
 
 
 %----------------------------------------------------------------------------------------
@@ -134,10 +126,10 @@ The following section describes how these tasks can be implemented and how the r
 %----------------------------------------------------------------------------------------
 \section{Methodology}
 
-So far the research question as well as the task description have been discussed in a general way.
+So far the research question as well as the task description have been discussed.
 This section provides detailed information about how the research questions can be answered step by step.
 
-To examine the research question the \libelektra project is being used as a test environment, as mentioned in the task description.
+The \libelektra project is being used as a test environment, as mentioned in the task description.
 The source code of the \libelektra project is available at GitHub:
 
 \url{https://github.com/ElektraInitiative/libelektra/}
