@@ -86,7 +86,7 @@ Implementation and Performance Analysis of Cryptographic Methods for Elektra
 \section{Task Description}
 
 Security has become a crucial aspect of modern day applications, especially when it comes to libraries.
-\libelektra (or simply Elektra) is essentially a hierarchical key-value database that is intended to store configuration data. It features extensibility by providing a plugin system. The main reason why \libelektra should provide security measures is, that application configurations often contain sensitive data (e.g. login credentials).
+\libelektra (or simply Elektra) is essentially a hierarchical key-value database that is intended to store configuration data. It features extensibility by providing a plugin system. The main reason why \libelektra should provide security measures is that application configurations often contain sensitive data (e.g. login credentials).
 
 The goal is to enhance \libelektra to provide \textbf{confidentiality} for sensitive values.
 Those values should be protected against unauthorized usage by means of symmetric encryption.
@@ -109,15 +109,15 @@ Let $t_e(x)$ denote the time the encryption of a value $x$ takes, and let $t_d(x
 The research questions examine the possible performance impact of cryptographic operations on Elektra:
 
 \begin{enumerate}
-\item How long does it take to encrypt and decrypt a typical password $p$, i.e. what are the values of $t_e(p)$ and $t_d(p)$? //TODO add literature ref about typical password strength
+\item How long does it take to encrypt and decrypt a typical password $p$, i.e. what are the mean values of $t_e(p)$ and $t_d(p)$? //TODO add literature ref about typical password strength
   
-\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the value of $t_e(x)/T_p(x)$?
+\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the mean value of $t_e(x)/T_p(x)$?
   
-\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the value of $t_d(x)/T_l(x)$?
+\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the mean value of $t_d(x)/T_l(x)$?
 
-\item How much impact has the length of the value $|x|$ on $t_d(x)$ and $t_e(x)$, i.e. what is the asymptotic behaviour of $t_e(x)$ and $t_d(x)$?
+\item How much impact has the length of the value $|x|$ on $t_d(x)$ and $t_e(x)$, i.e. what is the (statistical) asymptotic behaviour of $t_e(x)$ and $t_d(x)$?
 
-\item How much time is needed for signing and verifying an Elektra database file?
+\item How much time is needed for signing and verifying Elektra database files of different sizes?
   
 \end{enumerate}
 
