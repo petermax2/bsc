@@ -138,35 +138,43 @@ The source code of the \libelektra project is available at GitHub:
 \url{https://github.com/ElektraInitiative/libelektra/}
 
 The cryptographic operations will be provided by \libgcrypt, an open source cryptographic API, which is FIPS compliant and can thus be considered as ``sufficiently secure''.
-This project will act as the real-world implementation and will be tested against the security threats in order to examine the research question.
+This project will act as the real-world implementation and will be tested for performance in order to examine the research question.
 The \libgcrypt project is hosted by the Free Software Foundation (FSF) and can be accessed at:
 
 \url{http://www.gnu.org/software/libgcrypt/}
 
-The first step is the integration of the security concepts into \libelektra. Confidentiality will be increased by providing encrypted values. In order to distinguish encrypted values and plain text, the key meta-informations (source file \texttt{keymeta.c}) will be extended. Encrypted valus will be persisted in Base64 encoding (RFC 4848, see \url{https://tools.ietf.org/html/rfc4648}). The Advanced Encryption Standard (AES) will be used as symmetric cipher.
+The first step of the project is the integration of security concepts in \libelektra. Confidentiality will be increased by providing encrypted values. In order to distinguish encrypted values from plain text, the key meta-informations will be extended. Encrypted valus will be stored in Base64 encoding (RFC 4848, see \url{https://tools.ietf.org/html/rfc4648}). The Advanced Encryption Standard (AES) will be used as symmetric cipher.
 
-Once the symmetric encryption operations are integrated, test databases will be created. These databases are used to test the algorithm against known vulnerabilities. Security tests are either unit tests, that are integrated into the existing test suite, or stand-alone applications, depending on the complexity of the test setup and the required environment. The outcomes of these tests are evaluated and interpreted to answer part one of the research question.
+Once the symmetric encryption operations are integrated, test cases will be created that enable performance measurements. To see how much time is spent in the encryption and decryption functions the tool \texttt{callgrind} will be used. See:
 
-Finally the integrity of the key database files will be assured by storing the signed SHA-512 hash value of the file content. RSA will be used for signing the hash values. If the handling of the RSA keypair for the signature procedure should decrease usability, integrity can be provided by storing a hashed message authentication code (HMAC). \libgcrypt supports all of these cryptographic operations, so changing the method for assuring integrity should not be much effort.
+\url{http://www.valgrind.org/docs/manual/cl-manual.html}
 
-Again test cases will be used to attack known vulnerabilities of the implementations. Part two of the research question will be answered by evaluating and interpreting the outcomes of these tests.
+Finally the integrity of the key database files will be assured by storing the signed SHA-512 hash value of the file content. RSA will be used for signing the hash values. If handling the RSA keypair for the signature procedure should decrease usability, integrity can be provided by storing a hashed message authentication code (HMAC) alternatively. \libgcrypt supports all of these cryptographic operations, so changing the method for assuring integrity should not be much effort.
 
+Again test cases will be used to measure the overall performance of the signing and verfifying operations.
+
+Now the strategy for examining the research questions is clear. The following section will explain the planned timeline.
 
 %----------------------------------------------------------------------------------------
-%	TIMING
+%	TIMELINE
 %----------------------------------------------------------------------------------------
-\section{Timing}
+\section{Timeline}
+
+The thesis is separated into several milestones. The following table is a timeline, that shows when each of the deliverables should be ready.
 
 \begin{table}[h]
 \begin{tabular}{ll}
-\textbf{Date} & \textbf{Deliverable / Artifact} \\
-2015/04/30 & Concept (software design) for symmetric cryptographic implementation \\
-2015/05/31 & Thesis: Description of the methodology, first draft for test cases \\
-2015/06/30 & Completed work on symmetric cryptography (part 1 of the research question) \\
-2015/07/31 & Concept and description of the asymmetric cryptography implementation \\
-2015/08/31 & Completed work on asymmetric cryptogryphy (part 2 of the research question) \\
-~          & conclusion \\ 
-2015/09/31 & Review \& finalization
+\textbf{Date} & \textbf{Deliverable / Artifact}                                           \\ \hline
+2015/04/30    & Exposé                                                                    \\ \hline
+2015/05/31    & Concept (software design) for symmetric cryptographic implementation      \\
+              & Thesis: Description of the methodology                                    \\ \hline
+2015/06/30    & Completed implementation of symmetric cryptography                        \\ \hline
+2015/07/31    & Concept (software design)  for the asymmetric cryptography implementation \\
+              & Thesis: completed sections about symmetric cryptography                   \\ \hline
+2015/08/31    & Completed implementation of asymmetric cryptogryphy                       \\
+              & Thesis: completed sections about asymmetric cryptography                  \\
+              & Thesis: introduction and conclusion (draft)                               \\ \hline
+2015/09/31    & Review \& final thesis                                                   
 \end{tabular}
 \end{table}
 
