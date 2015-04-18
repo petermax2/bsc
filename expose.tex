@@ -105,20 +105,22 @@ The following section describes the research questions, which arise from the tas
 %----------------------------------------------------------------------------------------
 \section{Research Questions}
 
+The research questions examine the possible performance impact of cryptographic operations on Elektra. 
+To simplify communication, some abbreviations are introduced. 
 Let $t_e(x)$ denote the time the encryption of a value $x$ takes, and let $t_d(x)$ denote the time the decryption of a value $x$ takes.
-The research questions examine the possible performance impact of cryptographic operations on Elektra:
+The research questions are:
 
 \begin{enumerate}
 \item How long does it take to encrypt and decrypt a strong password $p$ \cite{5461951,Holt:2011:IRS:2047456.2047461}, i.e. what are the mean values of $t_e(p)$ and $t_d(p)$?
-  
-\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the mean value of $t_e(x)/T_p(x)$?
-  
-\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the mean value of $t_d(x)/T_l(x)$?
 
-\item How much impact has the length of the value $|x|$ on $t_d(x)$ and $t_e(x)$, i.e. what is the (statistical) asymptotic behaviour of $t_e(x)$ and $t_d(x)$?
+\item How much impact has the length of the value $|x|$ on $t_d(x)$ and $t_e(x)$, i.e. what concluions about the aymptotic behaviour of $t_e(x)$ and $t_d(x)$ can be drawn from the observations?
+
+\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the mean value of $t_e(x)/T_p(x)$ for different sizes of $x$?
+
+\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the mean value of $t_d(x)/T_l(x)$ for different sizes of $x$?
 
 \item How much time is needed for signing and verifying Elektra database files of different sizes?
-  
+
 \end{enumerate}
 
 The next section provides details about how these questions will be examined.
@@ -143,11 +145,10 @@ The \libgcrypt project is hosted by the Free Software Foundation (FSF) and can b
 
 \url{http://www.gnu.org/software/libgcrypt/}
 
-The first step of the project is the integration of security concepts in \libelektra. Confidentiality will be increased by providing encrypted values. In order to distinguish encrypted values from plain text, the key meta-informations will be extended. Encrypted valus will be stored in Base64 encoding (RFC 4848, see \url{https://tools.ietf.org/html/rfc4648}). The Advanced Encryption Standard (AES) will be used as symmetric cipher.
+The first step of the project is the integration of security concepts in \libelektra. Confidentiality will be increased by providing encrypted values. In order to distinguish encrypted values from plain text, the key meta-informations will be extended. Encrypted valus will be stored in Base64 encoding\footnote{RFC 4848, see \url{https://tools.ietf.org/html/rfc4648}}. The Advanced Encryption Standard (AES) will be used as symmetric cipher.
 
-Once the symmetric encryption operations are integrated, test cases will be created that enable performance measurements. To see how much time is spent in the encryption and decryption functions the tool \texttt{callgrind} will be used. See:
-
-\url{http://www.valgrind.org/docs/manual/cl-manual.html}
+Once the symmetric encryption operations are integrated, test cases will be created that enable performance measurements.
+To observe how much time the different functions of the test cases take for execution, the tool \texttt{callgrind}\footnote{\url{http://www.valgrind.org/docs/manual/cl-manual.html}} will be used.
 
 Finally the integrity of the key database files will be assured by storing the signed SHA-512 hash value of the file content. RSA will be used for signing the hash values. If handling the RSA keypair for the signature procedure should decrease usability, integrity can be provided by storing a hashed message authentication code (HMAC) alternatively. \libgcrypt supports all of these cryptographic operations, so changing the method for assuring integrity should not be much effort.
 
@@ -166,10 +167,10 @@ The thesis is separated into several milestones. The following table is a timeli
 \begin{tabular}{ll}
 \textbf{Date} & \textbf{Deliverable / Artifact}                                           \\ \hline
 2015/04/30    & Exposé                                                                    \\ \hline
-2015/05/31    & Concept (software design) for symmetric cryptographic implementation      \\
+2015/05/31    & Concept for symmetric cryptographic implementation                        \\
               & Thesis: Description of the methodology                                    \\ \hline
 2015/06/30    & Completed implementation of symmetric cryptography                        \\ \hline
-2015/07/31    & Concept (software design)  for the asymmetric cryptography implementation \\
+2015/07/31    & Concept for the asymmetric cryptography implementation                    \\
               & Thesis: completed sections about symmetric cryptography                   \\ \hline
 2015/08/31    & Completed implementation of asymmetric cryptogryphy                       \\
               & Thesis: completed sections about asymmetric cryptography                  \\
