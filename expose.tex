@@ -45,7 +45,7 @@
 %----------------------------------------------------------------------------------------
 \title{Exposé}
 \author{Peter Nirschl (1025647)}
-\date{Version 0.1}
+\date{Version 0.2}
 %----------------------------------------------------------------------------------------
 
 \begin{document}
@@ -77,7 +77,7 @@ For further information, please refer to:
 %----------------------------------------------------------------------------------------
 \section{Title}
 
-Implementation and Performance Analysis of Cryptographic Methods for Elektra
+Performance Analysis of Cryptographic Methods for Elektra
 
 
 %----------------------------------------------------------------------------------------
@@ -105,23 +105,25 @@ The following section describes the research questions, which arise from the tas
 %----------------------------------------------------------------------------------------
 \section{Research Questions}
 
-The research questions examine the possible performance impact of cryptographic operations on Elektra. 
+The research questions examine the possible performance impact of cryptographic operations on \libelektra.
 To simplify communication, some abbreviations are introduced. 
-Let $t_e(x)$ denote the time the encryption of a value $x$ takes, and let $t_d(x)$ denote the time the decryption of a value $x$ takes.
+Let $t_e(x)$ denote the time the encryption of a value $x$ takes as measured by a benchmark, and let $t_d(x)$ denote the time the decryption of a value $x$ takes as measured by a benchmark.
 The research questions are:
 
 \begin{enumerate}
-\item How long does it take to encrypt and decrypt a strong password $p$ \cite{5461951,Holt:2011:IRS:2047456.2047461}, i.e. what are the mean values of $t_e(p)$ and $t_d(p)$?
+\item How long does it take to encrypt and decrypt a strong password $p$ \cite{5461951,Holt:2011:IRS:2047456.2047461}, i.e. what are the median values of $t_e(p)$ and $t_d(p)$?
 
 \item How big is the impact of the length of the value $|x|$ on $t_e(x)$ and $t_d(x)$, i.e. what conclusions about the asymptotic behaviour of $t_e(x)$ and $t_d(x)$ can be drawn from the observations?
 
-\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the mean value of $t_e(x)/T_p(x)$ for different sizes of $x$?
+\item How big is the ratio of the time needed to encrypt a value $x$ in comparison to the total time of the persisting operation $T_p(x)$ for the value $x$, i.e. what is the median value of $t_e(x)/T_p(x)$ for different sizes of $x$?
 
-\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the mean value of $t_d(x)/T_l(x)$ for different sizes of $x$?
+\item How big is the ratio of the time needed to decrypt a value $x$ in comparison to the total time of the loading operation $T_l(x)$ for the value $x$, i.e. what is the median value of $t_d(x)/T_l(x)$ for different sizes of $x$?
 
-\item How much time is needed for signing and verifying Elektra database files of different sizes?
+\item How much time is needed for signing and verifying \libelektra database files of different sizes?
 
 \end{enumerate}
+
+The outcomes of the benchmarks may be represented visually by charts (e.g. box plots).
 
 The next section provides details about how these questions will be examined.
 
@@ -135,15 +137,11 @@ So far the task description as well as the research questions have been discusse
 This section provides detailed information about how the research questions will be answered step by step.
 
 The \libelektra project is being used as test environment, as mentioned in the task description.
-The source code of the \libelektra project is available at GitHub:
-
-\url{https://github.com/ElektraInitiative/libelektra/}
+The source code of the \libelektra project is available at GitHub\footnote{\url{https://github.com/ElektraInitiative/libelektra/}}.
 
 The cryptographic operations will be provided by \libgcrypt, an open source cryptographic API, which is FIPS compliant and can thus be considered as ``sufficiently secure''.
 This project will act as the real-world implementation and will be tested for performance in order to examine the research question.
-The \libgcrypt project is hosted by the Free Software Foundation (FSF) and can be accessed at:
-
-\url{http://www.gnu.org/software/libgcrypt/}
+The \libgcrypt project is hosted by the Free Software Foundation (FSF)\footnote{\url{http://www.gnu.org/software/libgcrypt/}}.
 
 The first step of the project is the integration of security concepts in \libelektra. 
 Confidentiality will be increased by providing encrypted values. 
@@ -161,7 +159,7 @@ If handling the RSA keypair for the signature procedure should decrease usabilit
 
 Again test cases will be used to measure the overall performance of the signing and verifying operations.
 
-Now the strategy for examining the research questions is defined. The following section will explain the planned timeline.
+The following section will explain the planned timeline.
 
 %----------------------------------------------------------------------------------------
 %	TIMELINE
