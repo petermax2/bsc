@@ -8,7 +8,20 @@ This work is distributed under the terms of the [Creative Commons Attribution-Sh
 
 ## Abstract ##
 
-TBD
+Security has become a crucial aspect of modern day applications, especially when it comes to libraries.
+`libelektra` (or simply Elektra) is essentially a hierarchical key-value database that is intended to store configuration data.
+It features extensibility by providing a plugin system.
+
+The goal is to enhance `libelektra` to provide **confidentiality** for sensitive values.
+Those values should be protected against unauthorized usage by means of symmetric encryption.
+An existing implementation of the Advanced Encryption Standard (AES) will be used for encryption.
+
+Another security enhancement to `libelektra` is to provide **integrity** for configuration files.
+Therefore an RSA-based signature algorithm will be used to detect unauthorized changes between the time the file has been persisted and reloaded again.
+
+However, security comes at a cost, namely: comfort and performance.
+The (possible) influences of security measures on the user experience are not covered in this thesis.
+The main question will be if the introduction of cryptographic methods leads to a significant decline in performance.
 
 ## Generating the content ##
 
