@@ -1,0 +1,24 @@
+Cryptographic Methods for Elektra
+
+Chapter I - Introduction
+
+> Elektra - Project Description
+> Research Questions
+> Introducing the Methodology
+> Distinction to related work
+
+Chapter II - Implementation
+
+> Gcrypt library
+> Software Design (Elektra adaptions)
+> Methodology in detail
+> How to apply the measurements
+
+Chapter III - Results
+
+> Outcome of the performance tests
+> Interpretation of the result
+
+Chapter IV - Conclusions
+
+> Final words / Conclusions
