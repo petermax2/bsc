@@ -4,9 +4,8 @@
 # For further information, please refer to:  http://creativecommons.org/licenses/by-sa/4.0/
 #
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(BachelorThesis NONE)
-INCLUDE(UseLATEX.cmake)
-
-ADD_SUBDIRECTORY(expose)
-ADD_SUBDIRECTORY(thesis)
+ADD_LATEX_DOCUMENT(expose.tex 
+	BIBFILES ./literature.bib 
+	MANGLE_TARGET_NAMES
+	DEFAULT_PDF
+)
