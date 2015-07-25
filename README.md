@@ -26,7 +26,7 @@ The main question will be if the introduction of cryptographic methods leads to 
 ## Generating the content ##
 
 Please note that a LaTeX distribution is required for generating the content as PDF or PostScript file.
-Also the [UseLATEX](https://github.com/kmorel/UseLATEX) CMake module should be installed on your system.
+Also the [UseLATEX](https://github.com/kmorel/UseLATEX) CMake module should be available on your system.
 
 * Verify the installation of the CMake module `UseLATEX.cmake` (you can simply copy the file into the root directory of the repository)
 
@@ -37,14 +37,9 @@ mkdir build
 cd build
 ```
 
-* Let CMake configure the build environment
+* Let CMake configure the build environment. make triggers the PDF creation
 
 ```
 cmake ..
-```
-
-* Use one of the Makefile targets to generate the content
-
-```
-make pdf
+make
 ```
