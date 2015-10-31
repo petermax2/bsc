@@ -1,3 +1,5 @@
 build*
 .directory*
 UseLATEX.cmake
+.DS_Store
+._.DS_Store
