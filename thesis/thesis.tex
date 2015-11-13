@@ -4,7 +4,7 @@
 % For further information, please refer to: http://creativecommons.org/licenses/by-sa/4.0/
 %
 
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{report}
 
 \usepackage[utf8]{inputenc}
 \usepackage[top=3cm, bottom=3cm, left=3cm, right=2cm]{geometry}
@@ -54,12 +54,8 @@
 \begin{abstract}
 TBD
 \end{abstract}
-%\setcounter{tocdepth}{1} % defines whether or not subsections should not be listed in the TOC
-%\tableofcontents
-%\newpage
 
-\vfill
-
+\newpage
 \section*{Copyright Notice}
 
 Copyright \copyright~ 2015 Peter Nirschl.
@@ -68,8 +64,25 @@ This work is released under the terms of the \textbf{Creative Commons Attributio
 For further information, please refer to:
 
 \url{http://creativecommons.org/licenses/by-sa/4.0/}
-
 \newpage
+
+\setcounter{tocdepth}{2} % defines whether or not subsections should not be listed in the TOC
+\tableofcontents
+\newpage
+
+
+% Content
+\chapter{Introduction}
+\input{intro}
+\input{related_work}
+
+\chapter{Problem}
+\input{goals}
+
+\chapter{Benchmarks}
+\input{bench_env}
+
+\chapter{Results}
 
 
 \end{document}

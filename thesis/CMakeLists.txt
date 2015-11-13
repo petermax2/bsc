@@ -4,8 +4,9 @@
 # For further information, please refer to:  http://creativecommons.org/licenses/by-sa/4.0/
 #
 
-ADD_LATEX_DOCUMENT(thesis.tex 
+ADD_LATEX_DOCUMENT(thesis.tex
 #	BIBFILES literature.bib 
 	MANGLE_TARGET_NAMES
+	INPUTS intro.tex related_work.tex goals.tex bench_env.tex
 	DEFAULT_PDF
 )
