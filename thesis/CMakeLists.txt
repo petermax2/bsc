@@ -7,6 +7,6 @@
 ADD_LATEX_DOCUMENT(thesis.tex
 #	BIBFILES literature.bib 
 	MANGLE_TARGET_NAMES
-	INPUTS intro.tex related_work.tex goals.tex bench_env.tex
+	INPUTS intro.tex rsq.tex eval.tex conclusion.tex
 	DEFAULT_PDF
 )
