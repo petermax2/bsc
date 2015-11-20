@@ -1,80 +1,165 @@
-% Copyright (C) 2015 Peter Nirschl.
+% Copyright (C) 2014-2015 by Thomas Auzinger <thomas@auzinger.name>
+
+\documentclass[draft,final]{vutinfth} % Remove option 'final' to obtain debug information.
+
+% Load packages to allow in- and output of non-ASCII characters.
+\usepackage{lmodern}        % Use an extension of the original Computer Modern font to minimize the use of bitmapped letters.
+\usepackage[T1]{fontenc}    % Determines font encoding of the output. Font packages have to be included before this line.
+\usepackage[utf8]{inputenc} % Determines encoding of the input. All input files have to use UTF8 encoding.
+
+% Extended LaTeX functionality is enables by including packages with \usepackage{...}.
+\usepackage{fixltx2e}   % Provides fixes for several errors in LaTeX2e.
+\usepackage{amsmath}    % Extended typesetting of mathematical expression.
+\usepackage{amssymb}    % Provides a multitude of mathematical symbols.
+\usepackage{mathtools}  % Further extensions of mathematical typesetting.
+\usepackage{microtype}  % Small-scale typographic enhancements.
+\usepackage{enumitem}   % User control over the layout of lists (itemize, enumerate, description).
+\usepackage{multirow}   % Allows table elements to span several rows.
+\usepackage{booktabs}   % Improves the typesettings of tables.
+\usepackage{subcaption} % Allows the use of subfigures and enables their referencing.
+\usepackage[ruled,linesnumbered,algochapter]{algorithm2e} % Enables the writing of pseudo code.
+\usepackage[usenames,dvipsnames,table]{xcolor} % Allows the definition and use of colors. This package has to be included before tikz.
+\usepackage{nag}       % Issues warnings when best practices in writing LaTeX documents are violated.
+\usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
+\usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
+
+% Define convenience functions to use the author name and the thesis title in the PDF document properties.
+\newcommand{\authorname}{Peter Nirschl} % The author name without titles.
+\newcommand{\thesistitle}{Cryptographic Methods For Elektra} % The title of the thesis. The English version should be used, if it exists.
+
+% Set PDF document properties
+\hypersetup{
+    pdfpagelayout   = TwoPageRight,           % How the document is shown in PDF viewers (optional).
+    linkbordercolor = {Melon},                % The color of the borders of boxes around crosslinks (optional).
+    pdfauthor       = {\authorname},          % The author's name in the document properties (optional).
+    pdftitle        = {\thesistitle},         % The document's title in the document properties (optional).
+    pdfsubject      = {},              % The document's subject in the document properties (optional).
+    pdfkeywords     = {cryptography,elektra,performance} % The document's keywords in the document properties (optional).
+}
+
+\setsecnumdepth{subsection} % Enumerate subsections.
+
+\nonzeroparskip             % Create space between paragraphs (optional).
+\setlength{\parindent}{0pt} % Remove paragraph identation (optional).
+
+\makeindex      % Use an optional index.
+\makeglossaries % Use an optional glossary.
+%\glstocfalse   % Remove the glossaries from the table of contents.
+
+% Set persons with 4 arguments:
+%  {title before name}{name}{title after name}{gender}
+%  where both titles are optional (i.e. can be given as empty brackets {}).
+\setauthor{Pretitle}{\authorname}{Posttitle}{female}
+\setadvisor{Pretitle}{Markus Raab}{Posttitle}{male}
+
+% For bachelor and master theses:
+\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+
+% For dissertations:
+%\setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
+
+% For dissertations at the PhD School:
+%\setsecondadvisor{Pretitle}{Forename Surname}{Posttitle}{male}
+
+% Required data.
+\setaddress{Jochen-Rindt-Straße 10 Haus 24, 1230 Wien}
+\setregnumber{1025647}
+\setdate{01}{01}{2016}
+\settitle{\thesistitle}{Cryptographic Methods For Elektra} % Sets English and German version of the title (both can be English or German).
+\setsubtitle{}{} % Sets English and German version of the subtitle (both can be English or German).
+
+% Select the thesis type: bachelor / master / doctor / phd-school.
+% Bachelor:
+\setthesis{bachelor}
 %
-% This document is released under the terms of the Creative Commons Attribution-ShareAlike 4.0 International License.
-% For further information, please refer to: http://creativecommons.org/licenses/by-sa/4.0/
+% Master:
+%\setthesis{master}
+%\setmasterdegree{dipl.} % dipl. / rer.nat. / rer.soc.oec. / master
 %
+% Doctor:
+%\setthesis{doctor}
+%\setdoctordegree{rer.soc.oec.}% rer.nat. / techn. / rer.soc.oec.
+%
+% Doctor at the PhD School
+%\setthesis{phd-school} % Deactivate non-English title pages (see below)
 
-\documentclass[a4paper,12pt]{report}
+% For bachelor and master:
+\setcurriculum{Software and Information Engineering}{Software and Information Engineering} % Sets the English and German name of the curriculum.
 
-\usepackage[utf8]{inputenc}
-\usepackage[top=3cm, bottom=3cm, left=3cm, right=2cm]{geometry}
-\usepackage{fancyhdr}
-\usepackage{lastpage}
-\usepackage{extramarks}
-\usepackage{graphicx}
-\usepackage{lipsum}
-\usepackage{mathtools}
-\usepackage{url}
+% For dissertations at the PhD School:
+\setfirstreviewerdata{Affiliation, Country}
+\setsecondreviewerdata{Affiliation, Country}
 
-\linespread{1.1}
+% Define convenience macros.
+\newcommand{\todo}[1]{{\color{red}\textbf{TODO: {#1}}}} % Comment for the final version, to raise errors.
 
-% Set up the header and footer
-\pagestyle{fancy}
-\lhead{}
-\chead{Cryptographic Methods for Elektra}
-\rhead{}
-\lfoot{}
-\cfoot{\thepage}
-\rfoot{}
-\renewcommand\headrulewidth{0.4pt}
-%\renewcommand\footrulewidth{0.4pt}
-
-% Setup paragraph style
-\setlength\parindent{0pt} % Removes all indentation from paragraphs
-\setlength{\parskip}{0.2cm}
-
-%----------------------------------------------------------------------------------------
-%	USER DEFINED COMMANDS
-%----------------------------------------------------------------------------------------
-\newcommand{\libelektra}{\texttt{libelektra}~}
-\newcommand{\libgcrypt}{\texttt{libgcrypt}~}
-
-
-%----------------------------------------------------------------------------------------
-%	TITLE PAGE
-%----------------------------------------------------------------------------------------
-\title{Cryptographic Methods for Elektra}
-\author{Peter Nirschl (1025647)}
-\date{DRAFT}
-%----------------------------------------------------------------------------------------
 
 \begin{document}
 
-\maketitle
+\frontmatter % Switches to roman numbering.
+% The structure of the thesis has to conform to
+%  http://www.informatik.tuwien.ac.at/dekanat
+
+\addtitlepage{naustrian} % German title page (not for dissertations at the PhD School).
+\addtitlepage{english} % English title page.
+\addstatementpage
+
+\begin{danksagung*}
+\todo{Ihr Text hier.}
+\end{danksagung*}
+
+\begin{acknowledgements*}
+\todo{Enter your text here.}
+\end{acknowledgements*}
+
+\begin{kurzfassung}
+\todo{Ihr Text hier.}
+\end{kurzfassung}
+
 \begin{abstract}
-TBD
+\todo{Enter your text here.}
 \end{abstract}
 
-\newpage
-\section*{Copyright Notice}
+% Select the language of the thesis, e.g., english or naustrian.
+\selectlanguage{english}
 
-Copyright \copyright~ 2015 Peter Nirschl.
+% Add a table of contents (toc).
+\tableofcontents % Starred version, i.e., \tableofcontents*, removes the self-entry.
 
-This work is released under the terms of the \textbf{Creative Commons Attribution-ShareAlike 4.0 International License}.
-For further information, please refer to:
+% Switch to arabic numbering and start the enumeration of chapters in the table of content.
+\mainmatter
 
-\url{http://creativecommons.org/licenses/by-sa/4.0/}
-\newpage
-
-\setcounter{tocdepth}{3} % defines whether or not subsections should not be listed in the TOC
-\tableofcontents
-\newpage
-
-% Content
 \input{intro}
 \input{rsq}
 \input{eval}
 \input{conclusion}
 
+% Remove following line for the final thesis.
+\input{intro.tex} % A short introduction to LaTeX.
+
+\backmatter
+
+% Use an optional list of figures.
+\listoffigures % Starred version, i.e., \listoffigures*, removes the toc entry.
+
+% Use an optional list of tables.
+\listoftables % Starred version, i.e., \listoftables*, removes the toc entry.
+
+% Use an optional list of alogrithms.
+\listofalgorithms
+\addcontentsline{toc}{chapter}{List of Algorithms}
+
+% Add an index.
+\printindex
+
+% Add a glossary.
+\printglossaries
+
+% Add a bibliography.
+\bibliographystyle{alpha}
+\bibliography{literature}
 
 \end{document}

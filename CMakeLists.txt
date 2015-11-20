@@ -9,4 +9,3 @@ PROJECT(BachelorThesis NONE)
 INCLUDE(UseLATEX.cmake)
 
 ADD_SUBDIRECTORY(expose)
-ADD_SUBDIRECTORY(thesis)
