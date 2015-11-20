@@ -49,13 +49,13 @@
 % Set persons with 4 arguments:
 %  {title before name}{name}{title after name}{gender}
 %  where both titles are optional (i.e. can be given as empty brackets {}).
-\setauthor{Pretitle}{\authorname}{Posttitle}{female}
-\setadvisor{Pretitle}{Markus Raab}{Posttitle}{male}
+\setauthor{}{\authorname}{}{female}
+\setadvisor{DI}{Markus Raab}{}{male}
 
 % For bachelor and master theses:
-\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
-\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
-\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
 
 % For dissertations:
 %\setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
@@ -90,8 +90,8 @@
 \setcurriculum{Software and Information Engineering}{Software and Information Engineering} % Sets the English and German name of the curriculum.
 
 % For dissertations at the PhD School:
-\setfirstreviewerdata{Affiliation, Country}
-\setsecondreviewerdata{Affiliation, Country}
+%\setfirstreviewerdata{Affiliation, Country}
+%\setsecondreviewerdata{Affiliation, Country}
 
 % Define convenience macros.
 \newcommand{\todo}[1]{{\color{red}\textbf{TODO: {#1}}}} % Comment for the final version, to raise errors.
@@ -136,9 +136,6 @@
 \input{rsq}
 \input{eval}
 \input{conclusion}
-
-% Remove following line for the final thesis.
-\input{intro.tex} % A short introduction to LaTeX.
 
 \backmatter
 
