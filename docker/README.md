@@ -8,7 +8,7 @@ The final container size will be about **4.3 GB**.
 
 Run the following command to build the container:
 
-	docker build -t pnirschl/bsc
+	docker build -t pnirschl/bsc .
 
 While building the container Docker will download about **2 GB** of packages.
 
