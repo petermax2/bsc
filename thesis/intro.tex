@@ -21,11 +21,32 @@ In the following section the test environment is introduced.
 
 \section{Environment}
 
+Two providers of cryptographic implementations will be benchmarked: OpenSSL and libgcrypt.
+They are integrated within the Elektra project.
+
 	\subsection{OpenSSL}
+
+The OpenSSL project offers implementations of the Transport Layer Security (TLS) and the Secure Sockets Layer (SSL) protocols.
+It also provides its own implementations of the underlying cryptographic operations, which can be accessed via the interfaces of the libcrypto library.
+
+The source code of OpenSSL is written in the C programming language.
+It is available at the project homepage.\footnote{OpenSSL project homepage: \url{https://www.openssl.org/}}
 
 	\subsection{libgcrypt}
 
+The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocols.
+The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
+
+The source code is also written in C and is available at the GnuPG project homepage.\footnote{GnuPG project homepage: \url{https://www.gnupg.org/}}
+
 	\subsection{Elektra}
+
+The core of Elektra's source code is written in C.
+The source code is available at the Github project page.\footnote{Elektra project page at Github: \url{https://github.com/ElektraInitiative/libelektra}}
+
+Elektra uses a special terminology.
+We adapt to these words and phrases.
+Their definitions are provided in the following section.
 
 \section{Terms and Definitions}
 
