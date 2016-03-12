@@ -7,25 +7,28 @@ One aspect of security is the protection of confidential data.
 In this thesis we talk about confidentiality, the protection of data against unauthorized access, and integrity, the protection of data against unauthorized change.
 Both of these goals are achieved by utilizing cryptography.
 
-While cryptography is useful, are there drawbacks as well?
+While cryptography is useful, does its introduction bring drawbacks as well?
 An increase in security induces a decline in performance and usability.
 More protection causes overhead, so more operations are executed on the CPU.
 The key-- and password--management are inconvenient for the user.
 
 We are not going to discuss drawbacks in usability, but focus on the performance issue.
+Theoretical analysis of cryptographic algorithms have already been done. \todo{citation needed}
+But how do concrete implementations of these algorithms perform in a real application?
+In order to find out, we benchmark implementations of cryptographic algorithms within a suitable environment.
 
-\todo{fill the gap -- den Bogen spannen}
+In the following section the test environment is introduced.
 
-OpenSSL and libgcrypt are two widely used cryptographic libraries and therefore good for benchmarking in real-world applications.
+\section{Environment}
 
-\todo{add short hypothesis}
+	\subsection{OpenSSL}
 
-\todo{add short hint about the benchmark reuslts?}
+	\subsection{libgcrypt}
+
+	\subsection{Elektra}
 
 \section{Terms and Definitions}
 
-\section{Related Work}
-
-\section{Elektra}
-
 \section{Research Question -- Security VS. System Performance}
+
+\section{Related Work}
