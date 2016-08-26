@@ -8,9 +8,8 @@ In this thesis we talk about confidentiality, the protection of data against una
 Both of these goals are achieved by utilizing cryptography.
 
 While cryptography is useful, does its introduction bring drawbacks as well?
-An increase in security induces a decline in performance and usability.
-More protection causes overhead, so more operations are executed on the CPU.
-The key-- and password--management are inconvenient for the user.
+An increase in security means a decline in performance and usability.
+More protection causes overhead and the key-- and password--management is inconvenient for the user.
 
 We are not going to discuss drawbacks in usability, but focus on the performance issue.
 Theoretical analysis of cryptographic algorithms have already been done. \todo{citation needed}
@@ -21,8 +20,15 @@ In the following section the test environment is introduced.
 
 \section{Environment}
 
-Two providers of cryptographic implementations will be benchmarked: OpenSSL and libgcrypt.
-They are integrated within the Elektra project.
+Three providers of cryptographic implementations will be benchmarked:
+
+\begin{enumerate}
+\item OpenSSL
+\item libgcrypt
+\item Botan
+\end{enumerate}
+
+They are integrated into the Elektra project, which acts as reference application.
 
 	\subsection{OpenSSL}
 
@@ -38,6 +44,13 @@ The libgcrypt library is part of the GnuPG project, an open source implementatio
 The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
 
 The source code is also written in C and is available at the GnuPG project homepage.\footnote{GnuPG project homepage: \url{https://www.gnupg.org/}}
+
+	\subsection{Botan}
+
+The Botan library is a free provider of cryptographic functions.
+
+The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
+
 
 	\subsection{Elektra}
 
