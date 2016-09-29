@@ -8,7 +8,7 @@ In this thesis we talk about confidentiality, the protection of data against una
 Both of these goals are achieved by utilizing cryptography.
 
 While cryptography is useful, does its introduction bring drawbacks as well?
-An increase in security means a decline in performance and usability.
+An increase in security usually means a decline in performance and usability.
 More protection causes overhead and the key-- and password--management is inconvenient for the user.
 
 We are not going to discuss drawbacks in usability, but focus on the performance issue.
@@ -33,14 +33,14 @@ They are integrated into the Elektra project, which acts as reference applicatio
 	\subsection{OpenSSL}
 
 The OpenSSL project offers implementations of the Transport Layer Security (TLS) and the Secure Sockets Layer (SSL) protocols.
-It also provides its own implementations of the underlying cryptographic operations, which can be accessed via the interfaces of the libcrypto library.
+It also provides its own implementations of the underlying cryptographic operations, which are accessible via the interfaces of the libcrypto library.
 
 The source code of OpenSSL is written in the C programming language.
 It is available at the project homepage.\footnote{OpenSSL project homepage: \url{https://www.openssl.org/}}
 
 	\subsection{libgcrypt}
 
-The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocols.
+The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocol.
 The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
 
 The source code is also written in C and is available at the GnuPG project homepage.\footnote{GnuPG project homepage: \url{https://www.gnupg.org/}}
@@ -51,8 +51,11 @@ The Botan library is a free provider of cryptographic functions.
 
 The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
 
-
 	\subsection{Elektra}
+
+The Elektra project is a library for centralized configuration management.
+It is extensible by a plugin system that enables the modification of the configuration values in a well-arranged manner.
+Elektra also provides a set of tools to directly modify the configuration database.
 
 The core of Elektra's source code is written in C.
 The source code is available at the Github project page.\footnote{Elektra project page at Github: \url{https://github.com/ElektraInitiative/libelektra}}
