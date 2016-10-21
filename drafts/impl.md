@@ -13,12 +13,12 @@ A KeySet holds zero or more Keys.
 The (Elektra) Key holds the configuration parameter either as a string or as a binary value.
 
 The core of Elektra is kept small, meaning that it provides mainly the database abstraction as well as a plugin system.
-All the configuration access operations (mainly file reads and writes but there are more exotic constructs as well) are performed by plugins.
+All the configuration access operations (mainly file reads and writes but there are more complicated constructs, like intercepting `open ()` calls in order to inject a Mozilla configuration, as well) are performed by plugins.
 The plugins should fulfill exactly one purpose, keeping to the UNIX philosophy.
-To give an example: one plugin may write to `/etc/host` and another one may encode binary values using the Base64 encoding scheme.
+To give an example: one plugin may write to `/etc/hosts` and another one may encode binary values using the Base64 encoding scheme.
 Multiple plugins may be combined into a backend.
 
-Backends use the concept of mounting like UNIX-like file systems.
+Backends can be mounted like UNIX-like file systems.
 Every backend has its own configuration itself, which specifies the runtime behavior of the plugins within the backend.
 
 A plugin can export different methods in order to fulfill their purpose.
