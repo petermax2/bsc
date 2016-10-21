@@ -47,8 +47,24 @@ The `get` stage is called when the content of the key-value database is requeste
 
 ## Crypto Plugin
 
+To protect confidential values within a configuration set the `crypto` plugin encrypts values at the `set` stage and decrypts them at the `get` stage.
 
+In order to benchmark different crypto provider there are three compile variants of the crypto plugin, each using a different backend:
+
+1. `crypto_botan` using the Botan library
+2. `crypto_openssl` using `libcrypto` (a part of the OpenSSL library)
+3. `crypto_gcrypt` using GPG's `libgcrypt`
 
 ### Key Management
 
 ### Details About The Crypto Libraries
+
+
+
+## Fcrypt Plugin
+
+The `fcrypt` plugin was written to encrypt and decrypt whole files using the GPG interface mentioned before.
+One of its advantages is that it requires the `gpg2` or `gpg` binary as only runtime dependency.
+There are no dependencies at compile time.
+
+Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the `crypto` plugins do.
