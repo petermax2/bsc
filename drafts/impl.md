@@ -49,7 +49,13 @@ The `get` stage is called when the content of the key-value database is requeste
 
 To protect confidential values within a configuration set the `crypto` plugin encrypts values at the `set` stage and decrypts them at the `get` stage.
 
-In order to benchmark different crypto provider there are three compile variants of the crypto plugin, each using a different backend:
+The crypto plugin only processes Elektra Keys which have a meta-key `crypto/encrypt` set to "1".
+
+The Advanced Encryption Standard (AES) cipher with 256 bit key-length in Cipher Block Chaining (CBC) mode is used for symmetric encryption and decryption.
+
+### Details About The Crypto Libraries
+
+In order to benchmark different crypto provider there are three compile variants of the crypto plugin, each using a different provider:
 
 1. `crypto_botan` using the Botan library
 2. `crypto_openssl` using `libcrypto` (a part of the OpenSSL library)
@@ -57,9 +63,17 @@ In order to benchmark different crypto provider there are three compile variants
 
 ### Key Management
 
-### Details About The Crypto Libraries
+The crypto plugin uses GnuPG for handling cryptographic keys.
+The GPG-keys to use for encryption are specified in the plugin configuration.
 
+When a backend is mounted with the crypto plugin (see `checkconf`) a random character string called the *master password* is generated.
+The master password is encrypted by calling GnuPG and the encrypted master password is stored in the plugin configuration.
 
+If the plugin wants to encrypt a value, it reads the encrypted master password from the configuration and decrypts it by calling GnuPG.
+Then a salt is generated for the Elektra-Key holding the value.
+Together with the master password the PBKDF2 is called to generate a cryptographic key as well as an initialization vector (IV).
+
+The generated cryptographic key together with the IV are passed on to the crypto provider.
 
 ## Fcrypt Plugin
 
