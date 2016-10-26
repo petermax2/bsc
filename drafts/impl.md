@@ -1,12 +1,10 @@
-# Implementation
-
 This chapter describes the changes and enhancements that were made to Elektra in order to answer the research questions.
 
 First we talk about Elektra's plugin API in general and how we used it to introduce cryptographic operations to Elektra.
 Then the concept of the key management is presented.
 At last some interesting implementation details about the crypto libraries used are given.
 
-## Elektra Plugins
+# Elektra Plugins
 
 Elektra abstracts configuration parameters in a hierarchical key-value database.
 A KeySet holds zero or more Keys.
@@ -24,28 +22,28 @@ Every backend has its own configuration itself, which specifies the runtime beha
 A plugin can export different methods in order to fulfill their purpose.
 They are enumerated below:
 
-### checkconf
+## checkconf
 
 At this stage a plugin may validate the backend configuration as well as the plugin configuration.
 The plugin may modify the configuration or report that the configuration is incomplete or wrong in some way.
 
-### open
+## open
 
 The `open` stage is called to initialize the plugin.
 
-### close
+## close
 
 The `close` stage is called to properly shutdown the plugin and release all resources it may hold.
 
-### set
+## set
 
 The `set` stage is called when changes made to the key-value database should be persisted.
 
-### get
+## get
 
 The `get` stage is called when the content of the key-value database is requested by an application.
 
-## Crypto Plugin
+# Crypto Plugin
 
 To protect confidential values within a configuration set the `crypto` plugin encrypts values at the `set` stage and decrypts them at the `get` stage.
 
@@ -53,7 +51,7 @@ The crypto plugin only processes Elektra Keys which have a meta-key `crypto/encr
 
 The Advanced Encryption Standard (AES) cipher with 256 bit key-length in Cipher Block Chaining (CBC) mode is used for symmetric encryption and decryption.
 
-### Details About The Crypto Libraries
+## Details About The Crypto Libraries
 
 In order to benchmark different crypto provider there are three compile variants of the crypto plugin, each using a different provider:
 
@@ -61,7 +59,7 @@ In order to benchmark different crypto provider there are three compile variants
 2. `crypto_openssl` using `libcrypto` (a part of the OpenSSL library)
 3. `crypto_gcrypt` using GPG's `libgcrypt`
 
-### Key Management
+## Key Management
 
 The crypto plugin uses GnuPG for handling cryptographic keys.
 The GPG-keys to use for encryption are specified in the plugin configuration.
@@ -75,7 +73,7 @@ Together with the master password the PBKDF2 is called to generate a cryptograph
 
 The generated cryptographic key together with the IV are passed on to the crypto provider.
 
-## Fcrypt Plugin
+# Fcrypt Plugin
 
 The `fcrypt` plugin was written to encrypt and decrypt whole files using the GPG interface mentioned before.
 One of its advantages is that it requires the `gpg2` or `gpg` binary as only runtime dependency.
