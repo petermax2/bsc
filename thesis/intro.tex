@@ -12,9 +12,56 @@ An increase in security usually means a decline in performance and usability.
 More protection causes overhead and the key-- and password--management is inconvenient for the user.
 
 We are not going to discuss drawbacks in usability, but focus on the performance issue.
-Theoretical analysis of cryptographic algorithms has already been done. \todo{citation needed}
+Cryptographic algorithms have been studied and benchmarked in different contexts.\cite{thakur2011aes,Gupta:2002:PAE:570681.570691} (see also in \ref{relatedwork} Related Work on page \pageref{relatedwork})
 But how do concrete implementations of these algorithms perform in a real application?
-In order to find out, we benchmark implementations of cryptographic algorithms within a suitable environment.
+In order to find out, we benchmark implementations of cryptographic algorithms within a suitable test environment.
+
+The following section concretizes the research questions we aim to answer.
+
+\section{Research Question}
+
+The focus of this work is to find out how much the use of cryptography
+impacts application performance in terms of runtime and memory
+usage.
+
+The research questions this thesis aims to answer are enumerated below:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  How much more time does the use of cryptography cost (runtime impact)?
+\item
+  What is the ratio compared to the runtime if cryptography is not used?
+\item
+  How much more memory is used when using cryptography (memory impact)?
+\item
+  What is the ratio compared to the memory consumption if cryptography
+  is not used?
+\end{enumerate}
+
+All of the questions refer to a typical user-space application, that is capable of handling file I/O in different volumes.
+
+\section{Related Work}\label{relatedwork}
+
+Performance analysis of cryptographic operations has been studied by different groups with different interests.
+
+In ''The Design of the OpenBSD Cryptographic Framework`` (\cite{ocf}) developers of OpenBSD describe their kernel interface that abstracts the use of hardware accelerated cryptographic operations.
+The authors mainly argue about the performance gain the OCF brings to applications.
+But rather than concentrating on a single application the focus of \cite{ocf} is overall system performance in scenarios where multiple applications perform cryptographic operations simultaneously.
+Another aspect \cite{ocf} covers is the load-balancing capability OCF has to offer if multiple hardware acceleration cards are available on a system.
+\cite{ocf} focuses on the kernel and operating system performance rather than on single applications.
+The paper measures speed-up in comparison to cryptographic operations performed in user-space.
+Thus the paper does not answer our research questions.
+
+''Improving High-Bandwidth TLS in the FreeBSD kernel`` (\cite{freebsdtls}), another performance study, has been conducted by FreeBSD developers.
+They tried to get higher TLS throughput on their high-performance network appliances for Netflix, a video on-demand streaming service.
+The focus of \cite{freebsdtls} is the networking aspect considering different network adapters and tuning options in the FreeBSD kernel.
+Again the focus is not a single application but rather the improvement of the TLS stack.
+
+\todo{describe more papers}
+
+Because none of the previous papers answered our research questions, it is reasonable to perform an experimental evaluation to find out the answers.
 
 In the following section the test environment is introduced.
 
@@ -53,8 +100,10 @@ The source code is written in C++ and is available at Github.\footnote{Github pr
 
 	\subsection{Elektra}
 
-The Elektra project is a library for centralized configuration management.
-It is extensible by a plugin system that enables the modification of the configuration values in a well-arranged manner.
+The Elektra project is a library combined with a set of tools for centralized configuration management.
+It is extensible by a plugin system that enables the modification of the configuration values in a well-arranged manner.\cite{raab2010thesis}
+
+The plugin framework makes benchmarking easy, which is why we chose Elektra as reference application.
 Elektra also provides a set of tools to directly modify the configuration database.
 
 The core of Elektra's source code is written in C.
@@ -65,46 +114,5 @@ We adapt to these words and phrases.
 Their definitions are provided in the following section.
 
 \section{Terms and Definitions}
-
-\section{Research Question}
-
-The focus of this work is to find out how much the use of cryptography
-impacts application performance in terms of runtime and memory
-usage.
-
-The research questions this thesis aims to answer are enumerated below:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  How much more time does the use of cryptography cost (runtime impact)?
-\item
-  What is the ratio compared to the runtime if cryptography is not used?
-\item
-  How much more memory is used when using cryptography (memory impact)?
-\item
-  What is the ratio compared to the memory consumption if cryptography
-  is not used?
-\end{enumerate}
-
-All of the questions refer to a typical user-space application, that is capable of handling file I/O in different volumes.
-
-\section{Related Work}
-
-The performance impact of cryptography has been studied by different groups with different interests.
-
-In ''The Design of the OpenBSD Cryptographic Framework`` ( \cite{ocf} ) developers of OpenBSD describe their kernel interface that abstracts the use of hardware accelerated cryptographic operations.
-The authors mainly argue about the performance gain the OCF brings to applications.
-But rather than concentrating on a single application the focus of \cite{ocf} is overall system performance in scenarios where multiple applications perform cryptographic operations simultaneously.
-Another aspect \cite{ocf} covers is the load-balancing capability OCF has to offer if multiple hardware acceleration cards are available on a system.
-
-\cite{ocf} focus on the kernel and operating system performance rather than on single applications.
-The paper measures speed-up in comparison to cryptographic operations performed in user-space.
-Thus the paper does not answer our research questions.
-
-\todo{describe more papers}
-
-Because none of the previous papers answered our research questions, it is reasonable to perform an experimental evaluation to find out the answers.
 
 The following chapter describes the changes that have been made to the Elektra project in preparation for benchmarking the impact of cryptography to applications.
