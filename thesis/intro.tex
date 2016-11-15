@@ -112,10 +112,22 @@ Elektra also provides a set of tools to directly modify the configuration databa
 The core of Elektra's source code is written in C.
 The source code is available at the Github project page.\footnote{Elektra project page at Github: \url{https://github.com/ElektraInitiative/libelektra}}
 
-Elektra uses a special terminology.
-We adapt to these words and phrases.
-Their definitions are provided in the following section.
-
 \section{Terms and Definitions}
+
+Elektra uses a special terminology, which conflicts with our research topic.
+We stick to the following terms in order to keep our statements precise.
+
+\paragraph{Key} is a data structure, that is used by Elektra to combine and hold the following information:
+\begin{enumerate}
+  \item Name
+  \item Metadata
+  \item Value
+\end{enumerate}
+When ``Key'' is used alone we always mean the (Elektra) Key and never a cryptographic key.
+
+\paragraph{KeySet} is an ordered set of (Elektra) Keys.
+
+\paragraph{Cryptographic Key} is a byte sequence used by cryptographic algorithms to enable confidentiality.
+We always explicitly refer to cryptography in order to distinguish between (Elektra) Keys and cryptographic keys.
 
 The following chapter describes the changes that have been made to the Elektra project in preparation for benchmarking the impact of cryptography to applications.
