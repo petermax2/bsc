@@ -2,9 +2,71 @@
 
 \section{Methodology}
 
+
+
 see valgrind manual \cite{valgrind}.
 
 \section{System Setup}
+  \subsection{Hardware Setup}
+
+The processor to run the benchmarks is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading support.
+It has 15825 MB of DDR3 RAM available clocked at 1333 MHz.
+The amount of total memory available was measured with the \texttt{free} program
+
+The operating system (root partition) is located on a ``Samsung SSD 840'' solid state drive.
+It uses the XFS filesystem inside an encrypted LUKS\footnote{Linux Unified Key Setup} container within a LVM\footnote{Logival Volume Manager} partition.
+
+The home directory is located on a software RAID 1\footnote{Redundant Array Of Inexpensive Disks} array, containing of two ``ST1000DM003-1SB1'' hard disks.
+It also uses the XFS filesystem inside an encrypted LUKS container within a LVM partiton.
+
+See the output of the \texttt{lsblk} program for the exact hard drive arrangement.
+
+\begin{lstlisting}[caption={Disk arrangement on the benchmark machine}]
+NAME                          TYPE  MOUNTPOINT
+sda                           disk
+|-sda1                        part  /boot/efi
+|-sda2                        part  /boot
++-sda3                        part
+  +-luks-6bcb2406             crypt
+    |-centos_peterspc-root    lvm   /
+    +-centos_peterspc-swap    lvm   [SWAP]
+sdb                           disk
++-sdb1                        part
+  +-md127                     raid1
+    +-home                    crypt /home
+sdc                           disk
++-sdc1                        part
+  +-md127                     raid1
+    +-home                    crypt /home
+\end{lstlisting}
+
+The \texttt{hdparm} program gives an idea of how much throughput this disk setup can actually handle:
+
+\begin{lstlisting}[caption={Disk performance on the benchmark machine}]
+/dev/sda:
+ Timing cached reads:   30192 MB in  2.00 seconds = 15133.81 MB/sec
+ Timing buffered disk reads: 1548 MB in  3.00 seconds = 515.86 MB/sec
+
+/dev/md127:
+ Timing cached reads:   30608 MB in  1.99 seconds = 15343.38 MB/sec
+ Timing buffered disk reads: 628 MB in  3.01 seconds = 208.78 MB/sec
+\end{lstlisting}
+
+The test configuration for the benchmarks are stored in the home directory (RAID 1 array).
+
+  \subsection{Software Setup}
+
+The software stack used to build and run the benchmarks is entirely defined by CentOS Linux release 7.2.1511 (Core).
+We highlight the most important program versions nevertheless:
+
+\begin{itemize}
+  \item GNU Make version 3.82
+  \item cmake version 2.8.11
+  \item clang version 3.4.2 (tags/RELEASE\textunderscore 34/dot2-final)
+  \item valgrind version 3.10.0
+\end{itemize}
+
+The Linux kernel version used for running the tests is 3.10.0-327.36.3.el7.x86\textunderscore 64.
 
 \section{Benchmark 1 -- TBD}
 
