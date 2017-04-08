@@ -4,7 +4,6 @@
 
 This chapter describes the changes and enhancements that were made to
 Elektra in order to answer the research questions.
-
 First we talk about Elektra's plugin API in general and how we used it
 to introduce cryptographic operations to Elektra. Then the concept of
 the key management is presented. At last some interesting implementation
@@ -13,24 +12,26 @@ details about the crypto libraries used are given.
 \section{Elektra Plugins}\label{elektra-plugins}
 
 Elektra abstracts configuration parameters in a hierarchical key-value
-database. A KeySet holds zero or more Keys. The (Elektra) Key holds the
-configuration parameter either as a string or as a binary value.
+database. A keyset holds zero or more keys. The key‚ holds the
+configuration parameter either as a string value or as a binary value.
 
 The core of Elektra is kept small, meaning that it provides mainly the
 database abstraction as well as a plugin system. All the configuration
 access operations (mainly file reads and writes but there are more
-complicated constructs, like intercepting \texttt{open\ ()} calls in
+complicated constructs, like intercepting \texttt{open()} calls in
 order to inject a Mozilla configuration, as well) are performed by
 plugins. The plugins should fulfill exactly one purpose, keeping to the
 UNIX philosophy. To give an example: one plugin may write to
 \texttt{/etc/hosts} and another one may encode binary values using the
-Base64 encoding scheme. Multiple plugins may be combined into a backend.
+Base64 encoding scheme.
 
-Backends can be mounted like UNIX-like file systems. Every backend has
-its own configuration itself, which specifies the runtime behavior of
-the plugins within the backend.
+Backends are one or more plugins combined into a unit that interact with a single configuration point (typically a configuration file).
+The backend is ''mounted`` into Elektra's configuration hierachy.
+This process is similar to the mounting process in UNIX-like file systems, where a device can be mounted to a specific directory in the virtual file system.
+In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
+Every backend has its own configuration itself, which specifies the runtime behavior of the plugins within the backend.
 
-A plugin can export different methods in order to fulfill their purpose.
+A plugin can export different methods in order to fulfill its purpose.
 They are enumerated below:
 
 \subsection{checkconf}\label{checkconf}

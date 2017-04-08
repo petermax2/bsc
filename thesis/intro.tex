@@ -1,7 +1,5 @@
 \chapter{Introduction}
 
-\section{Motivation}
-
 Security is a broad field of study and plays an important role in modern day application development.
 One aspect of security is the protection of confidential data.
 In this thesis we talk about confidentiality, the protection of data against unauthorized access, and integrity, the protection of data against unauthorized change.
@@ -13,8 +11,11 @@ More protection causes overhead and the key-- and password--management is inconv
 
 We are not going to discuss drawbacks in usability, but focus on the performance issue.
 Cryptographic algorithms have been studied and benchmarked in different contexts (see \ref{relatedwork} Related Work on page \pageref{relatedwork}).
-But how do concrete implementations of these algorithms perform in a real application?
+But how do concrete implementations of these algorithms perform in real applications?
 In order to find out, we benchmark implementations of cryptographic algorithms within a suitable test environment.
+
+The benchmark setup will test symmetric ciphers like the Advanced Encryption Standard (AES).
+The test inputs will be rather small values.
 
 The following section concretizes the research questions we aim to answer.
 
@@ -23,6 +24,9 @@ The following section concretizes the research questions we aim to answer.
 The focus of this work is to find out how much the use of cryptography
 impacts application performance in terms of runtime and memory
 usage.
+
+We want to find out if the introduction of cryptography slows down the test application significantly.
+Also we want to observe differences in memory usage while running the benchmarks.
 
 The research questions this thesis aims to answer are enumerated below:
 
@@ -34,6 +38,8 @@ The research questions this thesis aims to answer are enumerated below:
 \item
   What is the ratio compared to the runtime if cryptography is not used?
 \item
+  Are there significant differences between different implementations of cryptographic algorithms?
+\item
   How much more memory is used when using cryptography (memory impact)?
 \item
   What is the ratio compared to the memory consumption if cryptography
@@ -42,33 +48,9 @@ The research questions this thesis aims to answer are enumerated below:
 
 All of the questions refer to a typical user-space application, that is capable of handling file I/O in different volumes.
 
-\section{Related Work}\label{relatedwork}
-
-Performance analysis of cryptographic operations has been studied by different groups with different interests.
-
-The paper ''DES, AES and Blowfish: Symmetric Key Cryptography Algorithms Simulation Based Performance Analysis`` (\cite{thakur2011aes}) compares implementations of symmetric cryptographic algorithms.
-The authors' goal is to find the most performant algorithm.
-The paper does not answer how much overhead the introduction of cryptographic methods actually costs, but we will use the results for comparison with our own experiments.
-
-In ''The Design of the OpenBSD Cryptographic Framework`` (\cite{ocf}) developers of OpenBSD describe their kernel interface that abstracts the use of hardware accelerated cryptographic operations.
-The authors mainly argue about the performance gain the OCF brings to applications.
-But rather than concentrating on a single application the focus of \cite{ocf} is overall system performance in scenarios where multiple applications perform cryptographic operations simultaneously.
-Another aspect \cite{ocf} covers is the load-balancing capability OCF has to offer if multiple hardware acceleration cards are available on a system.
-\cite{ocf} focuses on the kernel and operating system performance rather than on single applications.
-The paper measures speed-up in comparison to cryptographic operations performed in user-space.
-Thus the paper does not answer our research questions.
-
-''Improving High-Bandwidth TLS in the FreeBSD kernel`` (\cite{freebsdtls}), another performance study, has been conducted by FreeBSD developers.
-They tried to get higher TLS throughput on their high-performance network appliances for Netflix, a video on-demand streaming service.
-The focus of \cite{freebsdtls} is the networking aspect considering different network adapters and tuning options in the FreeBSD kernel.
-Again the focus is not a single application but rather the improvement of the TLS stack.
-
-Because none of the previous papers answered our research questions, it is reasonable to perform an experimental evaluation to find out the answers.
-However, we will refer to \cite{thakur2011aes} and check if our measured overhead correlates with the expected performance loss as described in \cite{thakur2011aes}.
+\section{Environment}
 
 In the following section the test environment is introduced.
-
-\section{Environment}
 
 Three providers of cryptographic implementations will be benchmarked:
 
@@ -78,7 +60,9 @@ Three providers of cryptographic implementations will be benchmarked:
 \item Botan
 \end{enumerate}
 
-They are integrated into the Elektra project, which acts as reference ''real world`` application.
+They are integrated into the reference ''real world`` application.
+Elektra is a configuration management library, that also provides applications to interact with.
+Its modularity makes it a good choice to act as a reference application.
 
 	\subsection{OpenSSL}
 
@@ -97,7 +81,7 @@ The source code is also written in C and is available at the GnuPG project homep
 
 	\subsection{Botan}
 
-The Botan library is a free provider of cryptographic functions.
+The Botan library is another provider of cryptographic functions.
 
 The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
 
@@ -106,7 +90,8 @@ The source code is written in C++ and is available at Github.\footnote{Github pr
 The Elektra project is a library combined with a set of tools for centralized configuration management.
 It is extensible by a plugin system that enables the modification of the configuration values in a well-arranged manner.\cite{raab2010thesis}
 
-The plugin framework makes benchmarking easy, which is why we chose Elektra as reference application.
+The plugin framework grants modularity, which is why we chose Elektra as reference application.
+Because of the modularity runtime overheads of cryptographic operations can be detected easily.
 Elektra also provides a set of tools to directly modify the configuration database.
 
 The core of Elektra's source code is written in C.
@@ -114,7 +99,7 @@ The source code is available at the Github project page.\footnote{Elektra projec
 
 \section{Terms and Definitions}
 
-Elektra uses a special terminology, which conflicts with our research topic.
+Elektra uses a special terminology, which we need to clarify.
 We stick to the following terms in order to keep our statements precise.
 
 \paragraph{Key} is a data structure, that is used by Elektra to combine and hold the following information:
@@ -123,11 +108,15 @@ We stick to the following terms in order to keep our statements precise.
   \item Metadata
   \item Value
 \end{enumerate}
-When ``Key'' is used alone we always mean the (Elektra) Key and never a cryptographic key.
+When ``Key'' is used alone we always mean Elektra Key and never a cryptographic key.
 
-\paragraph{KeySet} is an ordered set of (Elektra) Keys.
+\paragraph{Keyset} is an ordered set of keys.
 
 \paragraph{Cryptographic Key} is a byte sequence used by cryptographic algorithms to enable confidentiality.
-We always explicitly refer to cryptography in order to distinguish between (Elektra) Keys and cryptographic keys.
+We always explicitly refer to cryptography in order to distinguish between Elektra keys and cryptographic keys.
+
+\section{Perspective}
 
 The following chapter describes the changes that have been made to the Elektra project in preparation for benchmarking the impact of cryptography to applications.
+
+TBD
