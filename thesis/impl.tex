@@ -11,9 +11,17 @@ details about the crypto libraries used are given.
 
 \section{Elektra Plugins}\label{elektra-plugins}
 
-Elektra abstracts configuration parameters in a hierarchical key-value
-database. A keyset holds zero or more keys. The key‚ holds the
-configuration parameter either as a string value or as a binary value.
+Elektra abstracts configuration parameters in a hierarchical key-value database.
+A keyset holds zero or more keys.
+The key holds its path within the configuration hierarchy as well as the configuration parameter either as a string value or as a binary value.
+A key may also contain meta-keys, which are keys that further describe the key.
+Elektra uses meta-keys for different purposes:
+
+\begin{enumerate}
+\item state information of the key (e.g. encrypted, encoded, ...)
+\item data validation (e.g. numeric value, binary value, ...)
+\item formatting (e.g. position in file, number of spaces/tabs between parameters, ...)
+\end{enumerate}
 
 The core of Elektra is kept small, meaning that it provides mainly the
 database abstraction as well as a plugin system. All the configuration
@@ -36,34 +44,37 @@ They are enumerated below:
 
 \subsection{checkconf}\label{checkconf}
 
-At this stage a plugin may validate the backend configuration as well as
+At this method a plugin may validate the backend configuration as well as
 the plugin configuration. The plugin may modify the configuration or
 report that the configuration is incomplete or wrong in some way.
 
 \subsection{open}\label{open}
 
-The \texttt{open} stage is called to initialize the plugin.
+The \texttt{open} method is called to initialize the plugin.
 
 \subsection{close}\label{close}
 
-The \texttt{close} stage is called to properly shutdown the plugin and
+The \texttt{close} method is called to properly shutdown the plugin and
 release all resources it may hold.
 
 \subsection{set}\label{set}
 
-The \texttt{set} stage is called when changes made to the key-value
+For storage plugins the \texttt{set} method is called when changes made to the key-value
 database should be persisted.
+Filter plugins export this method to modify the keyset (e.g. encode binary values using the Base64 schema).
 
 \subsection{get}\label{get}
 
-The \texttt{get} stage is called when the content of the key-value
+The \texttt{get} method is called when the content of the key-value
 database is requested by an application.
+Filter plugins provide this method to transform data in the keyset (e.g. decoding Base64 encoded strings back into their corresponding binary value).
+Storage plugins typically perform read operations within this method.
 
 \section{Crypto Plugin}\label{crypto-plugin}
 
 To protect confidential values within a configuration set the
-\texttt{crypto} plugin encrypts values at the \texttt{set} stage and
-decrypts them at the \texttt{get} stage.
+\texttt{crypto} plugin encrypts values at the \texttt{set} method and
+decrypts them at the \texttt{get} method.
 
 The crypto plugin only processes Elektra Keys which have a meta-key
 \texttt{crypto/encrypt} set to ``1''.
