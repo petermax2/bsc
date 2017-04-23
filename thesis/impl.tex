@@ -107,7 +107,7 @@ variants of the crypto plugin, each using a different provider:
 \subsection{Key Management}\label{key-management}
 
 The crypto plugin uses GnuPG for handling cryptographic keys. The
-GPG-keys to use for encryption are specified in the plugin
+GPG-keys to use for encryption are specified in the backend
 configuration.
 
 When a backend is mounted with the crypto plugin (see
@@ -123,18 +123,15 @@ the master password the PBKDF2 is called to generate a cryptographic key
 as well as an initialization vector (IV).
 
 The generated cryptographic key together with the IV are passed on to
-the crypto provider.
+the crypto library.
 
 \section{Fcrypt Plugin}\label{fcrypt-plugin}
 
-The \texttt{fcrypt} plugin was written to encrypt and decrypt whole
-files using the GPG interface mentioned before. One of its advantages is
-that it requires the \texttt{gpg2} or \texttt{gpg} binary as only
-runtime dependency. There are no dependencies at compile time.
+The \texttt{fcrypt} plugin was written to encrypt and decrypt whole files using the GPG interface mentioned before.
+One of its advantages is that there are no dependencies at compile time.
+Only the \texttt{gpg2} or \texttt{gpg} binary are required as runtime dependency.
 
-Again the GPG keys to be used for encryption are defined in the plugin
-configuration following the same semantics as the \texttt{crypto}
-plugins do.
+Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \texttt{crypto} plugins.
 
 This chapter explained the Elektra plugin system and how we used it to introduce cryptographic methods to the Elektra project.
 Now that we have an application to examine, we continue with the description of the actual measurements in the following chapter.
