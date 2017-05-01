@@ -37,7 +37,30 @@ Backends are one or more plugins combined into a unit that interact with a singl
 The backend is ''mounted`` into Elektra's configuration hierachy.
 This process is similar to the mounting process in UNIX-like file systems, where a device can be mounted to a specific directory in the virtual file system.
 In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
-Every backend has its own configuration itself, which specifies the runtime behavior of the plugins within the backend.
+Every backend has its own configuration itself (i.e. backend configuration), which specifies the runtime behavior of the plugins within the backend.
+
+Elektra's build scripts provide a functionality called compile variants, which means a plugin is being compiled multiple times with minor differences.
+This is useful if a feature (e.g. cryptographic operations) is provided by different libraries interchangeably.
+A lot of the plugin code stays the same for every compile variant except for the library-specific calls.
+Those calls are encapsulated using C preprocessor directives.
+The following code snippet illustrates compile variants further:
+
+\begin{lstlisting}[language=C]
+static int elektraCryptoInit (Key * errorKey)
+{
+#if defined(ELEKTRA_CRYPTO_API_GCRYPT)
+	return elektraCryptoGcryInit (errorKey);
+#elif defined(ELEKTRA_CRYPTO_API_OPENSSL)
+	return elektraCryptoOpenSSLInit (errorKey);
+#elif defined(ELEKTRA_CRYPTO_API_BOTAN)
+	return elektraCryptoBotanInit (errorKey);
+#else
+	return 1;
+#endif
+}
+\end{lstlisting}
+
+As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compile variants.
 
 A plugin can export different methods in order to fulfill its purpose.
 They are enumerated below:
