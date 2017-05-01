@@ -9,7 +9,9 @@ to introduce cryptographic operations to Elektra. Then the concept of
 the key management is presented. At last some interesting implementation
 details about the crypto libraries used are given.
 
-\section{Elektra Plugins}\label{elektra-plugins}
+\section{Elektra Components}\label{elektra-plugins}
+
+\subsection{Key and Keyset}
 
 Elektra abstracts configuration parameters in a hierarchical key-value database.
 A keyset holds zero or more keys.
@@ -23,21 +25,53 @@ Elektra uses meta-keys for different purposes:
 \item formatting (e.g. position in file, number of spaces/tabs between parameters, ...)
 \end{enumerate}
 
-The core of Elektra is kept small, meaning that it provides mainly the
-database abstraction as well as a plugin system. All the configuration
-access operations (mainly file reads and writes but there are more
-complicated constructs, like intercepting \texttt{open()} calls in
-order to inject a Mozilla configuration, as well) are performed by
-plugins. The plugins should fulfill exactly one purpose, keeping to the
-UNIX philosophy. To give an example: one plugin may write to
-\texttt{/etc/hosts} and another one may encode binary values using the
-Base64 encoding scheme.
+\subsection{Plugin}
+
+The core of Elektra is kept small, meaning that it provides mainly the database abstraction as well as a plugin system.
+All the configuration access operations (mainly file reads and writes but there are more complicated constructs, like intercepting \texttt{open()} calls in order to inject a Mozilla configuration, as well) are performed by plugins.
+The plugins should fulfill exactly one purpose, keeping to the UNIX philosophy.
+To give an example: one plugin may write to \texttt{/etc/hosts} and another one may encode binary values using the Base64 encoding scheme.
+
+A plugin can export different methods in order to fulfill its purpose.
+They are enumerated below:
+
+\subsubsection{checkconf}\label{checkconf}
+
+At this method a plugin may validate the backend configuration as well as
+the plugin configuration. The plugin may modify the configuration or
+report that the configuration is incomplete or wrong in some way.
+
+\subsubsection{open}\label{open}
+
+The \texttt{open} method is called to initialize the plugin.
+
+\subsubsection{close}\label{close}
+
+The \texttt{close} method is called to properly shutdown the plugin and
+release all resources it may hold.
+
+\subsubsection{set}\label{set}
+
+For storage plugins the \texttt{set} method is called when changes made to the key-value
+database should be persisted.
+Filter plugins export this method to modify the keyset (e.g. encode binary values using the Base64 schema).
+
+\subsubsection{get}\label{get}
+
+The \texttt{get} method is called when the content of the key-value
+database is requested by an application.
+Filter plugins provide this method to transform data in the keyset (e.g. decoding Base64 encoded strings back into their corresponding binary value).
+Storage plugins typically perform read operations within this method.
+
+\subsection{Backend}
 
 Backends are one or more plugins combined into a unit that interact with a single configuration point (typically a configuration file).
 The backend is ''mounted`` into Elektra's configuration hierachy.
 This process is similar to the mounting process in UNIX-like file systems, where a device can be mounted to a specific directory in the virtual file system.
 In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
 Every backend has its own configuration itself (i.e. backend configuration), which specifies the runtime behavior of the plugins within the backend.
+
+\subsection{Compile Variants}
 
 Elektra's build scripts provide a functionality called compile variants, which means a plugin is being compiled multiple times with minor differences.
 This is useful if a feature (e.g. cryptographic operations) is provided by different libraries interchangeably.
@@ -61,37 +95,6 @@ static int elektraCryptoInit (Key * errorKey)
 \end{lstlisting}
 
 As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compile variants.
-
-A plugin can export different methods in order to fulfill its purpose.
-They are enumerated below:
-
-\subsection{checkconf}\label{checkconf}
-
-At this method a plugin may validate the backend configuration as well as
-the plugin configuration. The plugin may modify the configuration or
-report that the configuration is incomplete or wrong in some way.
-
-\subsection{open}\label{open}
-
-The \texttt{open} method is called to initialize the plugin.
-
-\subsection{close}\label{close}
-
-The \texttt{close} method is called to properly shutdown the plugin and
-release all resources it may hold.
-
-\subsection{set}\label{set}
-
-For storage plugins the \texttt{set} method is called when changes made to the key-value
-database should be persisted.
-Filter plugins export this method to modify the keyset (e.g. encode binary values using the Base64 schema).
-
-\subsection{get}\label{get}
-
-The \texttt{get} method is called when the content of the key-value
-database is requested by an application.
-Filter plugins provide this method to transform data in the keyset (e.g. decoding Base64 encoded strings back into their corresponding binary value).
-Storage plugins typically perform read operations within this method.
 
 \section{Crypto Plugin}\label{crypto-plugin}
 
