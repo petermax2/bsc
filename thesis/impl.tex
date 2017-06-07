@@ -98,10 +98,10 @@ As we can see every crypto library is handled differently but the code frame of 
 
 \section{Crypto Plugin}\label{crypto-plugin}
 
-\subsection{Why developing the plugin?}
+\subsection{Reasons For Developing The Plugin}
 
 In order to evaluate our performance related questions we need a reference application with a high degree of modularity.
-The modularity is required to gain profound insight in the runtime behaviour of the reference application.
+The modularity is required to gain profound insight in the runtime behavior of the reference application.
 By combining different modules (or plugins) or disabling certain modules we can test a variety of possible use cases.
 
 Elektra provides the required degree of modularity but it did not provide any cryptographic functions when we started working on this thesis.
@@ -109,13 +109,12 @@ So we choose to develop a crypto plugin for Elektra, that enables us to use Elek
 
 \subsection{Benefits for the Elektra Project}
 
-Elektra is a configuration database and as such it will also be used for storing sensitive configuration data (e.g. database passwords).
+Elektra is a configuration database and as such it will be used for storing sensitive configuration data (e.g. database passwords) at some point.
 Leaving this information unencrypted is a security threat.
 The \texttt{crypto} plugin is a way of tackling this issue by providing transparent encryption.
 This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \texttt{crypto} plugin can simply be added to a backend and thus integrates well with other Elektra plugins.
 
 \subsection{Technical Details}
-
 
 To protect confidential values within a configuration set the
 \texttt{crypto} plugin encrypts values at the \texttt{set} method and
