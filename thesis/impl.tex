@@ -114,21 +114,21 @@ Leaving this information unencrypted is a security threat.
 The \texttt{crypto} plugin is a way of tackling this issue by providing transparent encryption.
 This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \texttt{crypto} plugin can simply be added to a backend and thus integrates well with other Elektra plugins.
 
-\subsection{Technical Details}
+\subsection{Technical Aspects}
 
-To protect confidential values within a configuration set the
-\texttt{crypto} plugin encrypts values at the \texttt{set} method and
-decrypts them at the \texttt{get} method.
+The \texttt{crypto} plugin acts as a filter that is applied to the keyset before the storage plugin reaches its \texttt{kdb set} phase.
+In Elektra terms this stage is called \texttt{presetstorage}.
+Later on when the encrypted data is requested the plugin decrypts the keyset after the storage plugin read the configuration in its \texttt{kdb get} phase.
+This stage is called \texttt{postgetstorage} in Elektra.
 
-The crypto plugin only processes Elektra Keys which have a meta-key
-\texttt{crypto/encrypt} set to ``1''.
+Not all keys in the keyset are considered for encryption or decryption.
+The \texttt{crypto} plugin uses a metakey to identify which keys have to be processed.
+If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the key is marked for encryption.
+During \texttt{presetstorage} the plugin checks the metakey and only encrypts values if the metakey is set properly.
+Decryption in the \texttt{postgetstorage} phase works analogous.
+All other keys, which are not marked, are ignored and left unchanged by the plugin.
 
-The Advanced Encryption Standard (AES) cipher with 256 bit key-length in
-Cipher Block Chaining (CBC) mode is used for symmetric encryption and
-decryption.
-
-Since the crypto Plugin can be easily enabled and disabled just by adding it to an Elektra backend,
-it will be very easy to benchmark its performance impact later on.
+In the following section we explain how the encryption and decryption process works in detail.
 
 \subsection{Details About The Crypto Libraries}\label{details-about-the-crypto-libraries}
 
