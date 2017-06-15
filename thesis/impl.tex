@@ -114,6 +114,26 @@ Leaving this information unencrypted is a security threat.
 The \texttt{crypto} plugin is a way of tackling this issue by providing transparent encryption.
 This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \texttt{crypto} plugin can simply be added to a backend and thus integrates well with other Elektra plugins.
 
+\subsection{Challenges}
+
+The first challenge was to design a single plugin or several plugins that support different providers for cryptographic operations.
+With the goal of comparability in mind, the plugin architectures must be very similar for each crypto-provider.
+Otherwise no useful conclusions can be drawn from differing benchmark results.
+Finally we decided to implement one single crypto plugin that handles the encryption and decryption of keysets.
+Elektra's compile variants enabled this architecture.
+For every crypto-provider or crypto library we want to integrate, a new compile variant is added to the plugin.
+
+The next problem was how to create, generate, derive or restore the keys for the cryptographic operations.
+This part of the plugin is crucial from a security perspective.
+Any kind of wrongdoing in this module could lead to leaks, endangering the confidentiality of the protected data.
+The first design that came to mind was a password based schema that utilizes the Password-Based Key Derivation Function 2 (PBKDF2).\footnote{PBKDF2 is specified in RFC 2898.}
+However this approach was not suitable for any kind of batch operation as the program flow would interrupt and ask for password input.
+So we decided to delegate the handling of cryptographic keys to an existing key store: GnuPG.
+GnuPG in combination with the pinentry utilities turned out to be a great way of managing keys.
+In addition the users benefit from this approach because they can simply use their existing PGP keys for securing their data in Elektra.
+
+In the following section we are going to dive deeper into the technical details of the implementation of the \texttt{crypto} plugin.
+
 \subsection{Technical Aspects}
 
 The \texttt{crypto} plugin acts as a filter that is applied to the keyset before the storage plugin reaches its \texttt{kdb set} phase.
