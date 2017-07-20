@@ -9,16 +9,16 @@ The runtime of a benchmark will be measured using the system time, which is retu
 
 The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
 
-Before we dive into the details about the benchmarks, the system setup on which they will be performed is described.
+Before we dive into the details about the benchmarks, the system setup, on which they will be performed, is described.
 
 \section{System Setup}
   \subsection{Hardware Setup}
 
-The processor to run the benchmarks is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading support.
-It has 15825 MB of DDR3 RAM available clocked at 1333 MHz.
+The processor to run the benchmarks is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading.
+It has 15825 MB of DDR3 RAM clocked at 1333 MHz.
 The amount of total memory available was measured with the \texttt{free} program
 
-The operating system (root partition) is located on a ``Samsung SSD 840'' solid state drive.
+The operating system's root partition is located on a ``Samsung SSD 840'' solid state drive.
 It uses the XFS filesystem inside an encrypted LUKS\footnote{Linux Unified Key Setup} container within a LVM\footnote{Logival Volume Manager} partition.
 
 The home directory is located on a software RAID 1\footnote{Redundant Array Of Inexpensive Disks} array, containing of two ``ST1000DM003-1SB1'' hard disks.
@@ -61,25 +61,20 @@ The test configuration for the benchmarks are stored in the home directory (RAID
 
   \subsection{Software Setup}
 
-The software stack used to build and run the benchmarks is defined by CentOS Linux release 7.2.1511 (Core) with the exception of Elektra.
+The software stack used to build and run the benchmarks is defined by CentOS Linux release 7.2.1511 (Core) with Elektra \todo{version}.
 We highlight the most important standard program versions:
 
 \begin{itemize}
-  \item GNU Make version 3.82
-  \item cmake version 2.8.11
   \item gcc version 4.8.5 20150623 (Red Hat 4.8.5-4)
   \item glibc version 2.17-106.el7\textunderscore 2.8
   \item valgrind version 3.10.0
   \item Botan version 1.10.13
   \item OpenSSL version 1.0.1e
   \item libgcrypt version 1.5.3
-  \item libgpg-error version 1.12
   \item GnuPG version 2.0.22
 \end{itemize}
 
 The Linux kernel version used for running the tests is 3.10.0-327.36.3.el7.x86\textunderscore 64.
-
-The modified Elektra source code is hosted on Github\footnote{\url{https://github.com/petermax2/libelektra}} in a separate branch called ``benchmarks''.
 
 \section{Benchmark 1 -- TBD}
 

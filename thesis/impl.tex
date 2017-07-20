@@ -21,8 +21,8 @@ Elektra uses meta-keys for different purposes:
 
 \begin{enumerate}
 \item state information of the key (e.g. encrypted, encoded, ...)
-\item data validation (e.g. numeric value, binary value, ...)
-\item formatting (e.g. position in file, number of spaces/tabs between parameters, ...)
+\item data validation (for example: numeric value, binary value, ...)
+\item formatting (for example: position in file, number of spaces/tabs between parameters, ...)
 \end{enumerate}
 
 \subsection{Plugin}
@@ -54,13 +54,13 @@ release all resources it may hold.
 
 For storage plugins the \texttt{set} method is called when changes made to the key-value
 database should be persisted.
-Filter plugins export this method to modify the keyset (e.g. encode binary values using the Base64 schema).
+Filter plugins export this method to modify the keyset (for example: encode binary values using the Base64 schema).
 
 \subsubsection{get}\label{get}
 
 The \texttt{get} method is called when the content of the key-value
 database is requested by an application.
-Filter plugins provide this method to transform data in the keyset (e.g. decoding Base64 encoded strings back into their corresponding binary value).
+Filter plugins provide this method to transform data in the keyset (for example: decoding Base64 encoded strings back into their corresponding binary value).
 Storage plugins typically perform read operations within this method.
 
 \subsection{Backend}
@@ -74,7 +74,7 @@ Every backend has its own configuration itself (i.e. backend configuration), whi
 \subsection{Compile Variants}
 
 Elektra's build scripts provide a functionality called compile variants, which means a plugin is being compiled multiple times with minor differences.
-This is useful if a feature (e.g. cryptographic operations) is provided by different libraries interchangeably.
+This is useful if a feature (for example: cryptographic operations) is provided by different libraries interchangeably.
 A lot of the plugin code stays the same for every compile variant except for the library-specific calls.
 Those calls are encapsulated using C preprocessor directives.
 The following code snippet illustrates compile variants further:
@@ -109,10 +109,10 @@ So we choose to develop a crypto plugin for Elektra, that enables us to use Elek
 
 \subsection{Benefits for the Elektra Project}
 
-Elektra is a configuration database and as such it will be used for storing sensitive configuration data (e.g. database passwords) at some point.
+Elektra is a configuration database and as such it will be used for storing sensitive configuration data (for example: database passwords) at some point.
 Leaving this information unencrypted is a security threat.
-The \texttt{crypto} plugin is a way of tackling this issue by providing transparent encryption.
-This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \texttt{crypto} plugin can simply be added to a backend and thus integrates well with other Elektra plugins.
+The \crypto{} is a way of tackling this issue by providing transparent encryption.
+This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \crypto{} can simply be added to a backend and thus integrates well with other Elektra plugins.
 
 \subsection{Challenges}
 
@@ -132,17 +132,18 @@ So we decided to delegate the handling of cryptographic keys to an existing key 
 GnuPG in combination with the pinentry utilities turned out to be a great way of managing keys.
 In addition the users benefit from this approach because they can simply use their existing PGP keys for securing their data in Elektra.
 
-In the following section we are going to dive deeper into the technical details of the implementation of the \texttt{crypto} plugin.
+In the following section we are going to dive deeper into the technical
+details of the implementation of the \crypto.
 
 \subsection{Technical Aspects}
 
-The \texttt{crypto} plugin acts as a filter that is applied to the keyset before the storage plugin reaches its \texttt{kdb set} phase.
+The \crypto{} acts as a filter that is applied to the keyset before the storage plugin reaches its \texttt{kdb set} phase.
 In Elektra terms this stage is called \texttt{presetstorage}.
 Later on when the encrypted data is requested the plugin decrypts the keyset after the storage plugin read the configuration in its \texttt{kdb get} phase.
 This stage is called \texttt{postgetstorage} in Elektra.
 
 Not all keys in the keyset are considered for encryption or decryption.
-The \texttt{crypto} plugin uses a metakey to identify which keys have to be processed.
+The \crypto{} uses a metakey to identify which keys have to be processed.
 If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the key is marked for encryption.
 During \texttt{presetstorage} the plugin checks the metakey and only encrypts values if the metakey is set properly.
 Decryption in the \texttt{postgetstorage} phase works analogous.
@@ -154,9 +155,36 @@ In the following section we explain how the encryption and decryption process wo
 
 \subsubsection{Data Types}
 
+\paragraph{elektraCryptoHandle} is a structure that  abstracts the crypto
+library specific data types which hold cryptographic keys and initialization
+data for the cryptographic processes (for example: initialization vectors).
+
+Other than the handle, the \crypto{} does not require any further
+data types.
 
 \subsubsection{Message Structure}
 
+The \crypto{} operates on Elektra's key data type. During its work it modifies
+the value as well as the meta-data of the keys. The value is always
+transformed into binary data. In order to restore the value to its original
+type during decryption, some sort of header information has to be stored.
+
+The following information is encoded into the first cryptographic block during
+encryption:
+
+\begin{itemize}
+\item length of the salt
+\item the salt
+\item original data type of the value (string, binary, null)
+\item original content length
+\end{itemize}
+
+The salt is a sequence of random bytes and is used in cryptography to prevent
+table-based key guessing attacks.
+The content length is saved because most crypto libraries do not support
+padding out of the box, which means that they always operate on whole blocks
+of data. The block size depends on the cryptographic algorithm that is
+used.
 
 \subsubsection{Methods}
 
@@ -194,11 +222,11 @@ In the following section we explain how the encryption and decryption process wo
 % cryptographic operations are entirely handled by GnuPG
 
 
-The \texttt{fcrypt} plugin was written to encrypt and decrypt whole files using the GPG interface mentioned before.
+The \fcrypt{} was written to encrypt and decrypt whole files using the GPG interface mentioned before.
 One of its advantages is that there are no dependencies at compile time.
 Only the \texttt{gpg2} or \texttt{gpg} binary are required as runtime dependency.
 
-Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \texttt{crypto} plugins.
+Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \crypto{}.
 
 % Chapter Outro
 
