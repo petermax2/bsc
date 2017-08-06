@@ -160,30 +160,36 @@ library specific data types which hold cryptographic keys and initialization
 data for the cryptographic processes (for example: initialization vectors).
 
 Other than the handle, the \crypto{} does not require any further
-data types.
+special data types.
 
 \subsubsection{Message Structure}
 
 The \crypto{} operates on Elektra's key data type. During its work it modifies
 the value as well as the meta-data of the keys. The value is always
 transformed into binary data. In order to restore the value to its original
-type during decryption, some sort of header information has to be stored.
+type during decryption, some header information has to be stored.
 
 The following information is encoded into the first cryptographic block during
 encryption:
 
-\begin{itemize}
-\item length of the salt
-\item the salt
-\item original data type of the value (string, binary, null)
-\item original content length
-\end{itemize}
+\begin{table}[h!]
+\centering
+\caption{Crypto message header}
+\label{my-label}
+\begin{tabular}{clrrl}
+	\textbf{} & \textbf{element}                          & \textbf{offset} & \textbf{length} & \textbf{data type}    \\ \hline
+	$L_S$     & length of the salt                        & 0               & 4 B             & unsigned long integer \\
+	$S$       & salt                                      & 4               & $L_S$ B         & byte                  \\
+	$T$       & original data type (string, binary, null) & 4 + $L_S$       & 1 B             & byte (flag)           \\
+	$L_C$     & original content length                   & 5 + $L_S$       & 4 B             & unsigned long integer \\ \hline
+\end{tabular}
+\end{table}
 
 The salt is a sequence of random bytes and is used in cryptography to prevent
 table-based key guessing attacks.
 The content length is saved because most crypto libraries do not support
 padding out of the box, which means that they always operate on whole blocks
-of data. The block size depends on the cryptographic algorithm that is
+of data, where the block size depends on the cryptographic algorithm that is
 used.
 
 \subsubsection{Methods}
