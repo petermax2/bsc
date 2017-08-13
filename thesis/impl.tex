@@ -25,7 +25,7 @@ Elektra uses meta-keys for different purposes:
 \item formatting (for example: position in file, number of spaces/tabs between parameters, ...)
 \end{enumerate}
 
-\subsection{Plugin}
+\subsection{Plugin}\label{impl_elektra_plugin}
 
 The core of Elektra is kept small, meaning that it provides mainly the database abstraction as well as a plugin system.
 All the configuration access operations (mainly file reads and writes but there are more complicated constructs, like intercepting \texttt{open()} calls in order to inject a Mozilla configuration, as well) are performed by plugins.
@@ -62,6 +62,23 @@ The \texttt{get} method is called when the content of the key-value
 database is requested by an application.
 Filter plugins provide this method to transform data in the keyset (for example: decoding Base64 encoded strings back into their corresponding binary value).
 Storage plugins typically perform read operations within this method.
+
+\subsection{Elektra State Sequence}
+
+First Elektra calls \texttt{open} and changes its state to ``opened''.
+Afterwards Elektra can either be closed by a \texttt{close} call or the configuration can be read by calling \texttt{get}.
+After the first call of \texttt{get} Elektra is ``ready''.
+Now the configuration held by Elektra may be modified with a call of \texttt{set} or the data may be read again by calling \texttt{get}.
+After all \texttt{get} and \texttt{set} calls are done, Elektra is closed by a call of \texttt{close}.\cite{elektra-doc}
+
+Figure \ref{impl_elektra_states} on page \pageref{impl_elektra_states} illustrates how the states in Elektra change by the calls of the methods mentioned above in section \ref{impl_elektra_plugin} on page \pageref{impl_elektra_plugin}.
+
+\begin{figure}[h]
+\center
+\caption{State changes in Elektra}
+\label{impl_elektra_states}
+\includegraphics[width=15.0cm]{umlet-figures/impl_elektra_state.pdf}
+\end{figure}
 
 \subsection{Backend}
 
