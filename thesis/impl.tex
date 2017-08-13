@@ -174,7 +174,7 @@ encryption:
 
 \begin{table}[h!]
 \centering
-\caption{Crypto message header}
+\caption{Structure of the crypto message header}
 \label{my-label}
 \begin{tabular}{clrrl}
 	\textbf{} & \textbf{element}                          & \textbf{offset} & \textbf{length} & \textbf{data type}    \\ \hline
@@ -193,6 +193,32 @@ of data, where the block size depends on the cryptographic algorithm that is
 used.
 
 \subsubsection{Methods}
+
+\paragraph*{open}
+
+\paragraph*{get}
+see figure \ref{impl_decrypt} on page \pageref{impl_decrypt}...
+
+\begin{figure}[h]
+\center
+\caption{Decryption of a keyset at the kdb get method}
+\label{impl_decrypt}
+\includegraphics[width=15.0cm]{umlet-figures/impl_decrypt.pdf}
+\end{figure}
+
+
+\paragraph*{set}
+see figure \ref{impl_encrypt} on page \pageref{impl_encrypt}...
+
+\begin{figure}[h]
+\center
+\caption{Encryption of a keyset at the kdb set method}
+\label{impl_encrypt}
+\includegraphics[width=15.0cm]{umlet-figures/impl_encrypt.pdf}
+\end{figure}
+
+
+\paragraph*{close}
 
 
 \subsubsection{Compilation Variants}
