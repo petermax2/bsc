@@ -94,7 +94,7 @@ static int elektraCryptoInit (Key * errorKey)
 }
 \end{lstlisting}
 
-As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compile variants.
+As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compilation variants.
 
 \section{Crypto Plugin}\label{crypto-plugin}
 
@@ -120,8 +120,8 @@ The first challenge was to design a single plugin or several plugins that suppor
 With the goal of comparability in mind, the plugin architectures must be very similar for each crypto-provider.
 Otherwise no useful conclusions can be drawn from differing benchmark results.
 Finally we decided to implement one single crypto plugin that handles the encryption and decryption of keysets.
-Elektra's compile variants enabled this architecture.
-For every crypto-provider or crypto library we want to integrate, a new compile variant is added to the plugin.
+Elektra's compilation variants enabled this architecture.
+For every crypto-provider or crypto library we want to integrate, a new compilation variant is added to the plugin.
 
 The next problem was how to create, generate, derive or restore the keys for the cryptographic operations.
 This part of the plugin is crucial from a security perspective.
