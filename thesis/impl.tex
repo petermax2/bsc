@@ -71,15 +71,15 @@ This process is similar to the mounting process in UNIX-like file systems, where
 In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
 Every backend has its own configuration itself (i.e. backend configuration), which specifies the runtime behavior of the plugins within the backend.
 
-\subsection{Compile Variants}
+\subsection{Compilation Variants}
 
-Elektra's build scripts provide a functionality called compile variants, which means a plugin is being compiled multiple times with minor differences.
+Elektra's build scripts provide a functionality called compilation variants, which means a plugin is being compiled multiple times with minor differences.
 This is useful if a feature (for example: cryptographic operations) is provided by different libraries interchangeably.
-A lot of the plugin code stays the same for every compile variant except for the library-specific calls.
+A lot of the plugin code stays the same for every compilation variant except for the library-specific calls.
 Those calls are encapsulated using C preprocessor directives.
-The following code snippet illustrates compile variants further:
+The following code snippet further illustrates the usage of compilation variants:
 
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C,caption={Example usage of compilation variants in Elektra}]
 static int elektraCryptoInit (Key * errorKey)
 {
 #if defined(ELEKTRA_CRYPTO_API_GCRYPT)
