@@ -193,12 +193,14 @@ encryption:
 \centering
 \caption{Structure of the crypto message header}
 \label{my-label}
-\begin{tabular}{clrrl}
-	\textbf{} & \textbf{element}                          & \textbf{offset} & \textbf{length} & \textbf{data type}    \\ \hline
-	$L_S$     & length of the salt                        & 0               & 4 B             & unsigned long integer \\
-	$S$       & salt                                      & 4               & $L_S$ B         & byte                  \\
-	$T$       & original data type (string, binary, null) & 4 + $L_S$       & 1 B             & byte (flag)           \\
-	$L_C$     & original content length                   & 5 + $L_S$       & 4 B             & unsigned long integer \\ \hline
+\begin{tabular}{lrrlc}
+	\textbf{element}           & \textbf{offset} & \textbf{length} & \textbf{data type}    & \textbf{encrypted} \\ \hline
+	magic number ``\#!crypto'' & 0               & 8 B             & character             & no                 \\
+	payload version            & 8               & 2 B             & character             & no                 \\
+	length of the salt $L_S$   & 10              & 4 B             & unsigned long integer & no                 \\
+	salt                       & 14              & $L_S$ B         & byte                  & no                 \\
+	original data type         & 14 + $L_S$      & 1 B             & byte                  & yes                \\
+	original content length    & 15 + $L_S$      & 4 B             & unsigned long integer & yes                \\ \hline
 \end{tabular}
 \end{table}
 
