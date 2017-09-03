@@ -1,0 +1,96 @@
+\chapter{Setting up the Benchmark Jail in FreeBSD 11}
+\label{jail-setup}
+
+This chapter covers the installation of the benchmark environment in FreeBSD 11.1 using the \texttt{tcsh} shell.
+
+\section*{Preparation of the Host System}
+
+The jail is put on a separate ZFS dataset.
+
+\begin{lstlisting}[language=bash]
+zfs create -o mountpoint=/usr/jail ROOT/jail
+setenv DESTDIR /usr/jail
+\end{lstlisting}
+
+The jail requires a network alias on the host system, otherwise netowrking will not be available within the jail.
+Also a DNS server must be provided to enable package installation.
+
+\begin{lstlisting}[language=bash]
+setenv JAIL_IP 10.0.2.16
+ifconfig em0 $JAIL_IP netmask 255.255.255.0 alias
+echo "nameserver 192.168.0.1" >> $DESTDIR/etc/resolv.conf
+\end{lstlisting}
+
+The FreeBSD installation media has to be mounted. Then the base system can be extracted into the root directory of the jail.
+
+\begin{lstlisting}[language=bash]
+setenv BSDISO /dev/`mdconfig -f ~/FreeBSD-11.1-RELEASE-amd64-disc1.iso`
+mount -t cd9660 $BSDISO /mnt
+tar -xf /mnt/usr/freebsd-dist/base.txz -C $DESTDIR
+tar -xf /mnt/usr/freebsd-dist/src.txz -C $DESTDIR
+\end{lstlisting}
+
+After the system is extracted, we update it to the latest patch level.
+
+\begin{lstlisting}[language=bash]
+freebsd-update -b $DESTDIR fetch
+freebsd-update -b $DESTDIR install
+\end{lstlisting}
+
+Another requirement for the jail is the availability of the \texttt{devfs} filesystem.
+
+\begin{lstlisting}[language=bash]
+mount -t devfs devfs $DESTDIR/dev
+\end{lstlisting}
+
+\section*{Configuration of the Jail}
+
+The jail is now ready to start.
+
+\begin{lstlisting}[language=bash]
+jail $DESTDIR elektra $JAIL_IP tcsh
+\end{lstlisting}
+
+The first step in the jail is the package installation.
+
+\begin{lstlisting}[language=bash]
+pkg install gnupg \
+llvm40 \
+botan110 \
+openssl \
+cmake \
+git \
+pkgconf \
+ninja
+\end{lstlisting}
+
+Then the build process of \texttt{libelektra} can start.
+
+\begin{lstlisting}[language=bash]
+git clone https://github.com/ElektraInitiative/libelektra.git /libelektra
+
+cd /libelektra
+mkdir build && cd build
+
+cmake \
+  -GNinja \
+  -DBUILD_STATIC=OFF \
+  -DPLUGINS="ALL" \
+  -DBINDINGS=ALL \
+  -DTOOLS=ALL \
+  ..
+
+ninja
+ninja install
+\end{lstlisting}
+
+The jail is now configured and ready to execute the benchmarks.
+
+\section*{Final Step}
+
+After the benchmark has executed, the jail environment has to be restored to its original state.
+In order to be able to restore the jail, a ZFS snapshot is created.
+
+\begin{lstlisting}[language=bash]
+zfs snapshot ROOT/jail@original
+\end{lstlisting}
