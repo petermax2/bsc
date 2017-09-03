@@ -1,80 +1,64 @@
 \chapter{Experimental Evaluation}
 
-\section{Methodology}
+%\section{Methodology}
 
-Runtime and memory usage evaluation are the focus of this chapter.
-Both parameters are quantified by benchmarks.
+The focus of this chapter is:
+\begin{enumerate}
+\item how the benchmark system is set up
+\item the exact definition and explanation how the benchmarks work and what is measured
+\item the results of the benchmarks
+\end{enumerate}
 
-The runtime of a benchmark will be measured using the system time, which is returned by the \texttt{gettimeofday ()} system function.
+%The runtime of a benchmark will be measured using the system time, which is returned by the \texttt{gettimeofday ()} system function.
+%
+%The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
 
-The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
-
-Before we dive into the details about the benchmarks, the system setup, on which they will be performed, is described.
-
-\section{System Setup}
+\section{Benchmark System Setup}
   \subsection{Hardware Setup}
 
-The processor to run the benchmarks is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading.
-It has 15825 MB of DDR3 RAM clocked at 1333 MHz.
-The amount of total memory available was measured with the \texttt{free} program
+The processor of the benchmark system is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading enabled (which means 8 threads are available).
+The benchmark system has a total of 16 GB of DDR3 RAM clocked at 1333 MHz available.
 
-The operating system's root partition is located on a ``Samsung SSD 840'' solid state drive.
-It uses the XFS filesystem inside an encrypted LUKS\footnote{Linux Unified Key Setup} container within a LVM\footnote{Logival Volume Manager} partition.
+The root partition of the operation system is located on a ``Samsung SSD 840'' solid state drive (SSD).
+It is installed on a ZFS filesystem.
 
-The home directory is located on a software RAID 1\footnote{Redundant Array Of Inexpensive Disks} array, containing of two ``ST1000DM003-1SB1'' hard disks.
-It also uses the XFS filesystem inside an encrypted LUKS container.
+The \texttt{diskinfo} program gives an idea of how much throughput the SSD can handle:
 
-See the output of the \texttt{lsblk} program for the exact hard drive arrangement.
+\begin{lstlisting}[caption={Disk performance on the benchmark system}]
+Seek times:
+  Full stroke:      250 iter in   0.014774 sec =    0.059 msec
+  Half stroke:      250 iter in   0.012662 sec =    0.051 msec
+  Quarter stroke:   500 iter in   0.024154 sec =    0.048 msec
+  Short forward:    400 iter in   0.018797 sec =    0.047 msec
+  Short backward:   400 iter in   0.018726 sec =    0.047 msec
+  Seq outer:       2048 iter in   0.075078 sec =    0.037 msec
+  Seq inner:       2048 iter in   0.074593 sec =    0.036 msec
 
-\begin{lstlisting}[caption={Disk arrangement on the benchmark machine}]
-NAME                          TYPE  MOUNTPOINT
-sda                           disk
-|-sda1                        part  /boot/efi
-|-sda2                        part  /boot
-+-sda3                        part
-  +-luks-6bcb2406             crypt
-    |-centos_peterspc-root    lvm   /
-    +-centos_peterspc-swap    lvm   [SWAP]
-sdb                           disk
-+-sdb1                        part
-  +-md127                     raid1
-    +-home                    crypt /home
-sdc                           disk
-+-sdc1                        part
-  +-md127                     raid1
-    +-home                    crypt /home
+Transfer rates:
+  outside:       102400 kbytes in   0.221568 sec =   462161 kbytes/sec
+  middle:        102400 kbytes in   0.218275 sec =   469133 kbytes/sec
+  inside:        102400 kbytes in   0.217949 sec =   469835 kbytes/sec
 \end{lstlisting}
 
-The \texttt{hdparm} program gives an idea of how much throughput this disk setup can actually handle:
-
-\begin{lstlisting}[caption={Disk performance on the benchmark machine}]
-/dev/sda:
- Timing cached reads:   30192 MB in  2.00 seconds = 15133.81 MB/sec
- Timing buffered disk reads: 1548 MB in  3.00 seconds = 515.86 MB/sec
-
-/dev/md127:
- Timing cached reads:   30608 MB in  1.99 seconds = 15343.38 MB/sec
- Timing buffered disk reads: 628 MB in  3.01 seconds = 208.78 MB/sec
-\end{lstlisting}
-
-The test configuration for the benchmarks are stored in the home directory (RAID 1 array).
+All benchmarks are performend on the SSD.
 
   \subsection{Software Setup}
 
-The software stack used to build and run the benchmarks is defined by CentOS Linux release 7.2.1511 (Core) with Elektra \todo{version}.
-We highlight the most important standard program versions:
+The operating system FreeBSD version 11.1 with patch level 1 is used to run the benchmarks.
+Elektra \todo{version} at the git commit \todo{commit-nr} is installed inside a FreeBSD jail.\footnote{FreeBSD jails
+are documented at \url{https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html}.
+}
+The most important program versions are listed below:
 
 \begin{itemize}
-  \item gcc version 4.8.5 20150623 (Red Hat 4.8.5-4)
-  \item glibc version 2.17-106.el7\textunderscore 2.8
-  \item valgrind version 3.10.0
-  \item Botan version 1.10.13
-  \item OpenSSL version 1.0.1e
-  \item libgcrypt version 1.5.3
-  \item GnuPG version 2.0.22
+  \item FreeBSD clang version 4.0.0 (tags/RELEASE\_400/final 297347) (based on LLVM 4.0.0)
+  \item Botan version 1.10.13\_3
+  \item OpenSSL version 1.0.2k-freebsd
+  \item libgcrypt version 1.8.0
+  \item GnuPG version 2.1.21
 \end{itemize}
 
-The Linux kernel version used for running the tests is 3.10.0-327.36.3.el7.x86\textunderscore 64.
+In the following section the benchmarks are documented and explained in detail.
 
 \section{Benchmark 1 -- TBD}
 
