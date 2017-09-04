@@ -22,23 +22,35 @@ The benchmark system has a total of 16 GB of DDR3 RAM clocked at 1333 MHz availa
 The root partition of the operation system is located on a ``Samsung SSD 840'' solid state drive (SSD).
 It is installed on a ZFS filesystem.
 
-The \texttt{diskinfo} program gives an idea of how much throughput the SSD can handle:
+The \texttt{diskinfo} program gives an idea of how much throughput the SSD can handle. The results are listed in the tables \ref{eval-ssd-seek} on page \pageref{eval-ssd-seek} and \ref{eval-ssd-transfer} on page \pageref{eval-ssd-transfer}.
 
-\begin{lstlisting}[caption={Disk performance on the benchmark system}]
-Seek times:
-  Full stroke:      250 iter in   0.014774 sec =    0.059 msec
-  Half stroke:      250 iter in   0.012662 sec =    0.051 msec
-  Quarter stroke:   500 iter in   0.024154 sec =    0.048 msec
-  Short forward:    400 iter in   0.018797 sec =    0.047 msec
-  Short backward:   400 iter in   0.018726 sec =    0.047 msec
-  Seq outer:       2048 iter in   0.075078 sec =    0.037 msec
-  Seq inner:       2048 iter in   0.074593 sec =    0.036 msec
+\begin{table}[h]
+\centering
+\caption{Seek times of the benchmark SSD}
+\label{eval-ssd-seek}
+\begin{tabular}{lrrr}
+\textbf{}      & \textbf{number of iterations} & \textbf{total duration} & \textbf{estimated time} \\ \hline
+full stroke    & $250$                         & $0.014774 s$            & $0.059 ms$              \\
+half stroke    & $250$                         & $0.012662 s$            & $0.051 ms$              \\
+quarter stroke & $500$                         & $0.024154 s$            & $0.048 ms$              \\
+short forward  & $400$                         & $0.018797 s$            & $0.047 ms$              \\
+short backward & $400$                         & $0.018726 s$            & $0.047 ms$              \\
+seq outer      & $2048$                        & $0.075078 s$            & $0.037 ms$              \\
+seq inner      & $2048$                        & $0.074593 s$            & $0.036 ms$              \\ \hline
+\end{tabular}
+\end{table}
 
-Transfer rates:
-  outside:       102400 kbytes in   0.221568 sec =   462161 kbytes/sec
-  middle:        102400 kbytes in   0.218275 sec =   469133 kbytes/sec
-  inside:        102400 kbytes in   0.217949 sec =   469835 kbytes/sec
-\end{lstlisting}
+\begin{table}[h]
+\centering
+\caption{Transfer rates of the benchmark SSD}
+\label{eval-ssd-transfer}
+\begin{tabular}{lrrr}
+\textbf{} & \textbf{data size} & \textbf{total duration} & \textbf{estimated transfer rate} \\ \hline
+outside   & $102400 kB$        & $0.221568 s$            & $462161 kB/s$                    \\
+middle    & $102400 kB$        & $0.218275 s$            & $469133 kB/s$                    \\
+inside    & $102400 kB$        & $0.217949 s$            & $469835 kB/s$                    \\ \hline
+\end{tabular}
+\end{table}
 
 All benchmarks are performend on the SSD.
 
