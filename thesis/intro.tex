@@ -2,7 +2,7 @@
 
 Providing login credentials via application configuration is a common problem in software development.
 Think of a web application which connects to a database server or stored tokens for authenticating to third party web-services.
-Often these credentials are stored as plain text in a configuration file, leaving them vulnerable to attack.
+These credentials are often stored as plain text in a configuration file, leaving them vulnerable to attack.
 WordPress is a typical web application with a backend connecting to a database.
 The login credentials for the database server are stored as plain text within a configuration file.\cite{wordpress-doc}
 Another example is Hibernate, a popular object-relational mapping (ORM) tool written in Java.
@@ -10,7 +10,7 @@ Again the login credentials for the database are provided in an XML configuratio
 These are just two examples but there are many more.
 
 In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to them.
-Passwords and other sensitive information should be stored encrypted.
+Passwords and other sensitive configuration values should be stored encrypted.
 The decryption process can be designed to be transparent to the application.
 
 While cryptography is useful for our case, its introduction brings drawbacks as well.
@@ -27,11 +27,10 @@ The scope of this thesis is cryptography applied to application configuration.
 \section{Elektra}
 
 The Elektra project is a library combined with a set of tools to enable centralized configuration management.
-It is extensible by a plugin system that enables the modification of the configuration sets in a well-arranged manner.
+It is extensible by a plugin system that enables the modification of the configuration settings in a well-arranged manner.
 The core of Elektra's source code is written in the C programming language.
 Different language bindings offer availability in other programming languages (for example: Java, Python, Ruby).
-Elektra supports several configuration file formats out of the box.
-For example the following file formats can be processed by Elektra:\cite{raab2010thesis,elektra-doc}
+Elektra supports several common configuration file formats out of the box, for example:\cite{raab2010thesis,elektra-doc}
 \begin{enumerate}
 \item INI
 \item JSON
@@ -41,11 +40,72 @@ For example the following file formats can be processed by Elektra:\cite{raab201
 
 All technical details, the source code and the documentation are available online.\footnote{Elektra project page: \url{https://www.libelektra.org}}
 
-We chose Elektra because of its focus on application configuration and its extendebility.
-Elektra offers many features, but it would originally store login credentials also as plain text.
-During the writing of this thesis we developed plugins for Elektra which provide transparent encryption and decryption.
+We choose Elektra as our reference project because of its focus on configuration and because of its extendebility.
+Elektra offers many features, but it would still store login credentials as plain text originally.
+Therefore during the writing of this thesis we developed plugins for Elektra which provide transparent encryption and decryption capabilities.
 
-In the following section we define which performance drawbacks we want to examine with Elektra.
+What we mean exactly by encryption and decryption is defined in the following section.
+
+\section{Cryptography}
+
+\subsection{Algorithms}
+
+There are many cryptographic algorithms out there and there are even more implementations.
+We can not (and should not) cover them all but focus on a typical setting that is viable for many applications.
+
+\subsubsection{Symmetric Cipher}
+
+The Advanced Encryption Standard (AES) is a widely used symmetric cipher that is standardized in the Federal Information Processing Standards Publication (FIPS) 197, that is published by the National Institute of Standards and Technology (NIST).\cite{fips197}
+AES supports three key lengths:
+\begin{enumerate}
+  \item 128 bits
+  \item 192 bits
+  \item 256 bits
+\end{enumerate}
+
+AES is a block cipher operating on blocks with a size of 128 bits.\cite{fips197,stallings2014} 
+As block cipher operation mode we choose Cipher Block Chaining (CBC) Mode.
+In CBC mode the XOR operation is applied to the plain text and the previous ciphertext block before the actual encryption happens.\cite{bruceschneier1996,stallings2014}
+
+In this thesis we mean AES with a key length of 256 bits in CBC mode when we are refering to a \emph{symmetric cipher}.
+We are going to apply a symmetric cipher to single configuration values.
+This way we can protect login credentials within configuration settings.
+
+\subsubsection{Hybrid -- GnuPG file encryption}
+
+
+
+\subsubsection{Digital Signatures}
+
+
+\subsection{Providers of Cryptographic Operations}
+
+  \subsubsection{GnuPG}
+
+  \subsubsection{libgcrypt}
+
+The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocol.
+The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
+
+The source code is also written in C and is available at the GnuPG project homepage.\footnote{GnuPG project homepage: \url{https://www.gnupg.org/}}
+
+  \subsubsection{OpenSSL}
+
+The OpenSSL project offers implementations of the Transport Layer Security (TLS) and the Secure Sockets Layer (SSL) protocols.
+It also provides its own implementations of the underlying cryptographic operations, which are accessible via the interfaces of the libcrypto library.
+
+The source code of OpenSSL is written in the C programming language.
+It is available at the project homepage.\footnote{OpenSSL project homepage: \url{https://www.openssl.org/}}
+
+  \subsubsection{Botan}
+
+The Botan library is another provider of cryptographic functions.
+
+The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
+
+
+
+In the following section we define which (possible) performance drawbacks we want to examine with Elektra.
 
 \section{Research Question}
 
@@ -75,62 +135,6 @@ The research questions this thesis aims to answer are enumerated below:
 \end{enumerate}
 
 All of the questions refer to a typical user-space application, that is capable of handling file I/O in different volumes.
-
-\section{Environment}
-
-In the following section the test environment is introduced.
-
-Three providers of cryptographic implementations will be benchmarked:
-
-\begin{enumerate}
-\item OpenSSL
-\item libgcrypt
-\item Botan
-\end{enumerate}
-
-They are integrated into the reference ''real world`` application.
-Elektra is a configuration management library, that also provides applications to interact with.
-Its modularity makes it a good choice to act as a reference application.
-
-	\subsection{OpenSSL}
-
-The OpenSSL project offers implementations of the Transport Layer Security (TLS) and the Secure Sockets Layer (SSL) protocols.
-It also provides its own implementations of the underlying cryptographic operations, which are accessible via the interfaces of the libcrypto library.
-
-The source code of OpenSSL is written in the C programming language.
-It is available at the project homepage.\footnote{OpenSSL project homepage: \url{https://www.openssl.org/}}
-
-	\subsection{libgcrypt}
-
-The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocol.
-The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
-
-The source code is also written in C and is available at the GnuPG project homepage.\footnote{GnuPG project homepage: \url{https://www.gnupg.org/}}
-
-	\subsection{Botan}
-
-The Botan library is another provider of cryptographic functions.
-
-The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
-
-
-\section{Terms and Definitions}
-
-Elektra uses a special terminology, which we need to clarify.
-We stick to the following terms in order to keep our statements precise.
-
-\paragraph{Key} is a data structure, that is used by Elektra to combine and hold the following information:
-\begin{enumerate}
-  \item Name
-  \item Metadata
-  \item Value
-\end{enumerate}
-When ``Key'' is used alone we always mean Elektra Key and never a cryptographic key.
-
-\paragraph{Keyset} is an ordered set of keys.
-
-\paragraph{Cryptographic Key} is a byte sequence used by cryptographic algorithms to enable confidentiality.
-We always explicitly refer to cryptography in order to distinguish between Elektra keys and cryptographic keys.
 
 \section{Perspective}
 
