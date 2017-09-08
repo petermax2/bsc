@@ -1,23 +1,51 @@
 \chapter{Introduction}
 
-Security is a broad field of study and plays an important role in modern day application development.
-One aspect of security is the protection of confidential data.
-In this thesis we talk about confidentiality, the protection of data against unauthorized access, and integrity, the protection of data against unauthorized change.
-Both of these goals are achieved by utilizing cryptography.
+Providing login credentials via application configuration is a common problem in software development.
+Think of a web application which connects to a database server or stored tokens for authenticating to third party web-services.
+Often these credentials are stored as plain text in a configuration file, leaving them vulnerable to attack.
+WordPress is a typical web application with a backend connecting to a database.
+The login credentials for the database server are stored as plain text within a configuration file.\cite{wordpress-doc}
+Another example is Hibernate, a popular object-relational mapping (ORM) tool written in Java.
+Again the login credentials for the database are provided in an XML configuration file as plain text.\cite{hibernate-doc}
+These are just two examples but there are many more.
 
-While cryptography is useful, does its introduction bring drawbacks as well?
-An increase in security usually means a decline in performance and usability.
-More protection causes overhead and the key-- and password--management is inconvenient for the user.
+In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to them.
+Passwords and other sensitive information should be stored encrypted.
+The decryption process can be designed to be transparent to the application.
 
-We are not going to discuss drawbacks in usability, but focus on the performance issue.
-Cryptographic algorithms have been studied and benchmarked in different contexts (see \ref{relatedwork} Related Work on page \pageref{relatedwork}).
-But how do concrete implementations of these algorithms perform in real applications?
-In order to find out, we benchmark implementations of cryptographic algorithms within a suitable test environment.
+While cryptography is useful for our case, its introduction brings drawbacks as well.
+Mainly two problems arise:
+\begin{enumerate}
+\item performance
+\item usability
+\end{enumerate}
 
-The benchmark setup will test symmetric ciphers like the Advanced Encryption Standard (AES).
-The test inputs will be rather small values.
+We are not going to discuss drawbacks in usability, but focus on the performance drawbacks.
+Cryptographic algorithms and their application have been studied and benchmarked in different contexts.\cite{thakur2011aes,ocf,freebsdtls}
+The scope of this thesis is cryptography applied to application configuration.
 
-The following section concretizes the research questions we aim to answer.
+\section{Elektra}
+
+The Elektra project is a library combined with a set of tools to enable centralized configuration management.
+It is extensible by a plugin system that enables the modification of the configuration sets in a well-arranged manner.
+The core of Elektra's source code is written in the C programming language.
+Different language bindings offer availability in other programming languages (for example: Java, Python, Ruby).
+Elektra supports several configuration file formats out of the box.
+For example the following file formats can be processed by Elektra:\cite{raab2010thesis,elektra-doc}
+\begin{enumerate}
+\item INI
+\item JSON
+\item XML
+\item Yaml
+\end{enumerate}
+
+All technical details, the source code and the documentation are available online.\footnote{Elektra project page: \url{https://www.libelektra.org}}
+
+We chose Elektra because of its focus on application configuration and its extendebility.
+Elektra offers many features, but it would originally store login credentials also as plain text.
+During the writing of this thesis we developed plugins for Elektra which provide transparent encryption and decryption.
+
+In the following section we define what performance impacts we want to examine with Elektra.
 
 \section{Research Question}
 
@@ -85,17 +113,6 @@ The Botan library is another provider of cryptographic functions.
 
 The source code is written in C++ and is available at Github.\footnote{Github project page: \url{https://github.com/randombit/botan}}
 
-	\subsection{Elektra}
-
-The Elektra project is a library combined with a set of tools for centralized configuration management.
-It is extensible by a plugin system that enables the modification of the configuration values in a well-arranged manner.\cite{raab2010thesis}
-
-The plugin framework grants modularity, which is why we chose Elektra as reference application.
-Because of the modularity runtime overheads of cryptographic operations can be detected easily.
-Elektra also provides a set of tools to directly modify the configuration database.
-
-The core of Elektra's source code is written in C.
-The source code is available at the Github project page.\footnote{Elektra project page at Github: \url{https://github.com/ElektraInitiative/libelektra}}
 
 \section{Terms and Definitions}
 
