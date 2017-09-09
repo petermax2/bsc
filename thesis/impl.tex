@@ -1,14 +1,9 @@
 \chapter{Implementation}
 
-%\section{Overview}
-
 This chapter covers the following topics:
 \begin{enumerate}
-\item the changes and enhancements that were made to Elektra in order to answer the research questions
-\item the key concepts of Elektra (for example the plugin API)
-\item the implementation details of the \crypto 
-\item details about the deployed crypto libraries
-\item the implementation details of the \fcrypt
+\item Elektra's key concepts that are relevant for this thesis (for example: the plugin API)
+\item the contributions that were made to Elektra
 \end{enumerate}
 
 
@@ -23,9 +18,9 @@ A key may also contain meta-keys, which are keys that further describe the key.
 Elektra uses meta-keys for different purposes:
 
 \begin{enumerate}
-\item state information of the key (e.g. encrypted, encoded, ...)
+\item state information of the key (for example: encrypted, encoded, ...)
 \item data validation (for example: numeric value, binary value, ...)
-\item formatting (for example: position in file, number of spaces/tabs between parameters, ...)
+\item formatting (for example: position in file, number of spaces between parameters, ...)
 \end{enumerate}
 
 \subsection{Plugin}\label{impl_elektra_plugin}
@@ -74,7 +69,7 @@ After the first call of \texttt{get} Elektra is ``ready''.
 Now the configuration held by Elektra may be modified with a call of \texttt{set} or the data may be read again by calling \texttt{get}.
 After all \texttt{get} and \texttt{set} calls are done, Elektra is closed by a call of \texttt{close}.\cite{elektra-doc}
 
-Figure \ref{impl_elektra_states} on page \pageref{impl_elektra_states} illustrates how the states in Elektra change by the calls of the methods mentioned above in section \ref{impl_elektra_plugin} on page \pageref{impl_elektra_plugin}.
+Figure \ref{impl_elektra_states} on page \pageref{impl_elektra_states} illustrates how the states in Elektra change by the calls of the methods mentioned above in Section \ref{impl_elektra_plugin} on page \pageref{impl_elektra_plugin}.
 
 \begin{figure}[h]
 \center
@@ -86,7 +81,7 @@ Figure \ref{impl_elektra_states} on page \pageref{impl_elektra_states} illustrat
 \subsection{Backend}
 
 Backends are one or more plugins combined into a unit that interact with a single configuration point (typically a configuration file).
-The backend is ''mounted`` into Elektra's configuration hierachy.
+The backend is mounted into Elektra's configuration hierachy.
 This process is similar to the mounting process in UNIX-like file systems, where a device can be mounted to a specific directory in the virtual file system.
 In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
 Every backend has its own configuration itself (i.e. backend configuration), which specifies the runtime behavior of the plugins within the backend.
@@ -280,6 +275,9 @@ One of its advantages is that there are no dependencies at compile time.
 Only the \texttt{gpg2} or \texttt{gpg} binary are required as runtime dependency.
 
 Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \crypto{}.
+
+
+\section{Base64 Plugin}\label{base64-plugin}
 
 % Chapter Outro
 

@@ -44,9 +44,9 @@ We choose Elektra as our reference project because of its focus on configuration
 Elektra offers many features, but it would still store login credentials as plain text originally.
 Therefore during the writing of this thesis we developed plugins for Elektra which provide transparent encryption and decryption capabilities.
 
-What we mean exactly by encryption and decryption is defined in the following section.
-
 \section{Cryptography}
+
+What we mean exactly by encryption and decryption is defined in this section.
 
 \subsection{Algorithms}
 
@@ -93,10 +93,10 @@ With digital signatures the authenticity of a message can be verified.\cite{bruc
 We are going to apply digital signatures to configuration files using the OpenPGP protocol.
 Thus we can guarantee that a configuration setting has not been modified by an unknown entity.
 
+\subsection{Providers of Cryptographic Functions}
+
 We defined which cryptographic algorithms we want to examine.
 Next we explain which providers of cryptographic functions we want to use for the examination.
-
-\subsection{Providers of Cryptographic Functions}
 
   \subsubsection{GnuPG and libgcrypt}
 
@@ -126,11 +126,9 @@ It is available at the OpenSSL project homepage.\footnote{OpenSSL project homepa
 The Botan library is another provider of cryptographic functions.
 The source code is written in the C++ programming language and is available at Github.\footnote{Botan's Github page: \url{https://github.com/randombit/botan}}
 
-In the following section we define which (possible) performance drawbacks we want to examine with Elektra.
-
 \section{Research Question}
 
-Considering the scope we defined so far the following research questions are to be examined:
+Considering the scope we defined so far, the following research questions are to be examined:
 
 \begin{enumerate}
   \item Which provider of cryptographic functions is the best fit when comparing the runtime and memory performance of AES-256-CBC?
