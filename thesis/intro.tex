@@ -11,7 +11,7 @@ These are just two examples but there are many more.
 
 In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to them.
 Passwords and other sensitive configuration values should be stored encrypted.
-The decryption process can be designed to be transparent to the application.
+The process of encryption and decryption is designed to be transparent to the application.
 
 While cryptography is useful for our case, its introduction brings drawbacks as well.
 Mainly two problems arise:
@@ -29,8 +29,8 @@ The scope of this thesis is cryptography applied to application configuration se
 The Elektra project is a library combined with a set of tools to enable centralized configuration management.
 It is extensible by a plugin system that enables the modification of configuration settings in a well-arranged manner.
 The core of Elektra's source code is written in the C programming language.
-Different language bindings offer availability in other programming languages (for example: Java, Python, Ruby) too.
-Elektra supports several common configuration file formats out of the box, for example:\cite{raab2010thesis,elektra-doc}
+Different language bindings offer availability of Elektra in other programming languages (for example: Java, Python, Ruby).
+Elektra supports common configuration file formats out of the box, for example:\cite{raab2010thesis,elektra-doc}
 \begin{enumerate}
 \item INI
 \item JSON
