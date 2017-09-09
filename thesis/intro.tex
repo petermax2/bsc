@@ -22,14 +22,14 @@ Mainly two problems arise:
 
 We are not going to discuss drawbacks in usability, but focus on the performance drawbacks.
 Cryptographic algorithms and their application have been studied and benchmarked in different contexts.\cite{thakur2011aes,ocf,freebsdtls}
-The scope of this thesis is cryptography applied to application configuration.
+The scope of this thesis is cryptography applied to application configuration settings.
 
 \section{Elektra}
 
 The Elektra project is a library combined with a set of tools to enable centralized configuration management.
-It is extensible by a plugin system that enables the modification of the configuration settings in a well-arranged manner.
+It is extensible by a plugin system that enables the modification of configuration settings in a well-arranged manner.
 The core of Elektra's source code is written in the C programming language.
-Different language bindings offer availability in other programming languages (for example: Java, Python, Ruby).
+Different language bindings offer availability in other programming languages (for example: Java, Python, Ruby) too.
 Elektra supports several common configuration file formats out of the box, for example:\cite{raab2010thesis,elektra-doc}
 \begin{enumerate}
 \item INI
@@ -55,7 +55,8 @@ We can not (and should not) cover them all but focus on a typical setting that i
 
 \subsubsection{Symmetric Cipher}
 
-The Advanced Encryption Standard (AES) is a widely used symmetric cipher that is standardized in the Federal Information Processing Standards Publication (FIPS) 197, that is published by the National Institute of Standards and Technology (NIST).\cite{fips197}
+The Advanced Encryption Standard (AES) is a widely used symmetric block-cipher that is specified in the Federal Information Processing Standards Publication (FIPS) 197.
+The FIPS 197 is published by the National Institute of Standards and Technology (NIST).\cite{fips197}
 AES supports three key lengths:
 \begin{enumerate}
   \item 128 bits
@@ -63,15 +64,24 @@ AES supports three key lengths:
   \item 256 bits
 \end{enumerate}
 
-AES is a block cipher operating on blocks with a size of 128 bits.\cite{fips197,stallings2014} 
-As block cipher operation mode we choose Cipher Block Chaining (CBC) Mode.
+AES operates on data blocks with a size of 128 bits.\cite{fips197,stallings2014}
+For the scope of this thesis we choose Cipher Block Chaining (CBC) Mode as the operation mode for AES.
 In CBC mode the XOR operation is applied to the plain text and the previous ciphertext block before the actual encryption happens.\cite{bruceschneier1996,stallings2014}
 
 In this thesis we mean AES with a key length of 256 bits in CBC mode when we are refering to a \emph{symmetric cipher}.
 We are going to apply a symmetric cipher to single configuration values.
 This way we can protect login credentials within configuration settings.
 
-\subsubsection{Hybrid -- GnuPG file encryption}
+\subsubsection{Hybrid -- Combining asymmetric and symmetric cryptography}
+
+Asymmetric ciphers tend to be slower than symmetric ciphers.
+Thus they are often combined to a public-key cryptographic system.
+Such systems utilize asymmetric cryptography to protect a key for a symmetric cipher.
+The symmetric cipher protects the actual data.
+This way the encrypted payload can be shared among multiple parties without the need for another encryption round for every participating party.\cite{stallings2014} 
+
+The OpenPGP protocol is a widely used public-key cryptographic system.
+It is specified in the RFC 4880.\cite{rfc4880}
 
 
 
@@ -80,9 +90,10 @@ This way we can protect login credentials within configuration settings.
 
 \subsection{Providers of Cryptographic Operations}
 
-  \subsubsection{GnuPG}
+  \subsubsection{GnuPG and libgcrypt}
 
-  \subsubsection{libgcrypt}
+
+
 
 The libgcrypt library is part of the GnuPG project, an open source implementation of the Pretty Good Privacy (PGP) protocol.
 The developers of GnuPG encapsulated the low-level implementations of the cryptographic algorithms within libgcrypt.
