@@ -2,19 +2,26 @@
 
 This chapter covers the following topics:
 \begin{enumerate}
-\item Elektra's key concepts that are relevant for this thesis (for example: the plugin API)
-\item the contributions that were made to Elektra
+\item concepts in Elektra that are relevant for this thesis
+\item the plugins and enhancements we contributed to Elektra
 \end{enumerate}
 
 
-\section{Elektra Components}\label{elektra-plugins}
+\section{Elektra Concepts}\label{elektra-plugins}
+
+Before we elaborate the contributions that were made to Elektra during the writing of this thesis, we need to explain some internal concepts of Elektra.
 
 \subsection{Key and Keyset}
 
-Elektra abstracts configuration parameters in a hierarchical key-value database.
-A keyset holds zero or more keys.
-The key holds its path within the configuration hierarchy as well as the configuration parameter either as a string value or as a binary value.
-A key may also contain meta-keys, which are keys that further describe the key.
+Elektra abstracts configuration settings in a hierarchical key-value database.
+A \emph{keyset} holds zero or more keys.
+The \emph{key} represents a configuration value within the configuration setting and holds:
+\begin{enumerate}
+\item its path within the configuration hierarchy
+\item its configuration value either as a string value or as a binary value
+\item optionally its meta-keys, which are keys that further describe the key itself
+\end{enumerate}
+
 Elektra uses meta-keys for different purposes:
 
 \begin{enumerate}
@@ -23,12 +30,32 @@ Elektra uses meta-keys for different purposes:
 \item formatting (for example: position in file, number of spaces between parameters, ...)
 \end{enumerate}
 
+In order to avoid ambiguity we do not use Elektra's terms in this thesis.
+We refer to a \emph{configuration setting} rather than to a \emph{keyset}.
+We refer to \emph{configuration values} rather than to Elektra \emph{keys}, in order to avoid confusion with cryptographic \emph{keys}.
+From now on if we refer to a \emph{key}, we mean a \emph{cryptographic key}.
+
 \subsection{Plugin}\label{impl_elektra_plugin}
 
 The core of Elektra is kept small, meaning that it provides mainly the database abstraction as well as a plugin system.
-All the configuration access operations (mainly file reads and writes but there are more complicated constructs, like intercepting \texttt{open()} calls in order to inject a Mozilla configuration, as well) are performed by plugins.
-The plugins should fulfill exactly one purpose, keeping to the UNIX philosophy.
-To give an example: one plugin may write to \texttt{/etc/hosts} and another one may encode binary values using the Base64 encoding scheme.
+All the configuration access operations are performed by plugins.\cite{raab2010thesis}
+Every plugin should fulfill exactly one purpose.
+This design decision was inspired by the UNIX philosophy.
+Let us illustrate what plugins can do by giving some examples:
+\begin{enumerate}
+\item the \crypto ~encrypts and decrypts configuration values
+\item the \base ~encodes and decodes binary values to and from Base64 strings
+\item the \texttt{ini} plugin reads from and writes to ini files
+\end{enumerate}
+
+Plugins can be divided into two categories:
+\begin{enumerate}
+\item filter plugins
+\item storage plugins
+\end{enumerate}
+
+A \emph{filter plugin} modifies configuration values before they are written to a file or after they have been read from a file.
+A \emph{storage plugin} directly reads from or writes to a configuration file.
 
 A plugin can export different methods in order to fulfill its purpose.
 They are enumerated below:
@@ -38,6 +65,9 @@ They are enumerated below:
 At this method a plugin may validate the backend configuration as well as
 the plugin configuration. The plugin may modify the configuration or
 report that the configuration is incomplete or wrong in some way.
+
+We added this method during the writing of this thesis.
+Its introduction was neccessary for the development of the \crypto ~as well as the \fcrypt.
 
 \subsubsection{open}\label{open}
 
@@ -80,7 +110,7 @@ Figure \ref{impl_elektra_states} on page \pageref{impl_elektra_states} illustrat
 
 \subsection{Backend}
 
-Backends are one or more plugins combined into a unit that interact with a single configuration point (typically a configuration file).
+Backends are one or more plugins combined into a unit that interact with a single configuration file.
 The backend is mounted into Elektra's configuration hierachy.
 This process is similar to the mounting process in UNIX-like file systems, where a device can be mounted to a specific directory in the virtual file system.
 In terms of Elektra the virtual file system is the key-value database and the device is the configuration file.
@@ -88,13 +118,14 @@ Every backend has its own configuration itself (i.e. backend configuration), whi
 
 \subsection{Compilation Variants}
 
-Elektra's build scripts provide a functionality called compilation variants, which means a plugin is being compiled multiple times with minor differences.
-This is useful if a feature (for example: cryptographic operations) is provided by different libraries interchangeably.
-A lot of the plugin code stays the same for every compilation variant except for the library-specific calls.
-Those calls are encapsulated using C preprocessor directives.
-The following code snippet further illustrates the usage of compilation variants:
+Elektra's build scripts provide a functionality called \emph{compilation variants}, which means a plugin is being compiled multiple times with minor differences.
+Let us demonstrate this idea using the \crypto ~as an example.
+Cryptographic functions are provided by different libraries (see Section \ref{intro-provider} on page \pageref{intro-provider}) interchangeably.
+The basic structure of the plugin stays the same for every compilation variant except for the library-specific calls.
+These calls are encapsulated using C preprocessor directives, which form the actual compilation variants.
+The following code snippet further illustrates the use of compilation variants, showing how the crypto libraries are initialized by the \crypto:
 
-\begin{lstlisting}[language=C,caption={Example usage of compilation variants in Elektra}]
+\begin{lstlisting}[language=C,caption={Example of how to use compilation variants in Elektra}]
 static int elektraCryptoInit (Key * errorKey)
 {
 #if defined(ELEKTRA_CRYPTO_API_GCRYPT)
@@ -115,40 +146,41 @@ As we can see every crypto library is handled differently but the code frame of 
 
 \subsection{Reasons For Developing The Plugin}
 
-In order to evaluate our performance related questions we need a reference application with a high degree of modularity.
+In order to evaluate our research questions we need a reference application with a high degree of modularity.
 The modularity is required to gain profound insight in the runtime behavior of the reference application.
-By combining different modules (or plugins) or disabling certain modules we can test a variety of possible use cases.
+By combining different Elektra plugins we can test a variety of possible use cases.
 
-Elektra provides the required degree of modularity but it did not provide any cryptographic functions when we started working on this thesis.
-So we choose to develop a crypto plugin for Elektra, that enables us to use Elektra as benchmark environment.
+Elektra originally did not provide any cryptographic functions when we started working on this thesis.
+So we choose to develop the \crypto ~for Elektra.
+The \crypto ~enables us to use Elektra as benchmark environment.
 
-\subsection{Benefits for the Elektra Project}
+\subsection{Benefits For The Elektra Project}
 
-Elektra is a configuration database and as such it will be used for storing sensitive configuration data (for example: database passwords) at some point.
-Leaving this information unencrypted is a security threat.
-The \crypto{} is a way of tackling this issue by providing transparent encryption.
-This means that the information is stored encrypted on the filesystem and is decrypted by Elektra whenever the application requests its configuration (thus the encryption/decryption works transparent to the user). The \crypto{} can simply be added to a backend and thus integrates well with other Elektra plugins.
+Elektra is a configuration database and as such it will be used for storing sensitive configuration values (for example: login credentials) at some point.
+Leaving these values unencrypted is a security threat.
+The \crypto{} is a way of tackling this threat by providing transparent encryption and decryption.
+This means that the configuration values are stored encrypted on the filesystem and are decrypted by Elektra whenever the application requests its configuration.
+Thus the encryption and the decryption work transparent to both the user and the application.
+The \crypto{} can simply be added to a backend and thus integrates well with other Elektra plugins.
 
 \subsection{Challenges}
 
-The first challenge was to design a single plugin or several plugins that support different providers for cryptographic operations.
-With the goal of comparability in mind, the plugin architectures must be very similar for each crypto-provider.
-Otherwise no useful conclusions can be drawn from differing benchmark results.
-Finally we decided to implement one single crypto plugin that handles the encryption and decryption of keysets.
-Elektra's compilation variants enabled this architecture.
-For every crypto-provider or crypto library we want to integrate, a new compilation variant is added to the plugin.
+The first challenge was to design the \crypto ~in a way that supports more than one provider of cryptographic functions.
+With the goal of comparability in mind, the encryption and decryption schema will be similar for each provider.
+Otherwise no conclusions can be drawn from differing benchmark results.
+Elektra's compilation variants enable the support for multiple providers.
+For every provider we want to integrate, a new compilation variant is added to the \crypto.
 
-The next problem was how to create, generate, derive or restore the keys for the cryptographic operations.
+The next problem was how to generate, derive and restore the keys for the cryptographic functions.
 This part of the plugin is crucial from a security perspective.
 Any kind of wrongdoing in this module could lead to leaks, endangering the confidentiality of the protected data.
 The first design that came to mind was a password based schema that utilizes the Password-Based Key Derivation Function 2 (PBKDF2).\footnote{PBKDF2 is specified in RFC 2898.}
-However this approach was not suitable for any kind of batch operation as the program flow would interrupt and ask for password input.
+However, this approach is not suitable for any kind of batch operation as the program flow would be interrupted to ask for a password input.
 So we decided to delegate the handling of cryptographic keys to an existing key store: GnuPG.
-GnuPG in combination with the pinentry utilities turned out to be a great way of managing keys.
-In addition the users benefit from this approach because they can simply use their existing PGP keys for securing their data in Elektra.
+GnuPG in combination with the \texttt{pinentry} utilities turned out to be a great way of managing keys.
+In addition the users benefit from this approach because they can simply use their existing PGP keys and even smart-cards for securing their data in Elektra.
 
-In the following section we are going to dive deeper into the technical
-details of the implementation of the \crypto.
+In the following section we are going to dive deeper into the technical details of the implementation of the \crypto.
 
 \subsection{Technical Aspects}
 
