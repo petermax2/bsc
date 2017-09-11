@@ -60,7 +60,7 @@ A \emph{storage plugin} directly reads from or writes to a configuration file.
 A plugin can export different methods in order to fulfill its purpose.
 They are enumerated below:
 
-\subsubsection{checkconf}\label{checkconf}
+\subsubsection{checkconf}\label{impl-method-checkconf}
 
 At this method a plugin may validate the backend configuration as well as
 the plugin configuration. The plugin may modify the configuration or
@@ -190,7 +190,7 @@ Figure \ref{impl_crypto_overview} on page \pageref{impl_crypto_overview} further
 
 \begin{figure}[h]
 \center
-\caption{Overview of the encryption and decryption process in the crypto plugin}
+\caption{Crypto Plugin: Overview of the encryption and decryption process}
 \label{impl_crypto_overview}
 \includegraphics[width=15.0cm]{umlet-figures/impl_crypto_overview.pdf}
 \end{figure}
@@ -224,6 +224,7 @@ typedef struct
 
 
 \subsubsection{Message Structure}
+\label{impl-msgstruct}
 
 The \crypto{} operates on configuration values.
 During its work it modifies the value as well as the meta-data.
@@ -250,33 +251,50 @@ Table \ref{impl-msgheader} on page \pageref{impl-msgheader} shows the informatio
 The salt is a sequence of random bytes and is used in cryptography to prevent table-based key guessing attacks.
 The content length is saved because most provider of cryptographic functions do not support padding out of the box, which means that they always operate on whole blocks of data, where the block size depends on the cryptographic algorithm that is used.
 
-\subsubsection{Methods}
+\subsubsection{Crypto Plugin Methods}
+
+The \crypto ~implements Elektra's plugin methods (see Section \ref{impl-method-checkconf} on page \pageref{impl-method-checkconf}) to offer its functionality.
+In the following section the program flow of the plugin methods is explained.
 
 \paragraph*{open}
+initializes the provider of cryptographic functions.
+
+\paragraph*{close}
+properly shuts down the provider of cryptographic functions.
 
 \paragraph*{get}
-see figure \ref{impl_decrypt} on page \pageref{impl_decrypt}...
+The \texttt{get} method takes a configuration setting as input.
+The \crypto ~iterates over the configuration setting and checks for every configuration value if it has been encrypted.
+This is done by using the metakey mentioned before.
+If the configuration value is encrypted, the \crypto ~decrypts it and thus restores the configuration value to the state it was in before the encryption took place.
+
+Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \texttt{get} method works in detail.
 
 \begin{figure}[h]
 \center
-\caption{Decryption of a keyset at the kdb get method}
+\caption{Crypto Plugin: Decryption of a keyset at the kdb get method}
 \label{impl_decrypt}
 \includegraphics[width=15.0cm]{umlet-figures/impl_decrypt.pdf}
 \end{figure}
 
 
 \paragraph*{set}
-see figure \ref{impl_encrypt} on page \pageref{impl_encrypt}...
+The \texttt{set} method takes a configuration setting as input.
+The \crypto ~iterates over the configuration setting and checks every configuration value if it has been marked for encryption.
+Marking a configuration value for encryption is done by using a metakey.
+If the metakey is present, the \crypto ~generates a message header (see Section \ref{impl-msgstruct} on page \pageref{impl-msgstruct}) and encrypts the configuration value.
+
+Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \texttt{set} method works in detail.
 
 \begin{figure}[h]
 \center
-\caption{Encryption of a keyset at the kdb set method}
+\caption{Crypto Plugin: Encryption of a keyset at the kdb set method}
 \label{impl_encrypt}
 \includegraphics[width=15.0cm]{umlet-figures/impl_encrypt.pdf}
 \end{figure}
 
+\paragraph*{checkconf}
 
-\paragraph*{close}
 
 
 \subsubsection{Compilation Variants}
