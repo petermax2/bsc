@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>866</w>
+      <h>581</h>
+    </coordinates>
+    <panel_attributes>title:checkconf
+Start
+look up the master password in the plugin configuration
+If
+	[password exists]
+	try to decrypt the master password
+	If
+		[decryption failed]
+		report error
+
+		[decryption succeeded]
+
+	EndIf
+
+	[password does not exist]
+	create random master password
+	encrypt the password using GnuPG
+	store the encrypted password in the plugin configuration
+	
+EndIf
+
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

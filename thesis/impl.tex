@@ -251,9 +251,16 @@ Table \ref{impl-msgheader} on page \pageref{impl-msgheader} shows the informatio
 The salt is a sequence of random bytes and is used in cryptography to prevent table-based key guessing attacks.
 The content length is saved because most provider of cryptographic functions do not support padding out of the box, which means that they always operate on whole blocks of data, where the block size depends on the cryptographic algorithm that is used.
 
+\subsubsection{Key Derivation}
+
+As mentioned before, GnuPG is used for managing the users' asymmetric keys.
+GnuPG is executed to store and receive a \emph{master password}, which is a part of the plugin configuration of the \crypto.
+Whenever a cryptographic key is required, the master password is fetched from the plugin configuration and decrypted.
+Then the PBKDF2 is applied to the decrypted master password together with a salt, so that a cryptographic key as well as an initialization vector can be derived.
+
 \subsubsection{Crypto Plugin Methods}
 
-The \crypto ~implements Elektra's plugin methods (see Section \ref{impl-method-checkconf} on page \pageref{impl-method-checkconf}) to offer its functionality.
+The \crypto ~implements Elektra's plugin methods (see Section \ref{impl-method-checkconf} on page \pageref{impl-method-checkconf}).
 In the following section the program flow of the plugin methods is explained.
 
 \paragraph*{open}
@@ -282,7 +289,7 @@ Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \te
 The \texttt{set} method takes a configuration setting as input.
 The \crypto ~iterates over the configuration setting and checks every configuration value if it has been marked for encryption.
 Marking a configuration value for encryption is done by using a metakey.
-If the metakey is present, the \crypto ~generates a message header (see Section \ref{impl-msgstruct} on page \pageref{impl-msgstruct}) and encrypts the configuration value.
+If the metakey is present, the \crypto ~generates a message header (see Section \ref{impl-msgstruct} on page \pageref{impl-msgstruct}) including a random salt and encrypts the configuration value.
 
 Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \texttt{set} method works in detail.
 
@@ -294,15 +301,30 @@ Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \te
 \end{figure}
 
 \paragraph*{checkconf}
+The \texttt{checkconf} method ensures that a master password is available in the plugin configuration of the \crypto.
+If an encrypted master password is provided, a decryption run is started to see if the user owns the required GnuPG key.
+Otherwise, a random master password is created, encrypted using GnuPG and stored in the plugin configuration.
+The encryption key has to be specified within the plugin configuration.
+If no such GnuPG private key is specified, the \crypto ~throws an error.
 
+Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the \texttt{checkconf} method works in detail.
 
+\begin{figure}[h]
+\center
+\caption{Crypto Plugin: the kdb checkconf method}
+\label{impl_checkconf}
+\includegraphics[width=15.0cm]{umlet-figures/impl_checkconf.pdf}
+\end{figure}
 
 \subsubsection{Compilation Variants}
 
-
-\subsubsection{Key Management}
-
-
+For every provider of cryptographic functions (see Section \ref{intro-provider} on page \pageref{intro-provider}) a compilation variant of the \crypto ~is created.
+The following compilation variants exist:
+\begin{enumerate}
+	\item \texttt{crypto\_botan} for the Botan library
+	\item \texttt{crypto\_gcrypt} for libgcrypt
+	\item \texttt{crypto\_openssl} for the OpenSSL library
+\end{enumerate}
 
 \subsection{Details About The Crypto Libraries}\label{details-about-the-crypto-libraries}
 
