@@ -123,9 +123,9 @@ Let us demonstrate this idea using the \crypto ~as an example.
 Cryptographic functions are provided by different libraries (see Section \ref{intro-provider} on page \pageref{intro-provider}) interchangeably.
 The basic structure of the plugin stays the same for every compilation variant except for the library-specific calls.
 These calls are encapsulated using C preprocessor directives, which form the actual compilation variants.
-The following code snippet further illustrates the use of compilation variants, showing how the crypto libraries are initialized by the \crypto:
+Listing \ref{impl-cryptoInit} on page \pageref{impl-cryptoInit} further illustrates the use of compilation variants, showing how the crypto libraries are initialized by the \crypto.
 
-\begin{lstlisting}[language=C,caption={Example of how to use compilation variants in Elektra}]
+\begin{lstlisting}[label=impl-cryptoInit,language=C,caption={Example of how to use compilation variants in Elektra}]
 static int elektraCryptoInit (Key * errorKey)
 {
 #if defined(ELEKTRA_CRYPTO_API_GCRYPT)
@@ -206,29 +206,36 @@ All other configuration values, which are not marked, are ignored and left uncha
 
 In this section we elaborate the details of how the encryption and decryption process works.
 
-\subsubsection{Data Types}
+\subsubsection{Data Structures}
 
-\paragraph{elektraCryptoHandle} is a structure that  abstracts the crypto
-library specific data types which hold cryptographic keys and initialization
-data for the cryptographic processes (for example: initialization vectors).
+The \crypto ~defines a single data structure, which is propagated throughout the plugin:
 
-Other than the handle, the \crypto{} does not require any further
-special data types.
+\paragraph{elektraCryptoHandle} is a structure that abstracts the library specific data types which hold keys and initialization data for the cryptographic functions.
+
+Listing \ref{list-elektraCryptoHandle} on page \pageref{list-elektraCryptoHandle} shows the definition of the \texttt{elektraCryptoHandle} for the OpenSSL plugin variant.
+
+\begin{lstlisting}[label=list-elektraCryptoHandle,language=C,caption={Definiton of elektraCryptoHandle for the OpenSSL crypto plugin variant}]
+typedef struct
+{
+	EVP_CIPHER_CTX * encrypt;
+	EVP_CIPHER_CTX * decrypt;
+} elektraCryptoHandle;
+\end{lstlisting}
+
 
 \subsubsection{Message Structure}
 
-The \crypto{} operates on Elektra's key data type. During its work it modifies
-the value as well as the meta-data of the keys. The value is always
-transformed into binary data. In order to restore the value to its original
-type during decryption, some header information has to be stored.
+The \crypto{} operates on configuration values.
+During its work it modifies the value as well as the meta-data.
+The value is always transformed into binary data.
+In order to restore the value to its original type during decryption, some header information has to be stored.
 
-The following information is encoded into the first cryptographic block during
-encryption:
+Table \ref{impl-msgheader} on page \pageref{impl-msgheader} shows the information which is encoded into the first cryptographic block during encryption.
 
-\begin{table}[h!]
+\begin{table}[h]
 \centering
 \caption{Structure of the crypto message header}
-\label{my-label}
+\label{impl-msgheader}
 \begin{tabular}{lrrlc}
 	\textbf{element}           & \textbf{offset} & \textbf{length} & \textbf{data type}    & \textbf{encrypted} \\ \hline
 	magic number ``\#!crypto'' & 0               & 8 B             & character             & no                 \\
@@ -240,12 +247,8 @@ encryption:
 \end{tabular}
 \end{table}
 
-The salt is a sequence of random bytes and is used in cryptography to prevent
-table-based key guessing attacks.
-The content length is saved because most crypto libraries do not support
-padding out of the box, which means that they always operate on whole blocks
-of data, where the block size depends on the cryptographic algorithm that is
-used.
+The salt is a sequence of random bytes and is used in cryptography to prevent table-based key guessing attacks.
+The content length is saved because most provider of cryptographic functions do not support padding out of the box, which means that they always operate on whole blocks of data, where the block size depends on the cryptographic algorithm that is used.
 
 \subsubsection{Methods}
 
@@ -310,7 +313,7 @@ see figure \ref{impl_encrypt} on page \pageref{impl_encrypt}...
 
 The \fcrypt{} was written to encrypt and decrypt whole files using the GPG interface mentioned before.
 One of its advantages is that there are no dependencies at compile time.
-Only the \texttt{gpg2} or \texttt{gpg} binary are required as runtime dependency.
+Only the \texttt{gpg2} or \texttt{gpg} binaries are required as runtime dependency.
 
 Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \crypto{}.
 
