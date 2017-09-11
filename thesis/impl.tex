@@ -184,21 +184,27 @@ In the following section we are going to dive deeper into the technical details 
 
 \subsection{Technical Aspects}
 
-The \crypto{} acts as a filter that is applied to the keyset before the storage plugin reaches its \texttt{kdb set} phase.
-In Elektra terms this stage is called \texttt{presetstorage}.
-Later on when the encrypted data is requested the plugin decrypts the keyset after the storage plugin read the configuration in its \texttt{kdb get} phase.
-This stage is called \texttt{postgetstorage} in Elektra.
+The \crypto{} acts as a filter that is applied to the configuration setting before the storage plugin reaches its \texttt{kdb set} phase.
+Later on, when the encrypted configuration is requested, the plugin decrypts the configuration setting after the storage plugin read the configuration file in its \texttt{kdb get} phase.
+Figure \ref{impl_crypto_overview} on page \pageref{impl_crypto_overview} further illustrates how the process works.
 
-Not all keys in the keyset are considered for encryption or decryption.
-The \crypto{} uses a metakey to identify which keys have to be processed.
-If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the key is marked for encryption.
-During \texttt{presetstorage} the plugin checks the metakey and only encrypts values if the metakey is set properly.
-Decryption in the \texttt{postgetstorage} phase works analogous.
-All other keys, which are not marked, are ignored and left unchanged by the plugin.
+\begin{figure}[h]
+\center
+\caption{Overview of the encryption and decryption process in the crypto plugin}
+\label{impl_crypto_overview}
+\includegraphics[width=15.0cm]{umlet-figures/impl_crypto_overview.pdf}
+\end{figure}
 
-In the following section we explain how the encryption and decryption process works in detail.
+Not all configuration values in the configuration setting are considered for encryption or decryption.
+The \crypto{} uses a metakey to identify which configuration values have to be processed.
+If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the configuration value is marked for encryption.
+The plugin checks the metakey and only encrypts values if the metakey is set properly.
+The decryption works analogous.
+All other configuration values, which are not marked, are ignored and left unchanged by the \crypto.
 
 \subsection{Cryptographic Details}
+
+In this section we elaborate the details of how the encryption and decryption process works.
 
 \subsubsection{Data Types}
 
