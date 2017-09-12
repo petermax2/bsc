@@ -413,7 +413,7 @@ const size_t buffered = encryptor.read (&buffer[bufferIndex],
 % crypto not good for entire config files -> too much overhead
 % other performance benchmark -> GPG also uses libgcrypt
 
-\subsection{Benefits for the Elektra Project}
+\subsection{Benefits For The Elektra Project}
 
 % Users can encrypt entire configuration files
 % no compile-time dependency which is nice for developers
@@ -435,17 +435,37 @@ const size_t buffered = encryptor.read (&buffer[bufferIndex],
 \section{Base64 Plugin}
 \label{base64-plugin}
 
-\subsection{Reasons For Developing The Plugin}
+\subsection{Motivation and Functionality}
 
+The \crypto ~causes trouble in text-based configuration file formats like INI, as it produces binary data.
+To mitigate this problem we developed the \base.
 
+During the \texttt{kdb set} method the \base ~iterates over the configuration setting and encodes all binary values using the Base64 schema, which is specified in the RFC 4648.\cite{rfc4648}
+During the \texttt{kdb get} method the \base ~decodes all Base64 strings back to its binary representatiton.
 
-\subsection{Benefits for the Elektra Project}
+In order to distuingish between Base64 strings and other strings, the prefix \texttt{@BASE64} is added to each Base64 encoded string. 
 
+\subsection{Base64 Examples}
 
+Figure \ref{impl_base64_overview} on page \pageref{impl_base64_overview} shows an example of an Elektra backend configuration with the \crypto ~and the \base.
 
+\begin{figure}[h]
+\center
+\caption{Base64 Plugin: example backend configuration with the base64 plugin}
+\label{impl_base64_overview}
+\includegraphics[width=7.5cm]{umlet-figures/impl_base64_overview.pdf}
+\end{figure}
 
+Listing \ref{list-base64} on page \pageref{list-base64} demonstrates how an INI file, that has been produced by the backend described in Figure \ref{impl_base64_overview} on page \pageref{impl_base64_overview}, might look like.
+
+\begin{lstlisting}[label=list-base64,caption={Base64 example INI output}]
+[section1]
+#@META crypto/encrypt = 1
+optionA = @BASE64IyFjcnlwdG8wMBEAAACFq0cCnjyfuwVy9/VtcpYCceYJVmnyTfF...
+\end{lstlisting}
 
 % Chapter Outro
+\section{Implementation Summary}
 
 This chapter explained the Elektra plugin system and how we used it to introduce cryptographic methods to the Elektra project.
 Now that we have an application to examine, we continue with the description of the actual measurements in the following chapter.
