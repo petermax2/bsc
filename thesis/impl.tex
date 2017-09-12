@@ -142,6 +142,9 @@ static int elektraCryptoInit (Key * errorKey)
 
 As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compilation variants.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CRYPTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Crypto Plugin}\label{crypto-plugin}
 
 \subsection{Reasons For Developing The Plugin}
@@ -151,7 +154,7 @@ The modularity is required to gain profound insight in the runtime behavior of t
 By combining different Elektra plugins we can test a variety of possible use cases.
 
 Elektra originally did not provide any cryptographic functions when we started working on this thesis.
-So we choose to develop the \crypto ~for Elektra.
+So we decided to develop the \crypto ~for Elektra.
 The \crypto ~enables us to use Elektra as benchmark environment.
 
 \subsection{Benefits For The Elektra Project}
@@ -303,7 +306,7 @@ Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \te
 \paragraph*{checkconf}
 The \texttt{checkconf} method ensures that a master password is available in the plugin configuration of the \crypto.
 If an encrypted master password is provided, a decryption run is started to see if the user owns the required GnuPG key.
-Otherwise, a random master password is created, encrypted using GnuPG and stored in the plugin configuration.
+If no master password exists, a random master password is created, encrypted using GnuPG and stored in the plugin configuration.
 The encryption key has to be specified within the plugin configuration.
 If no such GnuPG private key is specified, the \crypto ~throws an error.
 
@@ -321,15 +324,87 @@ Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the
 For every provider of cryptographic functions (see Section \ref{intro-provider} on page \pageref{intro-provider}) a compilation variant of the \crypto ~is created.
 The following compilation variants exist:
 \begin{enumerate}
-	\item \texttt{crypto\_botan} for the Botan library
 	\item \texttt{crypto\_gcrypt} for libgcrypt
 	\item \texttt{crypto\_openssl} for the OpenSSL library
+	\item \texttt{crypto\_botan} for the Botan library
 \end{enumerate}
 
-\subsection{Details About The Crypto Libraries}\label{details-about-the-crypto-libraries}
+\subsection{Details About The Providers of Cryptographic Functions}
+\label{impl-crypto-details}
+
+In this section we explain the details about the provider of cryptographic functions, which are relevant for the performance of the \crypto.
+
+\subsubsection*{libgcrypt}
+
+\gcry ~provides the data structure \texttt{gcry\_cipher\_hd\_t} for communicating cryptographic keys to the API, thus it is used as \texttt{elektraCryptoHandle}.
+The definition of the \texttt{elektraCryptoHandle} structure is shown in listing \ref{list-gcry-typedef} on page \pageref{list-gcry-typedef}.
+
+\begin{lstlisting}[label=list-gcry-typedef,language=C,caption={Definiton of elektraCryptoHandle for the libgcrypt crypto plugin variant}]
+typedef gcry_cipher_hd_t elektraCryptoHandle;
+\end{lstlisting}
+
+\gcry ~does not provide any internal mechanism for data manipulation, meaning it operates directly on memory buffers.
+Encryption and decryption happen in-place, so only a single buffer is used.
+Before the encryption call the buffer holds the plain text.
+After a successful encryption call the buffer holds the cipher text.
+Decryption works analogous.
+The size of the buffer must be a multiple of a block, thus it depends on the cryptographic algorithm in use.
+For AES-256-CBC the buffer size must be set to 16 bytes (128 bits).
+\cite{gnupg-doc}
+
+\subsubsection*{OpenSSL}
+
+OpenSSL exports the data structure \texttt{EVP\_CIPHER\_CTX} for communicating cryptographic keys to the API. The definition of the \texttt{elektraCryptoHandle} structure has already been shown in listing \ref{list-elektraCryptoHandle} on page \pageref{list-elektraCryptoHandle}.
+
+For data manipulation the \texttt{BIO} API is provided by OpenSSL.
+It handles data streams and data transformation.
+We use the \texttt{BIO} API for temporarily storing the encrypted/decrypted content.
+
+Listing \ref{list-ssl-bio} on page \pageref{list-ssl-bio} demonstrates how encryption works in OpenSSL and how the \texttt{BIO} API is used for storing the encrypted content. 
+
+\begin{lstlisting}[label=list-ssl-bio,language=C,caption={Encryption in the OpenSSL crypto plugin variant}]
+BIO * encrypted = BIO_new (BIO_s_mem ());
+
+EVP_EncryptUpdate (encrKey, cipherBuffer, 
+	&written, plainTxt, plainTxtLen);
+if (written > 0)
+{
+	BIO_write (encrypted, cipherBuffer, written);
+}
+\end{lstlisting}
+
+\subsubsection*{Botan}
+
+Since Botan is written in the C++ programming language the encryption and decryption process is encapsulated into classes.
+The cryptographic key is represented by the \texttt{SymmetricKey} and the initialization vector is represented by the \texttt{InitializationVector}.
+
+Botan provides an API for data manipulation, similar to OpenSSL.
+A \texttt{Pipe} abstracts I/O operations in Botan.
+We use the \texttt{Pipe} for encryption and decryption by attaching a corresponding filter to the \texttt{Pipe}. 
+
+Listing \ref{list-botan} on page \pageref{list-botan} shows an example of how the encryption works in Botan.
+
+\begin{lstlisting}[label=list-botan,language=C++,caption={Encryption in the Botan crypto plugin variant}]
+// initialize the pipe
+Pipe encryptor (get_cipher ("AES-256/CBC", 
+	*cryptoKey, *cryptoIv, ENCRYPTION));
+
+// encrypt the message
+encryptor.start_msg ();
+encryptor.write (static_cast<const byte *> (&plainTxt), 
+	sizeof (kdb_octet_t));
+encryptor.end_msg ();
+
+// receive the encrypted data
+const size_t msgLength = encryptor.remaining ();
+const size_t buffered = encryptor.read (&buffer[bufferIndex], 
+	msgLength);
+\end{lstlisting}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FCRYPT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fcrypt Plugin}\label{fcrypt-plugin}
 
 \subsection{Reasons For Developing The Plugin}
@@ -358,6 +433,9 @@ Only the \texttt{gpg2} or \texttt{gpg} binaries are required as runtime dependen
 Again the GPG keys to be used for encryption are defined in the plugin configuration following the same semantics as the \crypto{}.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BASE64
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Base64 Plugin}\label{base64-plugin}
 
 % Chapter Outro
