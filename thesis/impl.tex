@@ -156,6 +156,7 @@ By combining different Elektra plugins we can test a variety of possible use cas
 Elektra originally did not provide any cryptographic functions when we started working on this thesis.
 So we decided to develop the \crypto ~for Elektra.
 The \crypto ~enables us to use Elektra as benchmark environment.
+It will help us with the research questions 1 and 2 (see Section \ref{researchq} on page \pageref{researchq}).
 
 \subsection{Benefits For The Elektra Project}
 
@@ -334,14 +335,14 @@ The following compilation variants exist:
 
 In this section we explain the details about the provider of cryptographic functions, which are relevant for the performance of the \crypto.
 
-\subsubsection*{libgcrypt}
+\subsubsection{libgcrypt}
 
-\gcry ~provides the data structure \texttt{gcry\_cipher\_hd\_t} for communicating cryptographic keys to the API, thus it is used as \texttt{elektraCryptoHandle}.
-The definition of the \texttt{elektraCryptoHandle} structure is shown in listing \ref{list-gcry-typedef} on page \pageref{list-gcry-typedef}.
-
-\begin{lstlisting}[label=list-gcry-typedef,language=C,caption={Definiton of elektraCryptoHandle for the libgcrypt crypto plugin variant}]
-typedef gcry_cipher_hd_t elektraCryptoHandle;
-\end{lstlisting}
+\gcry ~provides the data structure \texttt{gcry\_cipher\_hd\_t} for communicating cryptographic keys to the API, thus it is used directly as \texttt{elektraCryptoHandle}.
+%The definition of the \texttt{elektraCryptoHandle} structure is shown in listing \ref{list-gcry-typedef} on page \pageref{list-gcry-typedef}.
+%
+%\begin{lstlisting}[label=list-gcry-typedef,language=C,caption={Definiton of elektraCryptoHandle for the libgcrypt crypto plugin variant}]
+%typedef gcry_cipher_hd_t elektraCryptoHandle;
+%\end{lstlisting}
 
 \gcry ~does not provide any internal mechanism for data manipulation, meaning it operates directly on memory buffers.
 Encryption and decryption happen in-place, so only a single buffer is used.
@@ -352,7 +353,7 @@ The size of the buffer must be a multiple of a block, thus it depends on the cry
 For AES-256-CBC the buffer size must be set to 16 bytes (128 bits).
 \cite{gnupg-doc}
 
-\subsubsection*{OpenSSL}
+\subsubsection{OpenSSL}
 
 OpenSSL exports the data structure \texttt{EVP\_CIPHER\_CTX} for communicating cryptographic keys to the API. The definition of the \texttt{elektraCryptoHandle} structure has already been shown in listing \ref{list-elektraCryptoHandle} on page \pageref{list-elektraCryptoHandle}.
 
@@ -373,7 +374,7 @@ if (written > 0)
 }
 \end{lstlisting}
 
-\subsubsection*{Botan}
+\subsubsection{Botan}
 
 Since Botan is written in the C++ programming language the encryption and decryption process is encapsulated into classes.
 The cryptographic key is represented by the \texttt{SymmetricKey} and the initialization vector is represented by the \texttt{InitializationVector}.
@@ -392,13 +393,12 @@ Pipe encryptor (get_cipher ("AES-256/CBC",
 // encrypt the message
 encryptor.start_msg ();
 encryptor.write (static_cast<const byte *> (&plainTxt), 
-	sizeof (kdb_octet_t));
+	sizeof (byte));
 encryptor.end_msg ();
 
 // receive the encrypted data
 const size_t msgLength = encryptor.remaining ();
-const size_t buffered = encryptor.read (&buffer[bufferIndex], 
-	msgLength);
+const size_t buffered = encryptor.read (buffer, msgLength);
 \end{lstlisting}
 
 
@@ -410,24 +410,60 @@ const size_t buffered = encryptor.read (&buffer[bufferIndex],
 
 \subsection{Reasons For Developing The Plugin}
 
-% crypto not good for entire config files -> too much overhead
-% other performance benchmark -> GPG also uses libgcrypt
+Elektra did not provide any facilities to encrypt or decrypt configuration files as a whole.
+Also there was no way of signing configuration files.
+The \fcrypt ~was developed during the writing of this thesis to provide these two features:
+\begin{enumerate}
+\item file based encryption and decryption using OpenPGP
+\item file based signatures using OpenPGP
+\end{enumerate}
+
+Both features can be used separately but they can also be combined together.
+
+The \fcrypt ~will help us with research questions 3 (see Section \ref{researchq} on page \pageref{researchq}).
 
 \subsection{Benefits For The Elektra Project}
 
-% Users can encrypt entire configuration files
-% no compile-time dependency which is nice for developers
+OpenPGP has been around for a long time.
+With the \fcrypt ~users can combine a well known and established public key cryptographic system together with Elektra's configuration capabilities.
 
-\subsection{Challenges}
+The \fcrypt ~does not have any compile-time dependencies.
+Only the \texttt{gnupg} or \texttt{gnupg2} binary is required at runtime.
+Both versions of GnuPG (version 1 and version 2) are supported.
 
+%\subsection{Challenges}
+%
 % Elektras internal API -> sync plugin workaround
 
 \subsection{Technical Aspects}
 
-% cryptographic operations are entirely handled by GnuPG
+The \fcrypt ~uses GnuPG as provider of cryptographic functions for all its operations.
+Doing so the plugin acts as a connector between Elektra and GnuPG, but it can also be seen as frontend to GnuPG.
+All calls that the \fcrypt ~produces can be executed in a shell without Elektra.
+The calls rely on the \texttt{fork} and the \texttt{execv} system functions.
 
+\subsubsection{File Based Encryption and Decryption}
 
+The encryption is done in the \texttt{kdb set} method of the \fcrypt.
+Listing \ref{list-fcrypt-enc} on page \pageref{list-fcrypt-enc} demonstrates how a typical encryption call will look like.
 
+\begin{lstlisting}[label=list-fcrypt-enc,language=Bash,caption={Fcrypt: encryption command}]
+gpg2 --batch -o /tmp/config.asc --yes -r 7F230E8D --armor \
+	-e /tmp/plaintext.ini
+\end{lstlisting}
+
+The decryption is done in a similar way and is implemented in the \texttt{kdb get} method.
+Listing \ref{list-fcrypt-dec} on page \pageref{list-fcrypt-dec} demonstrates how a typical decryption call will look like.
+
+\begin{lstlisting}[label=list-fcrypt-dec,language=Bash,caption={Fcrypt: decryption command}]
+gpg2 --batch -o /tmp/plaintext.ini --yes -d /tmp/config.asc
+\end{lstlisting}
+
+\subsubsection{File Based Signatures}
+
+Signatures 
+
+The verification of the signature works like a regular decryption and has already been shown in Listing \ref{list-fcrypt-dec} on page \pageref{list-fcrypt-dec}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BASE64
@@ -468,4 +504,6 @@ optionA = @BASE64IyFjcnlwdG8wMBEAAACFq0cCnjyfuwVy9/VtcpYCceYJVmnyTfF...
 \section{Implementation Summary}
 
 This chapter explained the Elektra plugin system and how we used it to introduce cryptographic methods to the Elektra project.
-Now that we have an application to examine, we continue with the description of the actual measurements in the following chapter.
+We learned about the contributions that were made during the writing of this thesis and have an understanding of the \crypto, the \fcrypt ~and the \base.
+Now we have a complete set of tools to start benchmarking.
+We continue with the description of the evaluation in the following chapter.
