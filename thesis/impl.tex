@@ -448,8 +448,7 @@ The encryption is done in the \texttt{kdb set} method of the \fcrypt.
 Listing \ref{list-fcrypt-enc} on page \pageref{list-fcrypt-enc} demonstrates how a typical encryption call will look like.
 
 \begin{lstlisting}[label=list-fcrypt-enc,language=Bash,caption={Fcrypt: encryption command}]
-gpg2 --batch -o /tmp/config.asc --yes -r 7F230E8D --armor \
-	-e /tmp/plaintext.ini
+gpg2 --batch -o /tmp/config.asc --yes -r 7F230E8D -e /tmp/plaintext.ini
 \end{lstlisting}
 
 The decryption is done in a similar way and is implemented in the \texttt{kdb get} method.
@@ -461,9 +460,18 @@ gpg2 --batch -o /tmp/plaintext.ini --yes -d /tmp/config.asc
 
 \subsubsection{File Based Signatures}
 
-Signatures 
+The signature -- like the encryption -- is created in the \texttt{kdb set} method.
+If a signature is requested, the \fcrypt ~appends the private key with the \texttt{-u} command line option of GnuPG.
+Also the \texttt{---clearsign} or the \texttt{-s} switch is added to the GnuPG command line options.
 
-The verification of the signature works like a regular decryption and has already been shown in Listing \ref{list-fcrypt-dec} on page \pageref{list-fcrypt-dec}.
+Listing \ref{list-fcrypt-sig} on page \pageref{list-fcrypt-sig} provides an example of how a signature call to GnuPG can look like.
+
+\begin{lstlisting}[label=list-fcrypt-sig,language=Bash,caption={Fcrypt: signature command}]
+gpg2 --batch -o /tmp/config.asc --yes -u 7F230E8D \
+	--armor --clearsign /tmp/plaintext.ini
+\end{lstlisting}
+
+The verification of the signature works like a regular decryption, which has already been shown in Listing \ref{list-fcrypt-dec} on page \pageref{list-fcrypt-dec}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % BASE64
