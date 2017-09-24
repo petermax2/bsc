@@ -93,7 +93,7 @@ Storage plugins typically perform read operations within this method.
 
 \subsection{Elektra State Sequence}
 
-First Elektra i \texttt{open} and changes its state to ``opened''.
+First Elektra invokes \texttt{open} and changes its state to ``opened''.
 Afterwards Elektra can either be closed by a \texttt{close} call or the configuration can be read by calling \texttt{get}.
 After the first call of \texttt{get} Elektra is ``ready''.
 Now the configuration held by Elektra may be modified with a call of \texttt{set} or the data may be read again by calling \texttt{get}.
