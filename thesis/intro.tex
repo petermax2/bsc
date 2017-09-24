@@ -1,27 +1,33 @@
 \chapter{Introduction}
 
-Providing login credentials via application configuration is a common problem in software development.
-Think of a web application which connects to a database server or stored tokens for authenticating to third party web-services.
-These credentials are often stored as plain text in a configuration file, leaving them vulnerable to attack.
+Storing and providing login credentials is a common problem in software development.
+Nowadays many applications store the login credentials unprotectedly in configuration files.
+The credentials are often saved as plain text, leaving them vulnerable to attack.
+Two applications behaving this way are given as example:
+
+\begin{enumerate}
+\item WordPress, and
+\item Hibernate.
+\end{enumerate}
+
 WordPress is a typical web application with a backend connecting to a database.
 The login credentials for the database server are stored as plain text within a configuration file.\cite{wordpress-doc}
-Another example is Hibernate, a popular object-relational mapping (ORM) tool written in Java.
+Another example is Hibernate, a popular object-relational mapping (ORM) tool, that is written in Java.
 Again the login credentials for the database are provided in an XML configuration file as plain text.\cite{hibernate-doc}
-These are just two examples but there are many more.
 
-In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to them.
-Passwords and other sensitive configuration values should be stored encrypted.
+In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to the login credentials.
+Login credentials like passwords and other sensitive configuration values should be stored encrypted.
 The process of encryption and decryption is designed to be transparent to the application.
 
 While cryptography is useful for our case, its introduction brings drawbacks as well.
 Mainly two problems arise:
 \begin{enumerate}
-\item performance
-\item usability
+\item performance, and
+\item usability.
 \end{enumerate}
 
 We are not going to discuss drawbacks in usability, but focus on the performance drawbacks.
-Cryptographic algorithms and their application have been studied and benchmarked in different contexts.\cite{thakur2011aes,ocf,freebsdtls}
+Cryptographic algorithms and their application have been studied and benchmarked in different contexts.\cite{ocf,freebsdtls,thakur2011aes}
 The scope of this thesis is cryptography applied to application configuration settings.
 
 \section{Elektra}
@@ -30,7 +36,7 @@ The Elektra project is a library combined with a set of tools to enable centrali
 It is extensible by a plugin system that enables the modification of configuration settings in a well-arranged manner.
 The core of Elektra's source code is written in the C programming language.
 Different language bindings offer availability of Elektra in other programming languages (for example: Java, Python, Ruby).
-Elektra supports common configuration file formats out of the box, for example:\cite{raab2010thesis,elektra-doc}
+Elektra supports common configuration file formats out of the box, for example:\cite{elektra-doc,raab2010thesis}
 \begin{enumerate}
 \item INI
 \item JSON
@@ -38,7 +44,7 @@ Elektra supports common configuration file formats out of the box, for example:\
 \item Yaml
 \end{enumerate}
 
-All technical details, the source code and the documentation are available online.\footnote{Elektra project page: \url{https://www.libelektra.org}}
+All technical details, the source code, and the documentation are available online.\footnote{Elektra project page: \url{https://www.libelektra.org}}
 
 We choose Elektra as our reference project because of its focus on configuration and because of its extendebility.
 Elektra offers many features, but it would still store login credentials as plain text originally.
@@ -50,7 +56,7 @@ What we mean exactly by encryption and decryption is defined in this section.
 
 \subsection{Algorithms}
 
-There are many cryptographic algorithms out there and there are even more implementations.
+There are many cryptographic algorithms and there are even more implementations.
 We can not (and should not) cover them all but focus on a typical setting that is viable for many applications.
 
 \subsubsection{Symmetric Cipher}
@@ -91,7 +97,7 @@ The OpenPGP protocol offers the possiblity to attach digital signatures to its m
 With digital signatures the authenticity of a message can be verified.\cite{bruceschneier1996,stallings2014}
 
 We are going to apply digital signatures to configuration files using the OpenPGP protocol.
-Thus we can guarantee that a configuration setting has not been modified by an unknown entity.
+Thus we can guarantee that a configuration setting has not been modified or completely replaced by an unknown entity.
 
 \subsection{Providers of Cryptographic Functions}
 \label{intro-provider}
@@ -101,7 +107,7 @@ Next we explain which providers of cryptographic functions we want to use for th
 
   \subsubsection{GnuPG and libgcrypt}
 
-The GnuPG project is a free open-source implementation of the OpenPGP protocol.
+The GnuPG project is a FLOSS implementation of the OpenPGP protocol.
 GnuPG supports:\cite{gnupg-doc}
 \begin{enumerate}
 \item encryption and decryption
@@ -130,12 +136,12 @@ The source code is written in the C++ programming language and is available at G
 \section{Research Question}
 \label{researchq}
 
-Considering the scope we defined so far, the following research questions are to be examined:
+In this thesis we want to examine the following research questions:
 
 \begin{enumerate}
   \item Which provider of cryptographic functions is the best fit when comparing the runtime and memory performance of AES-256-CBC?
-  \item What runtime and memory overhead is expected on average if AES-256-CBC is applied to configuration values?
-  \item What runtime and memory overhead is expected on average if OpenPGP encryption, decryption and signatures are applied to configuration files?
+  \item What runtime and memory overhead can be measured on average if AES-256-CBC is applied to configuration values?
+  \item What runtime and memory overhead can be detected on average if OpenPGP encryption, decryption and signatures are applied to configuration files?
 \end{enumerate}
 
 \section{Perspective}

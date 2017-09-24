@@ -2,14 +2,14 @@
 
 This chapter covers the following topics:
 \begin{enumerate}
-\item concepts in Elektra that are relevant for this thesis
-\item the plugins and enhancements we contributed to Elektra
+\item concepts in Elektra that are relevant for this thesis, and
+\item the plugins and enhancements we contributed to Elektra.
 \end{enumerate}
 
 
 \section{Elektra Concepts}\label{elektra-plugins}
 
-Before we elaborate the contributions that were made to Elektra during the writing of this thesis, we need to explain some internal concepts of Elektra.
+Before we elaborate the contributions that were made to Elektra during the writing of this thesis, we need to explain some internal concepts of Elektra we need.
 
 \subsection{Key and Keyset}
 
@@ -93,7 +93,7 @@ Storage plugins typically perform read operations within this method.
 
 \subsection{Elektra State Sequence}
 
-First Elektra calls \texttt{open} and changes its state to ``opened''.
+First Elektra i \texttt{open} and changes its state to ``opened''.
 Afterwards Elektra can either be closed by a \texttt{close} call or the configuration can be read by calling \texttt{get}.
 After the first call of \texttt{get} Elektra is ``ready''.
 Now the configuration held by Elektra may be modified with a call of \texttt{set} or the data may be read again by calling \texttt{get}.
@@ -439,12 +439,12 @@ Both versions of GnuPG (version 1 and version 2) are supported.
 
 The \fcrypt ~uses GnuPG as provider of cryptographic functions for all its operations.
 Doing so the plugin acts as a connector between Elektra and GnuPG, but it can also be seen as frontend to GnuPG.
-All calls that the \fcrypt ~produces can be executed in a shell without Elektra.
-The calls rely on the \texttt{fork} and the \texttt{execv} system functions.
+All invocations that the \fcrypt ~produces can be executed in a shell without Elektra.
+The invocations rely on the \texttt{fork} and the \texttt{execv} system functions.
 
 \subsubsection{File Based Encryption and Decryption}
 
-The encryption is done in the \texttt{kdb set} method of the \fcrypt.
+The \texttt{kdb set} method of the \fcrypt ~provides the encryption capabilities.
 Listing \ref{list-fcrypt-enc} on page \pageref{list-fcrypt-enc} demonstrates how a typical encryption call will look like.
 
 \begin{lstlisting}[label=list-fcrypt-enc,language=Bash,caption={Fcrypt: encryption command}]
