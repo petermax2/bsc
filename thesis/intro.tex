@@ -1,9 +1,19 @@
 \chapter{Introduction}
 
 Storing and providing login credentials is a common problem in software development.
-Nowadays many applications store the login credentials unprotectedly in configuration files.
-The credentials are often saved as plain text, leaving them vulnerable to attack.
-Two applications behaving this way are given as example:
+Login credentials in this thesis refers to information that grants access to a system, for example:
+
+\begin{enumerate}
+\item passwords, and
+\item access tokens (like OAuth tokens).
+\end{enumerate}
+
+Login credentials are seen as part of configuration settings of applications.
+
+Nowadays many applications store login credentials to related systems in configuration files.
+A typical example is a business application that connects to a database system.
+The login credentials are often saved as plain text, leaving them vulnerable to attack.
+We want to introduce the problem by giving two concrete examples:
 
 \begin{enumerate}
 \item WordPress, and
@@ -11,32 +21,34 @@ Two applications behaving this way are given as example:
 \end{enumerate}
 
 WordPress is a typical web application with a backend connecting to a database.
-The login credentials for the database server are stored as plain text within a configuration file.\cite{wordpress-doc}
-Another example is Hibernate, a popular object-relational mapping (ORM) tool, that is written in Java.
-Again the login credentials for the database are provided in an XML configuration file as plain text.\cite{hibernate-doc}
+WordPress reads the login credentials for the database server from a configuration file.\cite{wordpress-doc}
+The second example is Hibernate, a popular object-relational mapping (ORM) tool, that is written in Java.
+Hibernate expects that its login credentials for the database server are provided in a XML configuration file as plain text.\cite{hibernate-doc}
 
-In order to mitigate the risks of leaking plain text login credentials, cryptography should be applied to the login credentials.
-Login credentials like passwords and other sensitive configuration values should be stored encrypted.
-The process of encryption and decryption is designed to be transparent to the application.
+Both applications expect the login credentials to be unencrypted, but storing passwords this way is a major security risk.
+However, introducing means of cryptography to an application results in increased development efforts and possibly slower runtime behavior.
 
-While cryptography is useful for our case, its introduction brings drawbacks as well.
-Mainly two problems arise:
-\begin{enumerate}
-\item performance, and
-\item usability.
-\end{enumerate}
+\hypothesis{1}{Introducing cryptography to an application lowers the runtime performance of the application.}
 
-We are not going to discuss drawbacks in usability, but focus on the performance drawbacks.
+In order to mitigate the risks of leaking plain text login credentials, they should be encrypted before they are persisted to a storage.
+To keep the development effort low for application developers, a software library can abstract the cryptographic operations.
+By using third party software libraries an application encounters an increased memory consumption.
+
+\hypothesis{2}{Introducing cryptography to an application significantly increases the memory consumption of the application.}
+
+Cryptography as security measure might also bring drawbacks in usability.
+In this thesis we are not going to discuss any possible drawbacks regarding usability, but focus solely on the performance analysis.
+
 Cryptographic algorithms and their application have been studied and benchmarked in different contexts.\cite{ocf,freebsdtls,thakur2011aes}
-The scope of this thesis is cryptography applied to application configuration settings.
+The scope of this thesis is the performance analysis of cryptography applied to application configuration settings.
 
 \section{Elektra}
 
-The Elektra project is a library combined with a set of tools to enable centralized configuration management.
+The \elektra~ project is a library combined with a set of tools to enable centralized configuration management.
 It is extensible by a plugin system that enables the modification of configuration settings in a well-arranged manner.
 The core of Elektra's source code is written in the C programming language.
-Different language bindings offer availability of Elektra in other programming languages (for example: Java, Python, Ruby).
-Elektra supports common configuration file formats out of the box, for example:\cite{elektra-doc,raab2010thesis}
+Different language bindings offer availability of \elektra~ in other programming languages (for example: Java, Python, Ruby).
+\elektra~ supports common configuration file formats out of the box, for example:\cite{elektra-doc,raab2010thesis}
 \begin{enumerate}
 \item INI
 \item JSON
@@ -44,20 +56,22 @@ Elektra supports common configuration file formats out of the box, for example:\
 \item Yaml
 \end{enumerate}
 
-All technical details, the source code, and the documentation are available online.\footnote{Elektra project page: \url{https://www.libelektra.org}}
+All technical details, the source code, and the documentation are available online.\footnote{\elektra~ project page: \url{https://www.libelektra.org}}
 
-We choose Elektra as our reference project because of its focus on configuration and because of its extendebility.
-Elektra offers many features, but it would still store login credentials as plain text originally.
-Therefore during the writing of this thesis we developed plugins for Elektra which provide transparent encryption and decryption capabilities.
+We choose \elektra~ as our reference project because of its focus on configuration and because of its extendebility.
+\elektra~ offers many features, but it would still store login credentials as plain text originally.
+Therefore during the writing of this thesis we developed plugins for \elektra~ which provide transparent encryption and decryption capabilities.
+
+\elektra~ combined with the new plugins solves the problem of transparent configuration encryption and decryption.
 
 \section{Cryptography}
 
-What we mean exactly by encryption and decryption is defined in this section.
+In this section we define what we mean exactly by cryptography, encryption and decryption.
 
 \subsection{Algorithms}
 
 There are many cryptographic algorithms and there are even more implementations.
-We can not (and should not) cover them all but focus on a typical setting that is viable for many applications.
+We can not cover them all, but focus on a typical setting that is viable for most applications.
 
 \subsubsection{Symmetric Cipher}
 
@@ -84,7 +98,7 @@ Asymmetric ciphers tend to be slower than symmetric ciphers.
 To mitigate performance problems both asymmetric ciphers and symmetric ciphers are often combined into a public-key cryptographic system.
 Such systems utilize asymmetric cryptography to protect a key for a symmetric cipher.
 The symmetric cipher protects the actual data.
-This way the encrypted payload can be shared among multiple parties without the need to re-encrypt for every recipient.\cite{stallings2014} 
+This way the encrypted payload can be shared among multiple parties without the need to re-encrypt for every recipient.\cite{stallings2014}
 
 The OpenPGP protocol defines such a public-key cryptographic system.
 It is specified in the RFC 4880.\cite{rfc4880}
