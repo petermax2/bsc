@@ -4,8 +4,8 @@
 
 The focus of this chapter is:
 \begin{enumerate}
-\item how the benchmark system is set up
-\item the exact definition and explanation how the benchmarks work and what is measured
+\item the setup of the benchmark system,
+\item the definition of the benchmarks, and
 \item the results of the benchmarks
 \end{enumerate}
 
@@ -20,35 +20,18 @@ The processor of the benchmark system is an Intel\textregistered~ Core\texttrade
 The benchmark system has a total of 16 GB of DDR3 RAM clocked at 1333 MHz available.
 
 The root partition of the operation system is located on a ``Samsung SSD 840'' solid state drive (SSD).
-It is installed on a ZFS filesystem.
+It is installed on an ext4 filesystem.
 
-The \texttt{diskinfo} program gives an idea of how much throughput the SSD can handle. The results are listed in the tables \ref{eval-ssd-seek} on page \pageref{eval-ssd-seek} and \ref{eval-ssd-transfer} on page \pageref{eval-ssd-transfer}.
-
-\begin{table}[h]
-\centering
-\caption{Seek times of the benchmark SSD}
-\label{eval-ssd-seek}
-\begin{tabular}{lrrr}
-\textbf{}      & \textbf{number of iterations} & \textbf{total duration} & \textbf{estimated time} \\ \hline
-full stroke    & $250$                         & $0.014774 s$            & $0.059 ms$              \\
-half stroke    & $250$                         & $0.012662 s$            & $0.051 ms$              \\
-quarter stroke & $500$                         & $0.024154 s$            & $0.048 ms$              \\
-short forward  & $400$                         & $0.018797 s$            & $0.047 ms$              \\
-short backward & $400$                         & $0.018726 s$            & $0.047 ms$              \\
-seq outer      & $2048$                        & $0.075078 s$            & $0.037 ms$              \\
-seq inner      & $2048$                        & $0.074593 s$            & $0.036 ms$              \\ \hline
-\end{tabular}
-\end{table}
+The \texttt{hdparm} program gives an idea of how much throughput the SSD can handle. The results are listed in the table \ref{eval-ssd} on page \pageref{eval-ssd}.
 
 \begin{table}[h]
 \centering
-\caption{Transfer rates of the benchmark SSD}
-\label{eval-ssd-transfer}
+\caption{Read performance of the benchmark SSD}
+\label{eval-ssd}
 \begin{tabular}{lrrr}
-\textbf{} & \textbf{data size} & \textbf{total duration} & \textbf{estimated transfer rate} \\ \hline
-outside   & $102400 kB$        & $0.221568 s$            & $462161 kB/s$                    \\
-middle    & $102400 kB$        & $0.218275 s$            & $469133 kB/s$                    \\
-inside    & $102400 kB$        & $0.217949 s$            & $469835 kB/s$                    \\ \hline
+\textbf{}                   & \textbf{data read} & \textbf{time} & \textbf{result} \\ \hline
+Timing cached reads         & $28536 MB$         & $1.99 s$      & $14316.64 MB/s$ \\
+Timing buffered disk reads: & $1608 MB$          & $3.00 s$      & $535.47 MB/s$   \\ \hline
 \end{tabular}
 \end{table}
 
@@ -56,21 +39,18 @@ All benchmarks are performend on the SSD.
 
   \subsection{Software Setup}
 
-The operating system FreeBSD version 11.1 (patch level 1) is used for running the benchmarks.
-Elektra \todo{version} at the git commit \todo{commit-nr} is installed inside a FreeBSD jail.\footnote{FreeBSD jails
-are documented at \url{https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/jails.html}.
-}
-The exact setup of the benchmark jail is explained in Appendix \ref{jail-setup} on page \pageref{jail-setup}.
-More general information about jails and FreeBSD can be found in the \emph{FreeBSD Handbook}.\cite{freebsd-doc}
+The operating system Fedora 27 is used for running the benchmarks.
+Elektra version 0.8.21 at the git commit \texttt{dfa9bb8}\footnote{The full commit hash is: dfa9bb89ada39996cac5c1abd21481e1e2181ad9} is installed on the system.
+\todo{update Elektra version and commit}
 
 The most important program versions are listed below:
 
 \begin{itemize}
-  \item FreeBSD clang version 4.0.0 (tags/RELEASE\_400/final 297347)
-  \item Botan version 1.10.13\_3
-  \item OpenSSL version 1.0.2k-freebsd
-  \item libgcrypt version 1.8.0
-  \item GnuPG version 2.1.21
+  \item clang version 5.0.1 (tags/RELEASE\_501/final)
+  \item Botan version 1.10.17-1.fc27
+  \item OpenSSL version 1.1.0g-1.fc27
+  \item libgcrypt version 1.8.2-1.fc27
+  \item GnuPG version 2.2.4-1.fc27
 \end{itemize}
 
 In the following section the benchmarks are documented and explained in detail.
