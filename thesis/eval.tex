@@ -53,8 +53,85 @@ The most important program versions are listed below:
   \item GnuPG version 2.2.4-1.fc27
 \end{itemize}
 
-In the following section the benchmarks are documented and explained in detail.
+  \subsection{Time Measurement}
 
-\section{Benchmark 1 -- TBD}
+The runtime of a benchmark is measured using the system time, which is returned by the system function \texttt{gettimeofday ()}.
+The time measurement is abstracted in a class called \texttt{Timer}.
+Listing \ref{eval-time} on page \pageref{eval-time} demonstrates how a benchmark is written.
+
+\begin{lstlisting}[label=eval-time,language=C,caption={Time measurement for the benchmarks}]
+void do_benchmark ()
+{
+  Timer t();
+
+  // begin of measurement
+  t.start ();
+
+  action_to_be_measured ();
+
+  // end of measurement
+  t.end ();
+}
+\end{lstlisting}
+
+
+\section{Benchmark 1 -- Runtime Comparison}
+
+This benchmark examines the runtime performance of the \crypto ~.
+The benchmark compares the duration of the \texttt{kdb set} and \texttt{kdb get} phases:
+
+\begin{enumerate}
+\item without the \crypto ,
+\item with the \texttt{crypto\_openssl} plugin variant,
+\item the \texttt{crypto\_gcrypt} plugin variant, and 
+\item the \texttt{crypto\_botan} plugin variant.
+\end{enumerate}
+
+For each benchmark variant an Elektra backend is set up.
+For every backend a configuration setting with 100 keys \todo{verify number, possibly increase} is generated.
+First the duration of the \texttt{kdb set} method is being measured.
+Then the duration of the \texttt{kdb get} method is being measured.
+
+  \subsection{Code Example}
+
+The source code of the benchmark is distributed with Elektra, it is located at\\
+\texttt{libs/tools/benchmarks/benchmark\_crypto\_comparison.cpp}.
+
+Listing \ref{eval-1-code} on page \pageref{eval-1-code} is an excerpt of the benchmark code.
+The listing gives an idea about how the measurement is accomplished.
+The listing has been slightly modified to improve readability, but the execution flow has not been altered.
+
+\begin{lstlisting}[label=eval-1-code,language=C,caption={Excerpt of the first benchmark}]
+static Timer t (plugin_variant_names[VARIANT]);
+Key mp = mountBackend<VARIANT> (iteration);
+{
+  KDB kdb;
+  KeySet ks;
+
+  kdb.get (ks, mp);
+  for (int i = 0; i < 100; ++i)  // TODO update number of keys (if required)!
+  {
+    ks.append (Key (mp.getName () + "/k" + std::to_string (i),
+      KEY_VALUE, "value",
+      KEY_META, "crypto/encrypt", "1",
+      KEY_END));
+  }
+
+  t.start (); // start of the measurement
+  kdb.set (ks, mp);
+  t.stop (); // end of the measurement
+
+  kdb.close ();
+}
+std::cout << t;
+\end{lstlisting}
+
+  \subsection{Results of the Runtime Comparison}
+
+
+
 
 \section{Interpretation Of The Results}
+
+
+
