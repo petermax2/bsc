@@ -13,13 +13,13 @@ The focus of this chapter is:
 %
 %The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
 
-\section{Benchmark System Setup}
+\section{Benchmark System}
   \subsection{Hardware Setup}
 
 The processor of the benchmark system is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading enabled (which means 8 threads are available).
-The benchmark system has a total of 16 GB of DDR3 RAM clocked at 1333 MHz available.
+The benchmark system has a total amount of 16 GB of DDR3 RAM clocked at 1333 MHz available.
 
-The root partition of the operation system is located on a ``Samsung SSD 840'' solid state drive (SSD).
+The root partition of the operating system is located on a ``Samsung SSD 840'' solid state drive (SSD).
 It is installed on an ext4 filesystem.
 
 The \texttt{hdparm} program gives an idea of how much throughput the SSD can handle. The results are listed in the table \ref{eval-ssd} on page \pageref{eval-ssd}.
@@ -39,7 +39,7 @@ All benchmarks are performend on the SSD.
 
   \subsection{Software Setup}
 
-The operating system Fedora 27 is used for running the benchmarks.
+The operating system Fedora 27 is used for executing the benchmarks.
 Elektra version 0.8.21 at the git commit \texttt{dfa9bb8}\footnote{The full commit hash is: dfa9bb89ada39996cac5c1abd21481e1e2181ad9} is installed on the system.
 \todo{update Elektra version and commit}
 
@@ -52,6 +52,8 @@ The most important program versions are listed below:
   \item libgcrypt version 1.8.2-1.fc27
   \item GnuPG version 2.2.4-1.fc27
 \end{itemize}
+
+\todo{add Elektra compilation instructions (cmake arguments, etc.)?}
 
   \subsection{Time Measurement}
 
@@ -74,6 +76,7 @@ void do_benchmark ()
 }
 \end{lstlisting}
 
+\todo{describe statistical method (median, number of runs, iterations/run etc.)}
 
 \section{Benchmark 1 -- Runtime Comparison}
 
@@ -94,14 +97,14 @@ Then the duration of the \texttt{kdb get} method is being measured.
 
   \subsection{Code Example}
 
-The source code of the benchmark is distributed with Elektra, it is located at\\
+The source code of the benchmark is distributed with Elektra, and it is located at\\
 \texttt{libs/tools/benchmarks/benchmark\_crypto\_comparison.cpp}.
 
 Listing \ref{eval-1-code} on page \pageref{eval-1-code} is an excerpt of the benchmark code.
 The listing gives an idea about how the measurement is accomplished.
 The listing has been slightly modified to improve readability, but the execution flow has not been altered.
 
-\begin{lstlisting}[label=eval-1-code,language=C,caption={Excerpt of the first benchmark}]
+\begin{lstlisting}[label=eval-1-code,language=C,caption={Excerpt of Benchmark 1}]
 static Timer t (plugin_variant_names[VARIANT]);
 Key mp = mountBackend<VARIANT> (iteration);
 {
