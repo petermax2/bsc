@@ -9,7 +9,6 @@ The focus of this chapter is:
 \item the results of the benchmarks
 \end{enumerate}
 
-%The runtime of a benchmark will be measured using the system time, which is returned by the \texttt{gettimeofday ()} system function.
 %
 %The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
 
@@ -53,7 +52,19 @@ The most important program versions are listed below:
   \item GnuPG version 2.2.4-1.fc27
 \end{itemize}
 
-\todo{add Elektra compilation instructions (cmake arguments, etc.)?}
+Listing \ref{eval-compile} on page \pageref{eval-compile} shows how \elektra ~ is compiled on the benchmark system.
+
+\begin{lstlisting}[label=eval-compile,language=bash,caption={Elektra compile options for the benchmarks}]
+mkdir build && cd build
+cmake -GNinja \
+    -DBUILD_STATIC=OFF \
+    -DCMAKE_C_COMPILER=clang \
+    -DCMAKE_CXX_COMPILER=clang++ \
+    -DBUILD_DOCUMENTATION=OFF \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    ..
+ninja install
+\end{lstlisting}
 
   \subsection{Time Measurement}
 
