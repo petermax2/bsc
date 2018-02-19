@@ -126,7 +126,7 @@ The basic structure of the plugin stays the same for every compilation variant e
 These calls are encapsulated using C preprocessor directives, which form the actual compilation variants.
 Listing \ref{impl-cryptoInit} on page \pageref{impl-cryptoInit} further illustrates the use of compilation variants, showing how the crypto libraries are initialized by the \crypto.
 
-\begin{lstlisting}[label=impl-cryptoInit,language=C,caption={Example of how to use compilation variants in Elektra}]
+\begin{code}[label=impl-cryptoInit,language=C,caption={Example of how to use compilation variants in Elektra}]
 static int elektraCryptoInit (Key * errorKey)
 {
 #if defined(ELEKTRA_CRYPTO_API_GCRYPT)
@@ -139,7 +139,7 @@ static int elektraCryptoInit (Key * errorKey)
 	return 1;
 #endif
 }
-\end{lstlisting}
+\end{code}
 
 As we can see every crypto library is handled differently but the code frame of the plugin stays the same for all compilation variants.
 
@@ -219,13 +219,13 @@ The \crypto ~defines a single data structure, which is propagated throughout the
 
 Listing \ref{list-elektraCryptoHandle} on page \pageref{list-elektraCryptoHandle} shows the definition of the \texttt{elektraCryptoHandle} for the OpenSSL plugin variant.
 
-\begin{lstlisting}[label=list-elektraCryptoHandle,language=C,caption={Definiton of elektraCryptoHandle for the OpenSSL crypto plugin variant}]
+\begin{code}[label=list-elektraCryptoHandle,language=C,caption={Definiton of elektraCryptoHandle for the OpenSSL crypto plugin variant}]
 typedef struct
 {
 	EVP_CIPHER_CTX * encrypt;
 	EVP_CIPHER_CTX * decrypt;
 } elektraCryptoHandle;
-\end{lstlisting}
+\end{code}
 
 
 \subsubsection{Message Structure}
@@ -339,11 +339,6 @@ In this section we explain the details about the provider of cryptographic funct
 \subsubsection{libgcrypt}
 
 \gcry ~provides the data structure \texttt{gcry\_cipher\_hd\_t} for communicating cryptographic keys to the API, thus it is used directly as \texttt{elektraCryptoHandle}.
-%The definition of the \texttt{elektraCryptoHandle} structure is shown in listing \ref{list-gcry-typedef} on page \pageref{list-gcry-typedef}.
-%
-%\begin{lstlisting}[label=list-gcry-typedef,language=C,caption={Definiton of elektraCryptoHandle for the libgcrypt crypto plugin variant}]
-%typedef gcry_cipher_hd_t elektraCryptoHandle;
-%\end{lstlisting}
 
 \gcry ~does not provide any internal mechanism for data manipulation, meaning it operates directly on memory buffers.
 Encryption and decryption happen in-place, so only a single buffer is used.
@@ -364,7 +359,7 @@ We use the \texttt{BIO} API for temporarily storing the encrypted/decrypted cont
 
 Listing \ref{list-ssl-bio} on page \pageref{list-ssl-bio} demonstrates how encryption works in OpenSSL and how the \texttt{BIO} API is used for storing the encrypted content. 
 
-\begin{lstlisting}[label=list-ssl-bio,language=C,caption={Encryption in the OpenSSL crypto plugin variant}]
+\begin{code}[label=list-ssl-bio,language=C,caption={Encryption in the OpenSSL crypto plugin variant}]
 BIO * encrypted = BIO_new (BIO_s_mem ());
 
 EVP_EncryptUpdate (encrKey, cipherBuffer, 
@@ -373,7 +368,7 @@ if (written > 0)
 {
 	BIO_write (encrypted, cipherBuffer, written);
 }
-\end{lstlisting}
+\end{code}
 
 \subsubsection{Botan}
 
@@ -386,7 +381,7 @@ We use the \texttt{Pipe} for encryption and decryption by attaching a correspond
 
 Listing \ref{list-botan} on page \pageref{list-botan} shows an example of how the encryption works in Botan.
 
-\begin{lstlisting}[label=list-botan,language=C++,caption={Encryption in the Botan crypto plugin variant}]
+\begin{code}[label=list-botan,language=C++,caption={Encryption in the Botan crypto plugin variant}]
 // initialize the pipe
 Pipe encryptor (get_cipher ("AES-256/CBC", 
 	*cryptoKey, *cryptoIv, ENCRYPTION));
@@ -400,7 +395,7 @@ encryptor.end_msg ();
 // receive the encrypted data
 const size_t msgLength = encryptor.remaining ();
 const size_t buffered = encryptor.read (buffer, msgLength);
-\end{lstlisting}
+\end{code}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -503,11 +498,11 @@ Figure \ref{impl_base64_overview} on page \pageref{impl_base64_overview} shows a
 
 Listing \ref{list-base64} on page \pageref{list-base64} demonstrates how an INI file, that has been produced by the backend described in Figure \ref{impl_base64_overview} on page \pageref{impl_base64_overview}, might look like.
 
-\begin{lstlisting}[label=list-base64,caption={Base64 example INI output}]
+\begin{code}[label=list-base64,caption={Base64 example INI output}]
 [section1]
 #@META crypto/encrypt = 1
 optionA = @BASE64IyFjcnlwdG8wMBEAAACFq0cCnjyfuwVy9/VtcpYCceYJVmnyTfF...
-\end{lstlisting}
+\end{code}
 
 % Chapter Outro
 \section{Implementation Summary}

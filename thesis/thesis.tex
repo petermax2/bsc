@@ -25,6 +25,10 @@
 
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\small}
+\lstnewenvironment{code}[1][]%
+  {\noindent\minipage{\linewidth}\medskip
+  \lstset{basicstyle=\ttfamily\small,frame=top,frame=bottom,#1}}
+  {\endminipage}
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Peter Nirschl} % The author name without titles.

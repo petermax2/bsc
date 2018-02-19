@@ -54,7 +54,7 @@ The most important program versions are listed below:
 
 Listing \ref{eval-compile} on page \pageref{eval-compile} shows how \elektra ~ is compiled on the benchmark system.
 
-\begin{lstlisting}[label=eval-compile,language=bash,caption={Elektra compile options for the benchmarks}]
+\begin{code}[label=eval-compile,language=bash,caption={Elektra compile options for the benchmarks}]
 mkdir build && cd build
 cmake -GNinja \
     -DBUILD_STATIC=OFF \
@@ -64,7 +64,7 @@ cmake -GNinja \
     -DCMAKE_INSTALL_PREFIX=/usr \
     ..
 ninja install
-\end{lstlisting}
+\end{code}
 
   \subsection{Time Measurement}
 
@@ -72,7 +72,7 @@ The runtime of a benchmark is measured using the system time, which is returned 
 The time measurement is abstracted in a class called \texttt{Timer}.
 Listing \ref{eval-time} on page \pageref{eval-time} demonstrates how a benchmark is written.
 
-\begin{lstlisting}[label=eval-time,language=C,caption={Time measurement for the benchmarks}]
+\begin{code}[label=eval-time,language=C,caption={Time measurement for the benchmarks}]
 void do_benchmark ()
 {
   Timer t();
@@ -85,7 +85,7 @@ void do_benchmark ()
   // end of measurement
   t.end ();
 }
-\end{lstlisting}
+\end{code}
 
 \todo{describe statistical method (median, number of runs, iterations/run etc.)}
 
@@ -115,7 +115,7 @@ Listing \ref{eval-1-code} on page \pageref{eval-1-code} is an excerpt of the ben
 The listing gives an idea about how the measurement is accomplished.
 The listing has been slightly modified to improve readability, but the execution flow has not been altered.
 
-\begin{lstlisting}[label=eval-1-code,language=C,caption={Excerpt of Benchmark 1}]
+\begin{code}[label=eval-1-code,language=C,caption={Excerpt of Benchmark 1}]
 static Timer t (plugin_variant_names[VARIANT]);
 Key mp = mountBackend<VARIANT> (iteration);
 {
@@ -138,7 +138,7 @@ Key mp = mountBackend<VARIANT> (iteration);
   kdb.close ();
 }
 std::cout << t;
-\end{lstlisting}
+\end{code}
 
   \subsection{Results of the Runtime Comparison}
 
