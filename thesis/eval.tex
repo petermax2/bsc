@@ -123,7 +123,7 @@ Key mp = mountBackend<VARIANT> (iteration);
   KeySet ks;
 
   kdb.get (ks, mp);
-  for (int i = 0; i < 100; ++i)  // TODO update number of keys (if required)!
+  for (int i = 0; i < 100; ++i)
   {
     ks.append (Key (mp.getName () + "/k" + std::to_string (i),
       KEY_VALUE, "value",
@@ -141,6 +141,37 @@ std::cout << t;
 \end{code}
 
   \subsection{Results of the Runtime Comparison}
+
+
+\begin{figure}[h]
+\center
+\caption{Boxplots of the \texttt{kdb get} runtime with $n = 500$ configuration settings}
+\label{eval-boxplot-get}
+\includegraphics[width=\columnwidth]{plots/boxplot_500_get.pdf}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\caption{Boxplots of the \texttt{kdb set} runtime with $n = 500$ configuration settings}
+\label{eval-boxplot-set}
+\includegraphics[width=\columnwidth]{plots/boxplot_500_set.pdf}
+\end{figure}
+
+
+\begin{figure}[h]
+\center
+\caption{Runtime comparison of \texttt{kdb get}}
+\label{eval-runtime-comp-get}
+\includegraphics[width=\columnwidth]{plots/comp_median_get.pdf}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\caption{Runtime comparison of \texttt{kdb set}}
+\label{eval-runtime-comp-set}
+\includegraphics[width=\columnwidth]{plots/comp_median_set.pdf}
+\end{figure}
+
 
 
 
