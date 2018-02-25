@@ -92,21 +92,26 @@ void do_benchmark ()
 \section{Benchmark 1 -- Runtime Comparison}
 
 This benchmark examines the runtime performance of the \crypto ~.
-The benchmark compares the duration of the \texttt{kdb set} and \texttt{kdb get} phases:
+The benchmark compares the duration of the \texttt{kdb set} and \texttt{kdb get} methods:
 
 \begin{enumerate}
 \item without the \crypto ,
+\item with the \fcrypt ,
 \item with the \texttt{crypto\_openssl} plugin variant,
 \item the \texttt{crypto\_gcrypt} plugin variant, and 
 \item the \texttt{crypto\_botan} plugin variant.
 \end{enumerate}
 
 For each benchmark variant an Elektra backend is set up.
-For every backend a configuration setting with 100 keys \todo{verify number, possibly increase} is generated.
-First the duration of the \texttt{kdb set} method is being measured.
-Then the duration of the \texttt{kdb get} method is being measured.
+For every backend a configuration setting with a preset size is generated.
+First the duration of the \texttt{kdb set} method of Elektra is being measured, which represents the performance of the encryption process.
+Then the duration of the \texttt{kdb get} method of Elektra is being measured, which represents the performance of the decryption process.
+The benchmark is repeated with configuration setting sizes, that ranges from $1$ to $1000$.
 
-  \subsection{Code Example}
+For better reproducibility we provide a script, that executes the benchmark as we do in this thesis.
+The script is available at Github\footnote{\url{https://github.com/petermax2/libelektra-crypto-benchmarks/blob/master/scripts/start-crypto-comparison.sh}}.
+
+  \subsection{Benchmark Code}
 
 The source code of the benchmark is distributed with Elektra, and it is located at\\
 \texttt{libs/tools/benchmarks/benchmark\_crypto\_comparison.cpp}.
@@ -123,7 +128,8 @@ Key mp = mountBackend<VARIANT> (iteration);
   KeySet ks;
 
   kdb.get (ks, mp);
-  for (int i = 0; i < 100; ++i)
+  // n = size of the configuration setting
+  for (int i = 0; i < n; ++i)
   {
     ks.append (Key (mp.getName () + "/k" + std::to_string (i),
       KEY_VALUE, "value",
