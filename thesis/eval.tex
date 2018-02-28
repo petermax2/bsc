@@ -87,7 +87,13 @@ void do_benchmark ()
 }
 \end{code}
 
-\todo{describe statistical method (median, number of runs, iterations/run etc.)}
+  \subsection{Statistical Method}
+
+Every benchmark run is repeated 11 times.
+For the sorted set of results $\{r_{1},...,r_{11} | r_n \leq r_{n+1}\}$ the median is given as $\tilde{x}=r_6$.
+
+The median is chosen as measurement result because of its robustness against outliers.
+When we speak of the result of a benchmark, we always refer to the median $\tilde{x}$ of the 11 benchmarks runs.
 
 \section{Benchmark 1 -- Runtime Comparison}
 
