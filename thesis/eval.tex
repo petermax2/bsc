@@ -153,29 +153,12 @@ std::cout << t;
 \end{code}
 
   \subsection{Results of the Runtime Comparison}
+  \label{eval-section-runtime-results}
 
-
-\begin{figure}[h]
-\center
-\caption{Boxplots of the \texttt{kdb get} runtime with $n = 500$ configuration settings}
-\label{eval-boxplot-get}
-\includegraphics[width=\columnwidth]{plots/boxplot_500_get.pdf}
-\end{figure}
-
-\begin{figure}[h]
-\center
-\caption{Boxplots of the \texttt{kdb set} runtime with $n = 500$ configuration settings}
-\label{eval-boxplot-set}
-\includegraphics[width=\columnwidth]{plots/boxplot_500_set.pdf}
-\end{figure}
-
-
-\begin{figure}[h]
-\center
-\caption{Runtime comparison of \texttt{kdb get}}
-\label{eval-runtime-comp-get}
-\includegraphics[width=\columnwidth]{plots/comp_median_get.pdf}
-\end{figure}
+The runtime results of all benchmark runs are listed in chapter \ref{chapter-benchmark-results} on page \pageref{chapter-benchmark-results}.
+The results are also published at Github\footnote{\url{https://github.com/petermax2/libelektra-crypto-benchmarks/tree/master/results}}.
+Figure \ref{eval-runtime-comp-set} on page \pageref{eval-runtime-comp-set} compares the benchmark results of all tested variants for the \texttt{kdb set} method.
+Figure \ref{eval-runtime-comp-get} on page \pageref{eval-runtime-comp-get} provides a comparison of the benchmark results of all tested variants for the \texttt{kdb get} method.
 
 \begin{figure}[h]
 \center
@@ -184,11 +167,59 @@ std::cout << t;
 \includegraphics[width=\columnwidth]{plots/comp_median_set.pdf}
 \end{figure}
 
+\begin{figure}[h]
+\center
+\caption{Runtime comparison of \texttt{kdb get}}
+\label{eval-runtime-comp-get}
+\includegraphics[width=\columnwidth]{plots/comp_median_get.pdf}
+\end{figure}
+
+As we can see from the results, the runtime behavior increases linearly with the number of encrypted and decrypted configuration values.
+
+The boxplot in figure \ref{eval-boxplot-set} on page \pageref{eval-boxplot-set} shows that the benchmark results for the \texttt{kdb set} are stable.
+There are no noteworthy outliers.
+Figure \ref{eval-boxplot-get} on page \pageref{eval-boxplot-get} reveals analogous insights for the \texttt{kdb get} method.
+
+\begin{figure}[h]
+\center
+\caption{Boxplots of the \texttt{kdb set} runtime with $n = 500$ configuration settings}
+\label{eval-boxplot-set}
+\includegraphics[width=\columnwidth]{plots/boxplot_500_set.pdf}
+\end{figure}
+
+\begin{figure}[h]
+\center
+\caption{Boxplots of the \texttt{kdb get} runtime with $n = 500$ configuration settings}
+\label{eval-boxplot-get}
+\includegraphics[width=\columnwidth]{plots/boxplot_500_get.pdf}
+\end{figure}
+
+\section{Findings}
+
+We want to repeat the hypothesis $H_1$ and $H_2$, that have been introduced in chapter \ref{intro-hypo-1} on page \pageref{intro-hypo-1}:
+
+\hypothesis{$H_1$}{\emph{\hypoOne}}
+\hypothesis{$H_2$}{\emph{\hypoTwo}}
+
+Given the hypothesis, the research questions and all the benchmark results, we conclude that:
+
+\begin{enumerate}
+\item $H_1$ can not be falsified with the results we measured,
+\item $H_2$ has not been analysed yet,
+\item $RQ_1$ can be partially answered,
+\item $RQ_2$ can be partially answered, and
+\item $RQ_3$ can be paritally answered.
+\end{enumerate}
+
+\subsection{Answer to $RQ_1$}
+\RQ{$RQ_1$}{\emph{\rqOne}}
 
 
+\subsection{Answer to $RQ_2$}
+\RQ{$RQ_2$}{\emph{\rqTwo}}
 
 
-\section{Interpretation Of The Results}
-
+\subsection{Answer to $RQ_3$}
+\RQ{$RQ_3$}{\emph{\rqThree}}
 
 

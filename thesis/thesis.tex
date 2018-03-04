@@ -104,12 +104,21 @@
 % Define convenience macros.
 \newcommand{\todo}[1]{{\color{red}\textbf{TODO: {#1}}}} % Comment for the final version, to raise errors.
 \newcommand{\hypothesis}[2]{{\paragraph{Hypothesis {#1}} {#2}}}
+\newcommand{\RQ}[2]{{\paragraph{{#1}} {#2}}}
 \newcommand{\crypto}[0]{{\texttt{crypto} plugin}} % crypto plugin
 \newcommand{\fcrypt}[0]{{\texttt{fcrypt} plugin}} % fcrypt plugin
 \newcommand{\base}[0]{{\texttt{base64} plugin}} % base64 plugin
 \newcommand{\gcry}[0]{{libgcrypt}} % libgcrypt
 \newcommand{\elektra}[0]{Elektra}
 
+% Hypothesis
+\newcommand{\hypoOne}[0]{{Introducing cryptography to an application lowers the runtime performance of the application.}}
+\newcommand{\hypoTwo}[0]{{Introducing cryptography to an application significantly increases the memory consumption of the application.}}
+
+% RQs
+\newcommand{\rqOne}[0]{{Which provider of cryptographic functions is the best fit when comparing the runtime and memory performance of AES-256-CBC?}}
+\newcommand{\rqTwo}[0]{{What runtime and memory overhead can be measured on average if AES-256-CBC is applied to configuration values?}}
+\newcommand{\rqThree}[0]{{What runtime and memory overhead can be detected on average if OpenPGP encryption, decryption and signatures are applied to configuration files?}}
 
 \begin{document}
 

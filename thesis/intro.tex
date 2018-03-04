@@ -28,13 +28,15 @@ Hibernate expects that its login credentials for the database server are provide
 Both applications expect the login credentials to be unencrypted, but storing passwords this way is a major security risk.
 However, introducing means of cryptography to an application results in increased development efforts and possibly slower runtime behavior.
 
-\hypothesis{1}{Introducing cryptography to an application lowers the runtime performance of the application.}
+\hypothesis{$H_1$}{\hypoOne}
+\label{intro-hypo-1}
 
 In order to mitigate the risks of leaking plain text login credentials, they should be encrypted before they are persisted to a storage.
 To keep the development effort low for application developers, a software library can abstract the cryptographic operations.
 By using third party software libraries an application encounters an increased memory consumption.
 
-\hypothesis{2}{Introducing cryptography to an application significantly increases the memory consumption of the application.}
+\hypothesis{$H_2$}{\hypoTwo}
+\label{intro-hypo-2}
 
 Cryptography as a security measure might also bring drawbacks in usability.
 In this thesis we are not going to discuss any possible drawbacks regarding usability, but focus solely on the performance analysis.
@@ -152,11 +154,9 @@ The source code is written in the C++ programming language and is available at G
 
 In this thesis we want to examine the following research questions:
 
-\begin{enumerate}
-  \item Which provider of cryptographic functions is the best fit when comparing the runtime and memory performance of AES-256-CBC?
-  \item What runtime and memory overhead can be measured on average if AES-256-CBC is applied to configuration values?
-  \item What runtime and memory overhead can be detected on average if OpenPGP encryption, decryption and signatures are applied to configuration files?
-\end{enumerate}
+\RQ{$RQ_1$}{\rqOne}
+\RQ{$RQ_2$}{\rqTwo}
+\RQ{$RQ_3$}{\rqThree}
 
 \section{Perspective}
 
