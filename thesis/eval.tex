@@ -1,16 +1,11 @@
 \chapter{Experimental Evaluation}
 
-%\section{Methodology}
-
 The focus of this chapter is:
 \begin{enumerate}
 \item the setup of the benchmark system,
 \item the definition of the benchmarks, and
 \item the results of the benchmarks
 \end{enumerate}
-
-%
-%The memory usage is examined using the ``Massif'' tool which is part of the \texttt{valgrind} suite.\cite{valgrind}
 
 \section{Benchmark System}
   \subsection{Hardware Setup}
@@ -196,32 +191,59 @@ Figure \ref{eval-boxplot-get} on page \pageref{eval-boxplot-get} reveals analogo
 \includegraphics{plots/boxplot_500_get.pdf}
 \end{figure}
 
-\section{Findings}
 
-We want to repeat the hypothesis $H_1$ and $H_2$, that have been introduced in chapter \ref{intro-hypo-1} on page \pageref{intro-hypo-1}:
+\section{Benchmark 2 -- Memory Analysis}
 
-\hypothesis{$H_1$}{\emph{\hypoOne}}
-\hypothesis{$H_2$}{\emph{\hypoTwo}}
+\begin{figure}[h]
+\center
+\caption{Result Of The Memory Analysis with $n = 10$ configuration settings}
+\label{eval-massif-010}
+\includegraphics[width=\columnwidth]{plots/massif_010.pdf}
+\end{figure}
 
-Given the hypothesis, the research questions and all the benchmark results, we conclude that:
+\begin{figure}[h]
+\center
+\caption{Result Of The Memory Analysis with $n = 100$ configuration settings}
+\label{eval-massif-100}
+\includegraphics[width=\columnwidth]{plots/massif_100.pdf}
+\end{figure}
 
-\begin{enumerate}
-\item $H_1$ can not be falsified with the results we measured,
-\item $H_2$ has not been analysed yet,
-\item $RQ_1$ can be partially answered,
-\item $RQ_2$ can be partially answered, and
-\item $RQ_3$ can be paritally answered.
-\end{enumerate}
-
-\subsection{Answer to $RQ_1$}
-\RQ{$RQ_1$}{\emph{\rqOne}}
-
-
-\subsection{Answer to $RQ_2$}
-\RQ{$RQ_2$}{\emph{\rqTwo}}
+\begin{figure}[h]
+\center
+\caption{Result Of The Memory Analysis with $n = 200$ configuration settings}
+\label{eval-massif-200}
+\includegraphics[width=\columnwidth]{plots/massif_200.pdf}
+\end{figure}
 
 
-\subsection{Answer to $RQ_3$}
-\RQ{$RQ_3$}{\emph{\rqThree}}
+
+% Wrong place! Should be placed in the conclusions!!
+%\section{Findings}
+%
+%We want to repeat the hypothesis $H_1$ and $H_2$, that have been introduced in chapter \ref{intro-hypo-1} on page \pageref{intro-hypo-1}:
+%
+%\hypothesis{$H_1$}{\emph{\hypoOne}}
+%\hypothesis{$H_2$}{\emph{\hypoTwo}}
+%
+%Given the hypothesis, the research questions and all the benchmark results, we conclude that:
+%
+%\begin{enumerate}
+%\item $H_1$ can not be falsified with the results we measured,
+%\item $H_2$ has not been analysed yet,
+%\item $RQ_1$ can be partially answered,
+%\item $RQ_2$ can be partially answered, and
+%\item $RQ_3$ can be paritally answered.
+%\end{enumerate}
+%
+%\subsection{Answer to $RQ_1$}
+%\RQ{$RQ_1$}{\emph{\rqOne}}
+%
+%
+%\subsection{Answer to $RQ_2$}
+%\RQ{$RQ_2$}{\emph{\rqTwo}}
+%
+%
+%\subsection{Answer to $RQ_3$}
+%\RQ{$RQ_3$}{\emph{\rqThree}}
 
 
