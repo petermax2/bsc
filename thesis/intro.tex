@@ -47,10 +47,13 @@ The scope of this thesis is the performance analysis of cryptography applied to 
 
 \section{Elektra}
 
-The \elektra~ project is a library combined with a set of tools to enable centralized configuration management.
-Elektra is extensible by a plugin system that enables the modification of configuration settings in a well-arranged manner.
+	\subsection{What is Elektra?}
+
+The \elektra~ project is a configuration management tool, that consists of a library and a set of programs.
+The core idea of \elektra~ is to have a centralized hierachical key-value database for configuration settings.
 The core of Elektra's source code is written in the C programming language.
-Different language bindings offer availability of \elektra~ in other programming languages (for example: Java, Python, Ruby).
+\elektra~ is extensible by a plugin system.
+Different language bindings offer availability of \elektra~ in other programming languages (for example: Java, Python, and Ruby).
 \elektra~ supports common configuration file formats out of the box, for example:\cite{elektra-doc,raab2010thesis}
 \begin{enumerate}
 \item INI
@@ -61,11 +64,14 @@ Different language bindings offer availability of \elektra~ in other programming
 
 All technical details, the source code, and the documentation are available online.\footnote{\elektra~ project page: \url{https://www.libelektra.org}}
 
+	\subsection{Elektra And Cryptography}
+
 We choose \elektra~ as our reference project because of its focus on configuration and because of its extensibility.
 \elektra~ offers many features, but stores login credentials as plain text originally.
 Therefore during the writing of this thesis we developed plugins for \elektra~ that provide transparent encryption and decryption capabilities.
 
 \elektra~ combined with the new plugins solves the problem of transparent encryption and decryption of configuration settings.
+This combination is the basis for our experimental evaluation.
 
 \section{Cryptography}
 
@@ -108,13 +114,13 @@ It is specified in the RFC 4880.\cite{rfc4880}
 We are going to apply the OpenPGP protocol to encrypt configuration files.
 This will protect confidential configuration settings (for example: configuration files that only hold login credentials).
 
-\subsubsection{Digital Signatures}
-
-The OpenPGP protocol offers the possiblity to attach digital signatures to its messages.\cite{rfc4880}
-With digital signatures the authenticity of a message can be verified.\cite{bruceschneier1996,stallings2014}
-
-We are going to apply digital signatures to configuration files using the OpenPGP protocol.
-Thus we can guarantee that a configuration setting has not been modified or completely replaced by an unknown entity.
+%\subsubsection{Digital Signatures}
+%
+%The OpenPGP protocol offers the possiblity to attach digital signatures to its messages.\cite{rfc4880}
+%With digital signatures the authenticity of a message can be verified.\cite{bruceschneier1996,stallings2014}
+%
+%We are going to apply digital signatures to configuration files using the OpenPGP protocol.
+%Thus we can guarantee that a configuration setting has not been modified or completely replaced by an unknown entity.
 
 \subsection{Providers of Cryptographic Functions}
 \label{intro-provider}
@@ -125,11 +131,12 @@ Next we explain which providers of cryptographic functions we want to use for th
   \subsubsection{GnuPG and libgcrypt}
 
 The GnuPG project is a FLOSS implementation of the OpenPGP protocol.
-GnuPG supports:\cite{gnupg-doc}
+GnuPG supports:
 \begin{enumerate}
-\item encryption and decryption
-\item digital signatures
-\item key management
+\item encryption,
+\item decryption,
+\item digital signatures, and
+\item key management.\cite{gnupg-doc}
 \end{enumerate}
 
 The libgcrypt library is a part of the GnuPG project.
