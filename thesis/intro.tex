@@ -10,7 +10,7 @@ Login credentials in this thesis refer to information that grants access to a sy
 
 Login credentials are seen as part of configuration settings of applications.
 
-Nowadays many applications store login credentials to related systems in configuration files.
+Applications prefereably store login credentials to related systems in configuration files.
 A typical example is a business application that connects to a database system.
 The login credentials are often saved as plain text, leaving them vulnerable to attack.
 We want to introduce the problem by giving two concrete examples:
@@ -33,6 +33,7 @@ However, introducing means of cryptography to an application results in increase
 
 In order to mitigate the risks of leaking plain text login credentials, they should be encrypted before they are persisted to a storage.
 To keep the development effort low for application developers, a software library can abstract the cryptographic operations.
+
 By using third party software libraries an application encounters an increased memory consumption.
 
 \hypothesis{$H_2$}{\hypoTwo}
