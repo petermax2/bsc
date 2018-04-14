@@ -2,9 +2,75 @@
 
 \section{Findings}
 
+	\subsection{Hypotheses Are Not Refuted}
+
+In Chapter \ref{intro-hypo-one} on page \pageref{intro-hypo-one} we formulated two hypotheses, which we can not refute after the evaluation.
+
+\hypothesis{$H_1$}{\hypoOne}
+
+The evaluation revealed a linear increase in runtime in the interval of $[1,1000]$ configuration settings.
+We can not refute $H_1$ with our benchmark results.
+
+\hypothesis{$H_2$}{\hypoTwo}
+
+The evaluation shows a measureable but constant memory overhead in the interval of $[1,200]$ configuration settings.
+We can not refute $H_2$ with our benchmark results.
+
+	\subsection{Answering the Research Questions}
+
+In Section \ref{researchq} on page \pageref{researchq} we defined our research questions.
+After what we learned during the evaluation we are able to give some answers.
+
+\RQ{$RQ_1$}{\rqOne}
+
+When comparing the following providers of cryptographic functions:
+\begin{enumerate}
+\item libgcrypt,
+\item OpenSSL, and
+\item Botan,
+\end{enumerate}
+
+libgcrypt has to lowest runtime impact in the interval of $[1,1000]$ configuration settings.
+
+\RQ{$RQ_2$}{\rqTwo}
+
+\todo{tbd}
+
+\RQ{$RQ_3$}{\rqThree}
+
+\todo{tbd}
 
 \section{Discussion}
 
+In this section we want to discuss drawbacks of the methodology we used in our thesis.
+
+	\subsection{Isolated Performance Test}
+
+The benchmarks are designed as isolated (artificial) tests.
+The test results do not neccessarily correlate with ``real-world'' use cases.
+For example: we did not run benchmarks with configuration settings, that contain values that are not encrypted.
+
+Another problem is that the interval boundries of the benchmarks are limitied.
+However, we are able to draw conclusions about the runtime overhead tendency after the evaluation.
+
+	\subsection{Number of Cryptograhic Schemas}
+
+We evaluated only two cryptographic schemas, which are the \elektra~ plugins:
+\begin{enumerate}
+\item \crypto, and
+\item \fcrypt.
+\end{enumerate}
+
+Altough the plugins were carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
+
+	\subsection{Other criteria for choosing providers of cryptographic functions}
+
+Performance is not the only factor to be taken into account when choosing a provider of cryptographic functions.
+Robustness against attacks (for example: side channel attacks) and correctness of the code are two important dimensions, that should also be considered.
+
+Also the usability and the user acceptance play an important role in the decision process.
+We did not cover any of those aspects due to the limited context of the thesis.
 
 \section{Résumé}
 
+\todo{TBD}
