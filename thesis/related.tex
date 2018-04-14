@@ -2,27 +2,32 @@
 
 \section{Related Work}\label{relatedwork}
 
-Performance analysis of cryptographic operations has been studied by different groups with different interests.
+Performance analysis of cryptographic operations has already been studied in different contexts.
+
+	\subsection{Comparing AES Implementations}
 
 The paper ''DES, AES and Blowfish: Symmetric Key Cryptography Algorithms Simulation Based Performance Analysis`` \cite{thakur2011aes} compares implementations of symmetric cryptographic algorithms.
 The authors' goal is to find the most performant algorithm.
-The paper does not answer how much overhead the introduction of cryptographic methods actually costs, but we will use the results for comparison with our own experiments.
+However, the paper does not answer how much overhead the introduction of cryptographic methods actually costs.\cite{thakur2011aes}
+
+	\subsection{Cryptography in Operating Systems}
 
 In ''The Design of the OpenBSD Cryptographic Framework`` \cite{ocf} developers of OpenBSD describe their kernel interface that abstracts the use of hardware accelerated cryptographic operations.
 The authors mainly argue about the performance gain the OCF brings to applications.
-But rather than concentrating on a single application the focus of \cite{ocf} is overall system performance in scenarios where multiple applications perform cryptographic operations simultaneously.
-Another aspect \cite{ocf} covers is the load-balancing capability OCF has to offer if multiple hardware acceleration cards are available on a system.
-\cite{ocf} focuses on the kernel and operating system performance rather than on single applications.
-The paper measures speed-up in comparison to cryptographic operations performed in user-space.
-Thus the paper does not answer our research questions.
+But rather than concentrating on a single application the focus of the paper is overall system performance in scenarios where multiple applications perform cryptographic operations simultaneously.
+Another aspect the paper covers is the load-balancing capability OCF has to offer, if multiple hardware acceleration cards are available on a system.
+
+The paper's focus is the kernel and operating system performance rather than single application performance.
+The paper measures speed-up in comparison to cryptographic operations performed in user-space.\cite{ocf}
 
 ''Improving High-Bandwidth TLS in the FreeBSD kernel`` \cite{freebsdtls}, another performance study, has been conducted by FreeBSD developers.
 They tried to get higher TLS throughput on their high-performance network appliances for Netflix, a video on-demand streaming service.
-The focus of \cite{freebsdtls} is the networking aspect considering different network adapters and tuning options in the FreeBSD kernel.
-Again the focus is not a single application but rather the improvement of the TLS stack.
+The focus of the paper is the networking aspect considering different network adapters and tuning options in the FreeBSD kernel.
+Again the focus is not a single application but rather the improvement of the TLS stack in the FreeBSD operating system.\cite{freebsdtls}
 
-Because none of the previous papers answered our research questions, it is reasonable to perform an experimental evaluation to find out the answers.
-However, we will refer to \cite{thakur2011aes} and check if our measured overhead correlates with the expected performance loss.
+	\subsection{Cryptography in Configuration}
+
+Because none of the mentioned papers answered our research questions, it is reasonable to perform an experimental evaluation.
 
 \section{Future Work}
 
