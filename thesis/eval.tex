@@ -214,13 +214,14 @@ The benchmark is started with the following configuration setting sizes $n$:
 The results of the memory analysis  are published on Github
 \footnote{\url{https://github.com/petermax2/libelektra-crypto-benchmarks/tree/master/massif}}.
 
-Figures
+The following figures show the visualizations, that have been produced by Massif-Visualizer:
+
 \begin{itemize}
-\item \ref{eval-massif-010} on page \pageref{eval-massif-010},
-\item \ref{eval-massif-100} on page \pageref{eval-massif-100}, and
-\item \ref{eval-massif-200} on page \pageref{eval-massif-200}
+\item Figure \ref{eval-massif-010} on page \pageref{eval-massif-010},
+\item Figure \ref{eval-massif-100} on page \pageref{eval-massif-100}, and
+\item Figure \ref{eval-massif-200} on page \pageref{eval-massif-200}.
 \end{itemize}
-show the visualizations, that have been produced by Massif-Visualizer.
+
 
 \begin{sidewaysfigure}
 \center
@@ -242,4 +243,21 @@ show the visualizations, that have been produced by Massif-Visualizer.
 \label{eval-massif-200}
 \includegraphics[width=\columnwidth]{plots/massif_200.pdf}
 \end{sidewaysfigure}
+
+The memory analysis reveals a constant memory consumption overhead for OpenSSL and Botan.
+Libgcrypt does not use a custom allocator function, so its memory use is not distinguishable from the rest of the memory, that has been allocated by \elektra .
+
+Table \ref{eval-mem-res} on page \pageref{eval-mem-res} shows the results for OpenSSL and Botan.
+
+\begin{table}[h]
+\centering
+\caption{Allocated heap sizes of the crypto plugins}
+\label{eval-mem-res}
+\begin{tabular}{l|r}
+          & memory heap size \\ \hline
+libgcrypt & not available    \\
+OpenSSL   & $70.0$ kiB       \\
+Botan     & $64.0$ kiB      
+\end{tabular}
+\end{table}
 

@@ -16,7 +16,7 @@ We can not refute $H_1$ with our benchmark results.
 The evaluation shows a measureable but constant memory overhead in the interval of $[1,200]$ configuration settings.
 We can not refute $H_2$ with our benchmark results.
 
-	\subsection{Answering the Research Questions}
+	\subsection{Answers to the Research Questions}
 
 In Section \ref{researchq} on page \pageref{researchq} we defined our research questions.
 After what we learned during the evaluation we are able to give some answers.
@@ -32,13 +32,22 @@ When comparing the following providers of cryptographic functions:
 
 libgcrypt has to lowest runtime impact in the interval of $[1,1000]$ configuration settings.
 
+The lowest memory impact could not be found in the evaluation, because libgcrypt does not use a custom allocator.
+When comparing OpenSSL against Botan with $n \in \{10,100,200\}$ configuration settings, Botan allocates 6.0 kiB less heap memory.
+
 \RQ{$RQ_2$}{\rqTwo}
 
 \todo{tbd}
 
+The question for the memory overhead can only be partially answered, due to the lack of a custom allocating function in libgcrypt.
+The results are given in Table \ref{eval-mem-res} on page \pageref{eval-mem-res}.
+
 \RQ{$RQ_3$}{\rqThree}
 
 \todo{tbd}
+
+The question for the memory overhad can not be answered after the evaluation.
+Further benchmarks are required to gain more insights.
 
 \section{Discussion}
 
@@ -48,20 +57,20 @@ In this section we want to discuss drawbacks of the methodology we used in our t
 
 The benchmarks are designed as isolated (artificial) tests.
 The test results do not neccessarily correlate with ``real-world'' use cases.
-For example: we did not run benchmarks with configuration settings, that contain values that are not encrypted.
+For example: we did not run benchmarks with configuration settings, that contain values that are not to be encrypted (mixed configuration settings).
 
 Another problem is that the interval boundries of the benchmarks are limitied.
 However, we are able to draw conclusions about the runtime overhead tendency after the evaluation.
 
-	\subsection{Number of Cryptograhic Schemas}
+	\subsection{Variety of Cryptographic Schemas}
 
-We evaluated only two cryptographic schemas, which are the \elektra~ plugins:
+We evaluated only two cryptographic schemas:
 \begin{enumerate}
-\item \crypto, and
-\item \fcrypt.
+\item the \crypto, and
+\item the \fcrypt.
 \end{enumerate}
 
-Altough the plugins were carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
+Altough the plugins are carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
 
 	\subsection{Other criteria for choosing providers of cryptographic functions}
 
