@@ -37,7 +37,16 @@ When comparing OpenSSL against Botan with $n \in \{10,100,200\}$ configuration s
 
 \RQ{$RQ_2$}{\rqTwo}
 
-\todo{tbd}
+For any time $i$, let $x_i$ denote the runtime without the \crypto.
+Furthermore let $y_i$ denote the runtime with a plugin variant of the \crypto.
+Then the overhead $h_i$ is given as: $h_i=y_i - x_i$.
+
+Let $n$ be the number of measurements.
+Then the average runtime overhead $h$ is given as: $h=(1/n) \sum_{i=1}^{n}(y_i - x_i)$.
+
+Table \ref{concl-time-crypto} on page \pageref{concl-time-crypto} shows the overhead $h$ for every plugin variant of the \crypto~ in the interval $[1,1000]$ configuration settings.
+
+\todo{put table here}
 
 The question for the memory overhead can only be partially answered, due to the lack of a custom allocating function in libgcrypt.
 The results are given in Table \ref{eval-mem-res} on page \pageref{eval-mem-res}.
