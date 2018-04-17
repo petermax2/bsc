@@ -47,7 +47,18 @@ Then the average runtime overhead $h$ is given as: $h=(1/n) \sum_{i=1}^{n}(y_i -
 
 Table \ref{concl-time-crypto} on page \pageref{concl-time-crypto} shows the overhead $h$ for every plugin variant of the \crypto~ in the interval $[1,1000]$ configuration settings.
 
-\todo{put table here}
+\begin{table}[h]
+\centering
+\caption{Average overhead of the \crypto}
+\label{concl-time-crypto}
+\begin{tabular}{l|rr|rr}
+          & \multicolumn{2}{c|}{Decryption} & \multicolumn{2}{c}{Encryption} \\ \cline{2-5}
+          & $h$ (s)      & $f$           & $h$ (s)       & $f$          \\ \hline
+libgcrypt & $1.168$ s    & $1837.868$    & $1.171$ s     & $192.912$    \\
+OpenSSL   & $1.805$ s    & $2835.492$    & $1.808$ s     & $297.236$    \\
+Botan     & $4.125$ s    & $6459.077$    & $4.124$ s     & $675.795$
+\end{tabular}
+\end{table}
 
 The question for the memory overhead can only be partially answered, due to the lack of a custom allocating function in libgcrypt.
 The results are given in Table \ref{eval-mem-res} on page \pageref{eval-mem-res}.
@@ -56,7 +67,17 @@ The results are given in Table \ref{eval-mem-res} on page \pageref{eval-mem-res}
 
 Table \ref{concl-time-fcrypt} on page \pageref{concl-time-fcrypt} shows the overhead $h$ for the \fcrypt~ in the interval $[1,1000]$ configuration settings.
 
-\todo{put table here}
+\begin{table}[h]
+\centering
+\caption{Average overhead of the \fcrypt}
+\label{concl-time-fcrypt}
+\begin{tabular}{l|rr|rr}
+          & \multicolumn{2}{c|}{Decryption} & \multicolumn{2}{c}{Encryption} \\ \cline{2-5}
+          & $h$ (s)      & $f$           & $h$ (s)       & $f$          \\ \hline
+fcrypt    & $0.005$ s    & $25.609$      & $0.007$ s     & $2.791$     
+\end{tabular}
+\end{table}
+
 
 The question for the memory overhad can not be answered after the evaluation.
 Further benchmarks are required to gain more insights.
