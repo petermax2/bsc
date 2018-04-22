@@ -45,6 +45,8 @@ Then the overhead $h_i$ is given as: $h_i=y_i - x_i$.
 Let $n$ be the number of measurements.
 Then the average runtime overhead $h$ is given as: $h=(1/n) \sum_{i=1}^{n}(y_i - x_i)$.
 
+The average runtime overhead factor $f$ is given as: $f=(1/n) \sum_{i=1}^{n}(y_i/x_i)$.
+
 Table \ref{concl-time-crypto} on page \pageref{concl-time-crypto} shows the overhead $h$ for every plugin variant of the \crypto~ in the interval $[1,1000]$ configuration settings.
 
 \begin{table}[h]
@@ -104,14 +106,6 @@ We evaluated only two cryptographic schemas:
 \end{enumerate}
 
 Altough the plugins are carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
-
-	\subsection{Other criteria for choosing providers of cryptographic functions}
-
-Performance is not the only factor to be taken into account when choosing a provider of cryptographic functions.
-Robustness against attacks (for example: side channel attacks) and correctness of the code are two important dimensions, that should also be considered.
-
-Also the usability and the user acceptance play an important role in the decision process.
-We did not cover any of those aspects due to the limited context of the thesis.
 
 \section{Résumé}
 
