@@ -107,12 +107,15 @@ We evaluated only two cryptographic schemas:
 
 Altough the plugins are carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
 
-\section{Résumé}
+\chapter{Résumé}
 
-After introducing the problem of missing cryptographic methods in software configuration, we presented Elektra.
+After introducing the problem of missing cryptographic methods in software configuration systems, we presented Elektra.
 We learned about Elektra's configuration database and the plugin system.
-We developed the \crypto~, the \fcrypt~ and some helper plugins to study our research questions and solve the problem of encrypting and decrypting configuration settings.
+We explained how the \crypto~, the \fcrypt~ and some helper plugins have been designed and developed to study our research questions and solve the problem of encrypting and decrypting configuration settings.
 
-Our evaluation revealed a linear increase in runtime overhead when cryptography is applied to configuration settings.
-The memory analysis showed that the increase in memory overhead is constant for different configuration setting sizes.
-Therefore we were not able to refute the hypotheses, we stated in the introduction.
+Our evaluation revealed a linear increase in runtime overhead when cryptography is applied to configuration settings in our benchmark setup.
+The memory analysis showed that the increase in memory overhead is constant in our benchmark setup for different configuration setting sizes.
+Therefore we were not able to refute the hypotheses, that we stated in the introduction.
+
+If we compare the evaluated cryptographic schemas, then the \fcrypt~ is faster than the \crypto.
+In comparison to Botan and OpenSSL, libgcrypt shows the best runtime performance in our benchmark setup.

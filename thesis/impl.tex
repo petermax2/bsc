@@ -9,8 +9,8 @@ This chapter covers the following topics:
 
 \section{Elektra Concepts}\label{elektra-plugins}
 
-First we explain the most important concepts of Elektra, which we utilize.
-Then we elaborate the contributions that were made to Elektra during the writing of this thesis.
+First we explain the internal details of the configuration database that is provided by Elektra.
+Then we elaborate how Elektra's plugin system works.
 
 \subsection{Key and Keyset}
 
@@ -40,7 +40,7 @@ From now on if we refer to a \emph{key}, we mean a \emph{cryptographic key}.
 
 The core of Elektra is kept small, meaning that it provides mainly the database abstraction as well as a plugin system.
 All the configuration access operations are performed by plugins.\cite{raab2010thesis}
-Every plugin should fulfill exactly one purpose.
+Every plugin should fulfill a single purpose.
 This design decision was inspired by the UNIX philosophy.
 Let us illustrate what plugins can do by giving some examples:
 \begin{enumerate}
@@ -156,7 +156,7 @@ By combining different Elektra plugins we can test a variety of possible use cas
 
 Elektra originally did not provide any cryptographic functions when we started working on this thesis.
 So we decided to develop the \crypto ~for Elektra.
-The \crypto ~enables us to use Elektra as benchmark environment.
+The \crypto ~enables the use of Elektra as benchmark environment.
 It will help us with the research questions 1 and 2 (see Section \ref{researchq} on page \pageref{researchq}).
 
 \subsection{Benefits For The Elektra Project}
@@ -171,7 +171,7 @@ The \crypto{} can simply be added to a backend and thus integrates well with oth
 \subsection{Challenges}
 
 The first challenge was to design the \crypto ~in a way that supports more than one provider of cryptographic functions.
-With the goal of comparability in mind, the encryption and decryption schema will be similar for each provider.
+With the goal of comparability in mind, the encryption and decryption schema will be identical for each provider.
 Otherwise no conclusions can be drawn from differing benchmark results.
 Elektra's compilation variants enable the support for multiple providers.
 For every provider we want to integrate, a new compilation variant is added to the \crypto.
@@ -183,11 +183,11 @@ The first design that came to mind was a password based schema that utilizes the
 However, this approach is not suitable for any kind of batch operation as the program flow would be interrupted to ask for a password input.
 So we decided to delegate the handling of cryptographic keys to an existing key store: GnuPG.
 GnuPG in combination with the \texttt{pinentry} utilities turned out to be a great way of managing keys.
-In addition the users benefit from this approach because they can simply use their existing PGP keys and even smart-cards for securing their data in Elektra.
-
-In the following section we are going to dive deeper into the technical details of the implementation of the \crypto.
+In addition the users benefit from this approach because they can simply use their existing PGP keys and even smart-cards for securing their data with Elektra.
 
 \subsection{Technical Aspects}
+
+In this section we are going to dive deeper into the technical details of the implementation of the \crypto.
 
 The \crypto{} acts as a filter that is applied to the configuration setting before the storage plugin reaches its \texttt{kdb set} phase.
 Later on, when the encrypted configuration is requested, the plugin decrypts the configuration setting after the storage plugin read the configuration file in its \texttt{kdb get} phase.
@@ -203,7 +203,7 @@ Figure \ref{impl_crypto_overview} on page \pageref{impl_crypto_overview} further
 Not all configuration values in the configuration setting are considered for encryption or decryption.
 The \crypto{} uses a metakey to identify which configuration values have to be processed.
 If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the configuration value is marked for encryption.
-The plugin checks the metakey and only encrypts values if the metakey is set properly.
+The plugin checks the metakey and only encrypts values if the metakey is set accordingly.
 The decryption works analogous.
 All other configuration values, which are not marked, are ignored and left unchanged by the \crypto.
 
@@ -234,7 +234,7 @@ typedef struct
 The \crypto{} operates on configuration values.
 During its work it modifies the value as well as the meta-data.
 The value is always transformed into binary data.
-In order to restore the value to its original type during decryption, some header information has to be stored.
+In order to restore the value to its original type during decryption, some header information is required.
 
 Table \ref{impl-msgheader} on page \pageref{impl-msgheader} shows the information which is encoded into the first cryptographic block during encryption.
 
@@ -260,8 +260,8 @@ The content length is saved because most provider of cryptographic functions do 
 
 As mentioned before, GnuPG is used for managing the users' asymmetric keys.
 GnuPG is executed to store and receive a \emph{master password}, which is a part of the plugin configuration of the \crypto.
-Whenever a cryptographic key is required, the master password is fetched from the plugin configuration and decrypted.
-Then the PBKDF2 is applied to the decrypted master password together with a salt, so that a cryptographic key as well as an initialization vector can be derived.
+Whenever a cryptographic key is required, the master password is fetched from the plugin configuration and decrypted using GnuPG.
+Then the PBKDF2 is applied to the decrypted master password together with the salt, so that a cryptographic key as well as an initialization vector can be derived.
 
 \subsubsection{Crypto Plugin Methods}
 
@@ -278,7 +278,7 @@ properly shuts down the provider of cryptographic functions.
 The \texttt{get} method takes a configuration setting as input.
 The \crypto ~iterates over the configuration setting and checks for every configuration value if it has been encrypted.
 This is done by using the metakey mentioned before.
-If the configuration value is encrypted, the \crypto ~decrypts it and thus restores the configuration value to the state it was in before the encryption took place.
+If the configuration value is encrypted, the \crypto ~decrypts it and thus restores the configuration value to the original state it was in before the encryption took place.
 
 Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \texttt{get} method works in detail.
 
@@ -307,10 +307,11 @@ Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \te
 
 \paragraph*{checkconf}
 The \texttt{checkconf} method ensures that a master password is available in the plugin configuration of the \crypto.
-If an encrypted master password is provided, a decryption run is started to see if the user owns the required GnuPG key.
+If an encrypted master password is provided, a decryption run is started to see if the user owns the required GnuPG private key.
 If no master password exists, a random master password is created, encrypted using GnuPG and stored in the plugin configuration.
-The encryption key has to be specified within the plugin configuration.
-If no such GnuPG private key is specified, the \crypto ~throws an error.
+
+The GnuPG key ID, that is used for encrypting and decrypting the master password, has to be specified within the plugin configuration.
+If no such GnuPG private key is specified, the \crypto~ generates an error message.
 
 Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the \texttt{checkconf} method works in detail.
 
@@ -373,7 +374,7 @@ if (written > 0)
 \subsubsection{Botan}
 
 Since Botan is written in the C++ programming language the encryption and decryption process is encapsulated into classes.
-The cryptographic key is represented by the \texttt{SymmetricKey} and the initialization vector is represented by the \texttt{InitializationVector}.
+The cryptographic key is represented by the class \texttt{SymmetricKey} and the initialization vector is represented by the class \texttt{InitializationVector}.
 
 Botan provides an API for data manipulation, similar to OpenSSL.
 A \texttt{Pipe} abstracts I/O operations in Botan.
@@ -414,7 +415,7 @@ The \fcrypt ~was developed during the writing of this thesis to provide these tw
 \item file based signatures using GnuPG
 \end{enumerate}
 
-Both features can be used separately but they can also be combined together.
+Both features can be used separately or they can be combined together.
 
 The \fcrypt ~will help us with research questions 3 (see Section \ref{researchq} on page \pageref{researchq}).
 
@@ -477,7 +478,7 @@ The verification of the signatures works like a regular decryption, which has al
 
 \subsection{Motivation and Functionality}
 
-The \crypto ~causes trouble in text-based configuration file formats like INI, as it produces binary data.
+The \crypto ~causes trouble in text-only configuration file formats like INI, as it produces binary data.
 To mitigate this problem we developed the \base.
 
 During the \texttt{kdb set} method the \base ~iterates over the configuration setting and encodes all binary values using the Base64 schema, which is specified in the RFC 4648.\cite{rfc4648}
@@ -508,6 +509,6 @@ optionA = @BASE64IyFjcnlwdG8wMBEAAACFq0cCnjyfuwVy9/VtcpYCceYJVmnyTfF...
 \section{Implementation Summary}
 
 This chapter explained the Elektra plugin system and how we used it to introduce cryptographic methods to the Elektra project.
-We learned about the contributions that were made during the writing of this thesis and have an understanding of the \crypto, the \fcrypt ~and the \base.
-Now we have a complete set of tools to start benchmarking.
-We continue with the description of the evaluation in the following chapter.
+We learned about the contributions that were made to Elektra during the writing of this thesis.
+We have an understanding of the \crypto, the \fcrypt ~and the \base.
+Now we have a complete set of plugins to start the evaluation.

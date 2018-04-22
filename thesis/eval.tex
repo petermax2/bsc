@@ -4,14 +4,16 @@ The focus of this chapter is:
 \begin{enumerate}
 \item the setup of the benchmark system,
 \item the definition of the benchmarks, and
-\item the results of the benchmarks
+\item the results of the benchmarks.
 \end{enumerate}
 
 \section{Benchmark System}
   \subsection{Hardware Setup}
 
-The processor of the benchmark system is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU clocked at 3.50 GHz with 4 cores and hyperthreading enabled (which means 8 threads are available).
-The benchmark system has a total amount of 16 GB of DDR3 RAM clocked at 1333 MHz available.
+The processor of the benchmark system is an Intel\textregistered~ Core\texttrademark~ i7-4771 CPU that is clocked at 3.50 GHz.
+The processor has 4 cores and hyperthreading enabled (which means that 8 threads are available).
+The benchmark system has a total amount of 16 GB of DDR3 RAM installed.
+The RAM is clocked at 1333 MHz.
 
 The root partition of the operating system is located on a ``Samsung SSD 840'' solid state drive (SSD).
 It is installed on an ext4 filesystem.
@@ -84,10 +86,10 @@ void do_benchmark ()
   \subsection{Statistical Method}
 
 Every benchmark run is repeated 11 times.
-For the sorted set of results $\{r_{1},...,r_{11} | r_n \leq r_{n+1}\}$ the median is given as $\tilde{x}=r_6$.
+For the sorted set of results $\{r_{1},...,r_{11} | r_n \leq r_{n+1}\}$ the median $\tilde{x}$ is given as: $\tilde{x}=r_6$.
 
 The median is chosen as measurement result because of its robustness against outliers.
-When we speak of the result of a benchmark, we always refer to the median $\tilde{x}$ of the 11 benchmarks runs.
+When we speak of the result of a benchmark, we always refer to the median $\tilde{x}=r_6$ of the $11$ benchmarks runs.
 
 \section{Benchmark 1 -- Runtime Comparison}
 \label{eval-bench-one}
@@ -204,9 +206,9 @@ Massif-Visualizer is used to produce a visualization of the data, that is collec
 The benchmark is started with the following configuration setting sizes $n$:
 
 \begin{itemize}
-\item 10
-\item 100
-\item 200
+\item 10,
+\item 100, and
+\item 200.
 \end{itemize}
 
 	\subsection{Results of the Memory Analysis}
