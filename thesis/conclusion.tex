@@ -109,4 +109,10 @@ Altough the plugins are carefully designed, it is possible that the runtime over
 
 \section{Résumé}
 
-\todo{TBD}
+After introducing the problem of missing cryptographic methods in software configuration, we presented Elektra.
+We learned about Elektra's configuration database and the plugin system.
+We developed the \crypto~, the \fcrypt~ and some helper plugins to study our research questions and solve the problem of encrypting and decrypting configuration settings.
+
+Our evaluation revealed a linear increase in runtime overhead when cryptography is applied to configuration settings.
+The memory analysis showed that the increase in memory overhead is constant for different configuration setting sizes.
+Therefore we were not able to refute the hypotheses, we stated in the introduction.
