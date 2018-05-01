@@ -110,6 +110,7 @@ For every backend a configuration setting with a preset size is generated.
 First the duration of the \texttt{kdb set} method of Elektra is being measured, which represents the performance of the encryption process.
 Then the duration of the \texttt{kdb get} method of Elektra is being measured, which represents the performance of the decryption process.
 The benchmark is repeated with the following configuration setting sizes: 
+
 $\{$1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 17, 20, 25, 30, 31, 32, 35, 40, 50, 51, 52, 55, 56, 57, 60, 70, 80, 90, 100, 150, 175, 200, 250, 300, 350, 400, 500, 1000$\}$.
 
 For better reproducibility we provide a script, that executes the benchmark as we do in this thesis.
@@ -206,11 +207,7 @@ Massif-Visualizer is used to produce a visualization of the data, that is collec
 
 The benchmark is started with the following configuration setting sizes $n$:
 
-\begin{itemize}
-\item 10,
-\item 100, and
-\item 200.
-\end{itemize}
+$\{$10, 100, 200$\}$.
 
 	\subsection{Results of the Memory Analysis}
 
