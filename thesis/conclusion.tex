@@ -67,7 +67,7 @@ The results are given in Table \ref{eval-mem-res} on page \pageref{eval-mem-res}
 
 \RQ{$RQ_3$}{\rqThree}
 
-Table \ref{concl-time-fcrypt} on page \pageref{concl-time-fcrypt} shows the overhead $h$ for the \fcrypt~ in the interval $[1,1000]$ configuration settings.
+Table \ref{concl-time-fcrypt} on page \pageref{concl-time-fcrypt} shows the overhead $h$ for the \fcrypt ~in the interval $[1,1000]$ configuration settings.
 
 \begin{table}[h]
 \centering
@@ -80,22 +80,22 @@ fcrypt    & $0.005$ s    & $25.609$      & $0.007$ s     & $2.791$
 \end{tabular}
 \end{table}
 
-
 The question for the memory overhad can not be answered after the evaluation.
 Further benchmarks are required to gain more insights.
 
 \section{Discussion}
 
-In this section we want to discuss drawbacks of the methodology we used in our thesis.
+In this section we:
+\begin{enumerate}
+\item discuss drawbacks of the methodology we used in our thesis, and
+\item interpret the meaning of the evaluation results.
+\end{enumerate}
 
 	\subsection{Isolated Performance Test}
 
 The benchmarks are designed as isolated (artificial) tests.
 The test results do not neccessarily correlate with ``real-world'' use cases.
 For example: we did not run benchmarks with configuration settings, that contain values that are not to be encrypted (mixed configuration settings).
-
-Another problem is that the interval boundries of the benchmarks are limitied.
-However, we are able to draw conclusions about the runtime overhead tendency after the evaluation.
 
 	\subsection{Variety of Cryptographic Schemas}
 
@@ -106,12 +106,32 @@ We evaluated only two cryptographic schemas:
 \end{enumerate}
 
 Altough the plugins are carefully designed, it is possible that the runtime overhead is distorted by the plugin design.
+Other reference environments than Elektra should be used to repeat the benchmarks.
+
+	\subsection{Limited Hardware}
+
+The benchmarks were executed on a single system.
+Especially older processors without built-in AES support, will probably show a higher runtime overhead.
+The benchmarks should therefore be repeated with different hardware configurations.
+
+	\subsection{Interpretation of the Results}
+
+When encrypting and decrypting configuration settings and configuration files, the expected runtime overhead increases linear with the number of configuration values.
+The explanation for this behavior is the process of how the plugins operate.
+The \crypto ~iterates over the whole configuration setting, thus the linear increase in runtime.
+The \fcrypt ~encrypts and decrypts whole files.
+The bigger the size of the configuration setting, the bigger the size of the resulting configuration file.
+Both plugins have a tendency towards linear runtime overhead.
+
+The increase of memory consumption is constant, due to the design of the plugins.
+The \crypto ~encrypts and decrypts single configuration values only, so only one configuration value is being processed at a time.
+Since every configuration value in our benchmark has the same size, the memory allocations stay the same, even when the size of the configuration setting increases.
 
 \chapter{Résumé}
 
-After introducing the problem of missing cryptographic methods in software configuration systems, we presented Elektra.
+After introducing the problem of missing cryptographic methods for software configuration, we presented Elektra.
 We learned about Elektra's configuration database and the plugin system.
-We explained how the \crypto~, the \fcrypt~ and some helper plugins have been designed and developed to study our research questions and solve the problem of encrypting and decrypting configuration settings.
+We explained how the \crypto, the \fcrypt ~and some helper plugins have been designed and developed to study our research questions and solve the problem of encrypting and decrypting configuration settings.
 
 Our evaluation revealed a linear increase in runtime overhead when cryptography is applied to configuration settings in our benchmark setup.
 The memory analysis showed that the increase in memory overhead is constant in our benchmark setup for different configuration setting sizes.
