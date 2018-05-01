@@ -10,31 +10,33 @@ This chapter covers the following topics:
 \section{Elektra Concepts}\label{elektra-plugins}
 
 First we explain the internal details of the configuration database that is provided by Elektra.
-Then we elaborate how Elektra's plugin system works.
+Then we elaborate on how Elektra's plugin system works.
 
 \subsection{Key and Keyset}
 
 Elektra abstracts configuration settings in a hierarchical key-value database.
 A \emph{keyset} holds zero or more keys.
-The \emph{key} represents a configuration value within the configuration setting and holds:
+The \emph{key} holds:
 \begin{enumerate}
-\item its path within the configuration hierarchy
-\item its configuration value either as a string value or as a binary value
-\item optionally its meta-keys, which are keys that further describe the key itself
+\item its path within the configuration hierarchy,
+\item its configuration value either as a string value or as a binary value, and
+\item optionally its meta-keys, which are keys that further describe the key itself.
 \end{enumerate}
 
 Elektra uses meta-keys for different purposes:
 
 \begin{enumerate}
-\item state information of the key (for example: encrypted, encoded, ...)
-\item data validation (for example: numeric value, binary value, ...)
-\item formatting (for example: position in file, number of spaces between parameters, ...)
+\item state information of the key (for example: encrypted, encoded, ...),
+\item data validation (for example: numeric value, binary value, ...), and
+\item formatting (for example: position in file, number of spaces between parameters, ...).
 \end{enumerate}
 
 In order to avoid ambiguity we do not use Elektra's terms in this thesis.
 We refer to a \emph{configuration setting} rather than to a \emph{keyset}.
 We refer to \emph{configuration values} rather than to Elektra \emph{keys}, in order to avoid confusion with cryptographic \emph{keys}.
 From now on if we refer to a \emph{key}, we mean a \emph{cryptographic key}.
+
+\todo{Maybe replace configuration values with configuration entries?}
 
 \subsection{Plugin}\label{impl_elektra_plugin}
 
@@ -44,15 +46,15 @@ Every plugin should fulfill a single purpose.
 This design decision was inspired by the UNIX philosophy.
 Let us illustrate what plugins can do by giving some examples:
 \begin{enumerate}
-\item the \crypto ~encrypts and decrypts configuration values
-\item the \base ~encodes and decodes binary values to and from Base64 strings
-\item the \texttt{ini} plugin reads from and writes to ini files
+\item The \crypto ~encrypts and decrypts configuration values.
+\item The \base ~encodes and decodes binary values to and from Base64 strings.
+\item The \texttt{ini} plugin reads from and writes to ini files.
 \end{enumerate}
 
 Plugins can be divided into two categories:
 \begin{enumerate}
-\item filter plugins
-\item storage plugins
+\item filter plugins, and
+\item storage plugins.
 \end{enumerate}
 
 A \emph{filter plugin} modifies configuration values before they are written to a file or after they have been read from a file.
@@ -61,23 +63,13 @@ A \emph{storage plugin} directly reads from or writes to a configuration file.
 A plugin can export different methods in order to fulfill its purpose.
 They are enumerated below:
 
-\subsubsection{checkconf}\label{impl-method-checkconf}
-
-At this method a plugin may validate the backend configuration as well as
-the plugin configuration. The plugin may modify the configuration or
-report that the configuration is incomplete or wrong in some way.
-
-We added this method during the writing of this thesis.
-Its introduction was neccessary for the development of the \crypto ~as well as the \fcrypt.
-
 \subsubsection{open}\label{open}
 
 The \texttt{open} method is called to initialize the plugin.
 
 \subsubsection{close}\label{close}
 
-The \texttt{close} method is called to properly shutdown the plugin and
-release all resources it may hold.
+The \texttt{close} method is called to properly shutdown the plugin and release all resources.
 
 \subsubsection{set}\label{set}
 
@@ -91,6 +83,14 @@ The \texttt{get} method is called when the content of the key-value
 database is requested by an application.
 Filter plugins provide this method to transform data in the keyset (for example: decoding Base64 encoded strings back into their corresponding binary value).
 Storage plugins typically perform read operations within this method.
+
+\subsubsection{checkconf}\label{impl-method-checkconf}
+
+A plugin implements this method to validate the backend configuration as well as the plugin configuration.
+The plugin may modify the configuration or report that the configuration is incomplete or wrong in some way.
+
+We added this method during the writing of this thesis.
+Its introduction was neccessary for the development of the \crypto ~as well as the \fcrypt.
 
 \subsection{Elektra State Sequence}
 
@@ -120,7 +120,7 @@ Every backend has its own configuration itself (i.e. backend configuration), whi
 \subsection{Compilation Variants}
 
 Elektra's build scripts provide a functionality called \emph{compilation variants}, which means a plugin is being compiled multiple times with minor differences.
-Let us demonstrate this idea using the \crypto ~as an example.
+Let us demonstrate this idea using the \crypto{}.
 Cryptographic functions are provided by different libraries (see Section \ref{intro-provider} on page \pageref{intro-provider}) interchangeably.
 The basic structure of the plugin stays the same for every compilation variant except for the library-specific calls.
 These calls are encapsulated using C preprocessor directives, which form the actual compilation variants.
@@ -200,10 +200,10 @@ Figure \ref{impl_crypto_overview} on page \pageref{impl_crypto_overview} further
 \includegraphics[width=15.0cm]{umlet-figures/impl_crypto_overview.pdf}
 \end{figure}
 
-Not all configuration values in the configuration setting are considered for encryption or decryption.
-The \crypto{} uses a metakey to identify which configuration values have to be processed.
-If a metakey with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the configuration value is marked for encryption.
-The plugin checks the metakey and only encrypts values if the metakey is set accordingly.
+Not all configuration values in the configuration settings are considered for encryption or decryption.
+The \crypto{} uses a meta-key to identify which configuration values have to be processed.
+If a meta-key with name \texttt{``crypto/encrypt''} is set to a value of \texttt{``1''} then the configuration value is marked for encryption.
+The plugin checks the meta-key and only encrypts values if the meta-key is set accordingly.
 The decryption works analogous.
 All other configuration values, which are not marked, are ignored and left unchanged by the \crypto.
 
@@ -265,7 +265,7 @@ Then the PBKDF2 is applied to the decrypted master password together with the sa
 
 \subsubsection{Crypto Plugin Methods}
 
-The \crypto ~implements Elektra's plugin methods (see Section \ref{impl-method-checkconf} on page \pageref{impl-method-checkconf}).
+The \crypto ~implements the following Elektra's plugin methods (see Section \ref{impl-method-checkconf} on page \pageref{impl-method-checkconf}).
 In the following section the program flow of the plugin methods is explained.
 
 \paragraph*{open}
@@ -277,7 +277,7 @@ properly shuts down the provider of cryptographic functions.
 \paragraph*{get}
 The \texttt{get} method takes a configuration setting as input.
 The \crypto ~iterates over the configuration setting and checks for every configuration value if it has been encrypted.
-This is done by using the metakey mentioned before.
+This is done by using the meta-key mentioned before.
 If the configuration value is encrypted, the \crypto ~decrypts it and thus restores the configuration value to the original state it was in before the encryption took place.
 
 Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \texttt{get} method works in detail.
@@ -293,8 +293,8 @@ Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \te
 \paragraph*{set}
 The \texttt{set} method takes a configuration setting as input.
 The \crypto ~iterates over the configuration setting and checks every configuration value if it has been marked for encryption.
-Marking a configuration value for encryption is done by using a metakey.
-If the metakey is present, the \crypto ~generates a message header (see Section \ref{impl-msgstruct} on page \pageref{impl-msgstruct}) including a random salt and encrypts the configuration value.
+Marking a configuration value for encryption is done by using a meta-key.
+If the meta-key is present, the \crypto ~generates a message header (see Section \ref{impl-msgstruct} on page \pageref{impl-msgstruct}) including a random salt and encrypts the configuration value.
 
 Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \texttt{set} method works in detail.
 
@@ -311,7 +311,7 @@ If an encrypted master password is provided, a decryption run is started to see 
 If no master password exists, a random master password is created, encrypted using GnuPG and stored in the plugin configuration.
 
 The GnuPG key ID, that is used for encrypting and decrypting the master password, has to be specified within the plugin configuration.
-If no such GnuPG private key is specified, the \crypto~ generates an error message.
+If no such GnuPG private key is specified, the \crypto ~generates an error message.
 
 Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the \texttt{checkconf} method works in detail.
 
@@ -357,6 +357,8 @@ OpenSSL exports the data structure \texttt{EVP\_CIPHER\_CTX} for communicating c
 For data manipulation the \texttt{BIO} API is provided by OpenSSL.
 It handles data streams and data transformation.
 We use the \texttt{BIO} API for temporarily storing the encrypted/decrypted content.
+
+\todo{Further explain the BIO API}
 
 Listing \ref{list-ssl-bio} on page \pageref{list-ssl-bio} demonstrates how encryption works in OpenSSL and how the \texttt{BIO} API is used for storing the encrypted content. 
 
@@ -415,7 +417,7 @@ The \fcrypt ~was developed during the writing of this thesis to provide these tw
 \item file based signatures using GnuPG
 \end{enumerate}
 
-Both features can be used separately or they can be combined together.
+Both features can be used separately and they can be combined together.
 
 The \fcrypt ~will help us with research questions 3 (see Section \ref{researchq} on page \pageref{researchq}).
 
@@ -442,14 +444,14 @@ The invocations rely on the \texttt{fork} and the \texttt{execv} system function
 \subsubsection{File Based Encryption and Decryption}
 
 The \texttt{kdb set} method of the \fcrypt ~provides the encryption capabilities.
-Listing \ref{list-fcrypt-enc} on page \pageref{list-fcrypt-enc} demonstrates how a typical encryption call will look like.
+Listing \ref{list-fcrypt-enc} demonstrates how a typical encryption call will look like.
 
 \begin{lstlisting}[label=list-fcrypt-enc,language=Bash,caption={Fcrypt: encryption command}]
 gpg2 --batch -o /tmp/config.asc --yes -r 7F230E8D -e /tmp/plaintext.ini
 \end{lstlisting}
 
 The decryption is done in a similar way and is implemented in the \texttt{kdb get} method.
-Listing \ref{list-fcrypt-dec} on page \pageref{list-fcrypt-dec} demonstrates how a typical decryption call will look like.
+Listing \ref{list-fcrypt-dec} demonstrates how a typical decryption call will look like.
 
 \begin{lstlisting}[label=list-fcrypt-dec,language=Bash,caption={Fcrypt: decryption command}]
 gpg2 --batch -o /tmp/plaintext.ini --yes -d /tmp/config.asc
@@ -457,11 +459,11 @@ gpg2 --batch -o /tmp/plaintext.ini --yes -d /tmp/config.asc
 
 \subsubsection{File Based Signatures}
 
-The signature -- like the encryption -- is created in the \texttt{kdb set} method.
+The signature --- like the encryption --- is created in the \texttt{kdb set} method.
 If a signature is requested, the \fcrypt ~appends the private key with the \texttt{-u} command line option of GnuPG.
 Also the \texttt{---clearsign} or the \texttt{-s} switch is added to the GnuPG command line options.
 
-Listing \ref{list-fcrypt-sig} on page \pageref{list-fcrypt-sig} provides an example of how a signature call to GnuPG can look like.
+Listing \ref{list-fcrypt-sig} provides an example of how a signature call to GnuPG can look like.
 
 \begin{lstlisting}[label=list-fcrypt-sig,language=Bash,caption={Fcrypt: signature command}]
 gpg2 --batch -o /tmp/config.asc --yes -u 7F230E8D \
