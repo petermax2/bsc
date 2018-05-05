@@ -325,7 +325,7 @@ Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the
 
 \begin{figure}[h]
 \center
-\caption{Crypto Plugin: the kdb checkconf method}
+\caption{Crypto Plugin: The kdb checkconf method}
 \label{impl_checkconf}
 %\includegraphics[width=15.0cm]{umlet-figures/impl_checkconf.pdf}
 \def\svgwidth{\columnwidth}
@@ -359,8 +359,7 @@ Before the encryption call the buffer holds the plain text.
 After a successful encryption call the buffer holds the cipher text.
 Decryption works analogous.
 The size of the buffer must be a multiple of a block, thus it depends on the cryptographic algorithm in use.
-For AES-256-CBC the buffer size must be set to 16 bytes (128 bits).
-\cite{gnupg-doc}
+For AES-256-CBC the buffer size must be set to 16 bytes (128 bits).\cite{gnupg-doc}
 
 \subsubsection{OpenSSL}
 
@@ -506,7 +505,7 @@ Figure \ref{impl_base64_overview} on page \pageref{impl_base64_overview} shows a
 
 \begin{figure}[h]
 \center
-\caption{Base64 Plugin: example backend configuration with the base64 plugin}
+\caption{Base64 Plugin: Example backend configuration with the base64 plugin}
 \label{impl_base64_overview}
 \includegraphics[width=7.5cm]{umlet-figures/impl_base64_overview.pdf}
 \end{figure}
