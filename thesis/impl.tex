@@ -36,7 +36,7 @@ We refer to a \emph{configuration setting} rather than to a \emph{keyset}.
 We refer to \emph{configuration values} rather than to Elektra \emph{keys}, in order to avoid confusion with cryptographic \emph{keys}.
 From now on if we refer to a \emph{key}, we mean a \emph{cryptographic key}.
 
-\todo{Maybe replace configuration values with configuration entries?}
+%\todo{Maybe replace configuration values with configuration entries?}
 
 \subsection{Plugin}\label{impl_elektra_plugin}
 
@@ -365,12 +365,9 @@ For AES-256-CBC the buffer size must be set to 16 bytes (128 bits).\cite{gnupg-d
 
 OpenSSL exports the data structure \texttt{EVP\_CIPHER\_CTX} for communicating cryptographic keys to the API. The definition of the \texttt{elektraCryptoHandle} structure has already been shown in listing \ref{list-elektraCryptoHandle} on page \pageref{list-elektraCryptoHandle}.
 
-For data manipulation the \texttt{BIO} API is provided by OpenSSL.
-It handles data streams and data transformation.
+OpenSSL provides the \texttt{BIO} API for data manipulation.
+The \texttt{BIO} API is basically an I/O stream abstraction for handling data streams and data transformation.
 We use the \texttt{BIO} API for temporarily storing the encrypted/decrypted content.
-
-\todo{Further explain the BIO API}
-
 Listing \ref{list-ssl-bio} on page \pageref{list-ssl-bio} demonstrates how encryption works in OpenSSL and how the \texttt{BIO} API is used for storing the encrypted content. 
 
 \begin{code}[label=list-ssl-bio,language=C,caption={Encryption in the OpenSSL crypto plugin variant}]
