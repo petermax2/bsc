@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.2">
-  <zoom_level>10</zoom_level>
+  <zoom_level>11</zoom_level>
   <element>
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>50</x>
+      <x>44</x>
       <y>0</y>
-      <w>858</w>
-      <h>785</h>
+      <w>863</w>
+      <h>846</h>
     </coordinates>
-    <panel_attributes>title:decryption of a keyset at kdb get
+    <panel_attributes>title:decryption of a configuration setting at kdb get
 Start
 read the plugin configuration
 decrypt the master password using GnuPG
-While[unprocessed key left]
-	read the meta-keys of the key
+While[unprocessed configuration values left]
+	check if the configuration value is encrypted
 	If
-		[key is marked as encrypted]
+		[encrypted]
 		initialize the crypto handle
-		decrypt the value of the key
+		decrypt the configuration value
 		destroy the crypto handle
 
-		[key is not marked as encrypted]
+		[not encrypted]
 	EndIf
-[all keys processed]
-destroy the key holding the master password
+[all configuration values processed]
+release the master password
 End
 
 </panel_attributes>

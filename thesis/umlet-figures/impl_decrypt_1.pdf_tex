@@ -1,0 +1,81 @@
+%% Creator: Inkscape inkscape 0.92.2, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'umlet-figures/impl_decrypt_1.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{603.75bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.97515528)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0.01304348,0.95341615){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}decryption of a configuration setting at kdb get\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.56956522,0.85900621){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}read the plugin configuration\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.51614907,0.79937888){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}decrypt the master password using GnuPG\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.07018634,0.66521739){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}unprocessed configuration values left\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.51118012,0.66397516){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}check if the configuration value is encrypted\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.54347826,0.52857143){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}encrypted\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.43291925,0.46645963){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}initialize the crypto handle\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.41428571,0.4068323){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}decrypt the configuration value\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.43540373,0.34720497){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}destroy the crypto handle\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.73354037,0.52857143){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}not encrypted\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.69006211,0.13850932){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}all configuration values processed\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{umlet-figures/impl_decrypt_1.pdf}}%
+    \put(0.57080745,0.07639752){\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}release the master password\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{umlet-figures/impl_decrypt_1.pdf}}%
+  \end{picture}%
+\endgroup%

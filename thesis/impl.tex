@@ -197,7 +197,7 @@ Figure \ref{impl_crypto_overview} on page \pageref{impl_crypto_overview} further
 \center
 \caption{Crypto Plugin: Overview of the encryption and decryption process}
 \label{impl_crypto_overview}
-\includegraphics[width=15.0cm]{umlet-figures/impl_crypto_overview.pdf}
+\includegraphics[width=\columnwidth]{umlet-figures/impl_crypto_overview.pdf}
 \end{figure}
 
 Not all configuration values in the configuration settings are considered for encryption or decryption.
@@ -284,9 +284,13 @@ Figure \ref{impl_decrypt} on page \pageref{impl_decrypt} illustrates how the \te
 
 \begin{figure}[h]
 \center
-\caption{Crypto Plugin: Decryption of a keyset at the kdb get method}
+\caption{Crypto Plugin: Decryption of a configuration setting at the kdb get method}
 \label{impl_decrypt}
-\includegraphics[width=15.0cm]{umlet-figures/impl_decrypt.pdf}
+%\includegraphics[width=\textwidth]{umlet-figures/impl_decrypt.pdf}
+\def\svgwidth{\columnwidth}
+\textsf{\tiny{
+\input{umlet-figures/impl_decrypt_1.pdf_tex}
+}}
 \end{figure}
 
 
@@ -300,9 +304,13 @@ Figure \ref{impl_encrypt} on page \pageref{impl_encrypt} illustrates how the \te
 
 \begin{figure}[h]
 \center
-\caption{Crypto Plugin: Encryption of a keyset at the kdb set method}
+\caption{Crypto Plugin: Encryption of a configuration setting at the kdb set method}
 \label{impl_encrypt}
-\includegraphics[width=15.0cm]{umlet-figures/impl_encrypt.pdf}
+%\includegraphics[width=\textwidth]{umlet-figures/impl_encrypt.pdf}
+\def\svgwidth{\columnwidth}
+\textsf{\tiny{
+\input{umlet-figures/impl_encrypt_1.pdf_tex}
+}}
 \end{figure}
 
 \paragraph*{checkconf}
@@ -319,7 +327,11 @@ Figure \ref{impl_checkconf} on page \pageref{impl_checkconf} illustrates how the
 \center
 \caption{Crypto Plugin: the kdb checkconf method}
 \label{impl_checkconf}
-\includegraphics[width=15.0cm]{umlet-figures/impl_checkconf.pdf}
+%\includegraphics[width=15.0cm]{umlet-figures/impl_checkconf.pdf}
+\def\svgwidth{\columnwidth}
+\textsf{\tiny{
+\input{umlet-figures/impl_checkconf_1.pdf_tex}
+}}
 \end{figure}
 
 \subsubsection{Compilation Variants}

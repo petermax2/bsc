@@ -6,25 +6,25 @@
     <coordinates>
       <x>50</x>
       <y>0</y>
-      <w>872</w>
+      <w>849</w>
       <h>785</h>
     </coordinates>
-    <panel_attributes>title:encryption of a keyset at kdb set
+    <panel_attributes>title:encryption of a configuration setting  at kdb set
 Start
 read the plugin configuration
 decrypt the master password using GnuPG
-While[unprocessed key left]
-	read the meta-keys of the key
+While[unprocessed configuration value left]
+	check if configuration value is marked for encryption
 	If
-		[key is marked for encryption]
+		[marked for encryption]
 		initialize the crypto handle
-		encrypt the value of the key
+		encrypt the configuration value
 		destroy the crypto handle
 
-		[key is not marked for encryption]
+		[not marked for encryption]
 	EndIf
-[all keys processed]
-destroy the key holding the master password
+[all configuration values processed]
+release the master password
 End
 
 </panel_attributes>
