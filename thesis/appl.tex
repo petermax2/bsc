@@ -1,11 +1,91 @@
 \chapter{Applications}
 
-In this chapter we present
+In this chapter we present how the \crypto ~and the \fcrypt ~solve the problem of:
+\begin{enumerate}
+\item transparently encrypting/decrypting configuration values in a configuration setting with Elektra, and
+\item transparently encrypting/decrypting entire configuration files with Elektra.
+\end{enumerate}
 
-\section{Encrypted Configuration Values}
+Finally we demonstrate how the \base ~and the \crypto ~are combined to protect configuration values within an INI-file.
+
+\section{Encrypted Configuration Values With Elektra}
+
+This scenario covers how a password is protected inside a configuration setting using Elektra with the \crypto{}.
+First of all, we add the \crypto ~to the backend.
+Listing \ref{appl-crypto-mount} demonstrates how a backend is mounted with the \crypto{} enabled.
+Note that \texttt{DDEBEF9EE2DC931701338212DAF635B17F230E8D} refers to the GnuPG key that is used to protect the master password.
+In Section \ref{crypto-plugin} on page \pageref{crypto-plugin} we explain in detail how the \crypto ~works.
+
+We use the \texttt{crypto\_gcrypt} plugin variant in this chapter.
+The other plugin variants \texttt{crypto\_openssl}, and \texttt{crypto\_botan} operate the same way.
+It is possible to exchange the plugin variants of the \crypto ~seamlessly.
+
+\begin{code}[label=appl-crypto-mount,language=bash,caption={Mounting an Elektra backend with the \crypto{}}]
+kdb mount demo.ecf user/demo crypto_gcrypt \
+    "crypto/key=DDEBEF9EE2DC931701338212DAF635B17F230E8D"
+\end{code}
+
+Now we have a backend mounted and we can add configuration values to it.
+We store the password under \texttt{user/demo/password} in our configuration.
+First we tell the \crypto ~to encrypt the password by setting the meta-key \texttt{crypto/encrypt} to \texttt{1}.
+
+Listing \ref{appl-crypto-set} shows how the password is marked for encryption and how it is stored within the configuration.
+
+\begin{code}[label=appl-crypto-set,language=bash,caption={Marking a configuration value for encryption}]
+kdb setmeta user/demo/password crypto/encrypt 1
+kdb set user/demo/password "secret"
+\end{code}
+
+As a result the password ``secret'' is being stored as encrypted binary string in the configuration file.
+In Listing \ref{appl-crypto-get} we show how the password is received from the configuration.
+
+\begin{code}[label=appl-crypto-get,language=bash,caption={Receiving an encrypted configuration value}]
+kdb get user/demo/password
+\end{code}
 
 
+\section{Encrypted Configuration Files With Elektra}
 
-\section{Encrypted Configuration Files}
+Our second scenario shows how an entire configuration file is encrypted with the \fcrypt{}.
+Like in the previous section, \texttt{DDEBEF9EE2DC931701338212DAF635B17F230E8D} refers to the GnuPG key that is used for encrypting and decrypting the configuration file.
+See Section \ref{fcrypt-plugin} on page \pageref{fcrypt-plugin} for further details about the \fcrypt{}.
 
+Listing \ref{appl-fcrypt-mount} demonstrates how an Elektra backend is mounted with the \fcrypt ~enabled.
+
+\begin{code}[label=appl-fcrypt-mount,language=bash,caption={Mounting an Elektra backend with the \fcrypt{}}]
+kdb mount fcrypt.ecf user/fcrypt fcrypt \
+    "encrypt/key=DDEBEF9EE2DC931701338212DAF635B17F230E8D"
+\end{code}
+
+As opposed to the \crypto{}, the \fcrypt ~does not require to set any meta-keys, because it encrypts the entire configuration file.
+Listing \ref{appl-fcrypt-set} shows how configuration values are added to the configuration setting.
+
+\begin{code}[label=appl-fcrypt-set,language=bash,caption={Adding configuration values with the \fcrypt{}}]
+kdb set user/fcrypt/password "entirely.secret"
+\end{code}
+
+The resulting configuration file is a valid GnuPG file and can not only be decrypted by Elektra but also with GnuPG directly.
+
+\section{Protecting a Password inside an INI-File}
+
+It is hardly feasible for configuration files to contain binary data (for example: INI or XML).
+In this scenario we demonstrate how to add the \base ~to the backend, so that all binary values are transformed into Base64 strings.
+All technical details about the \base ~were given in Section \ref{base64-plugin} on page \pageref{base64-plugin}.
+
+Listing \ref{appl-ini-mount} shows how an INI-file is mounted together with the \crypto{}, and the \base ~plugins.
+
+\begin{code}[label=appl-ini-mount,language=bash,caption={Mounting an INI-file with the \crypto{} and the \base{}}]
+kdb mount test.ini user/test crypto_gcrypt \
+    "crypto/key=DDEBEF9EE2DC931701338212DAF635B17F230E8D" \
+    base64 ini
+\end{code}
+
+We add our password under \texttt{user/test/password}, analogous as shown in Listing \ref{appl-crypto-set} before.
+The resulting INI-file is presented in Listing \ref{appl-ini-result}.
+
+\begin{code}[label=appl-ini-result,language=bash,caption={Encrypted values in an INI-file}]
+#@META crypto/encrypt = 1
+password = @BASE64IyFjcnlwdG8wMBEAAADwPI+lqp+X2b6BIfLdRYgwxmAhVUPurqk \
+QVAI78Pn4OYONbei4NfykMPvx9C9w91KT
+\end{code}
 
